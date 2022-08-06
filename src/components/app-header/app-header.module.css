@@ -1,0 +1,32 @@
+.navWrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.nav{
+  width: 1240px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navLeft,
+.navRight,
+.logo{
+  flex: 1;
+  display: flex;
+}
+
+.navLeft{
+  justify-content: left;
+}
+.navRight{
+  justify-content: right;
+}
+.logo {
+  justify-content: center;
+  align-items: center;
+
+}
+.logo > svg{
+  height: 40px;
+}

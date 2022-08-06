@@ -1,0 +1,22 @@
+.tab{
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+
+.title{
+  display: flex;
+  color: var(--text-inactive-color);
+  align-items: center;
+}
+
+.icon{
+  display: flex;
+}
+
+.active{
+  color: var(--text-primary-color);
+}
+
