@@ -16,10 +16,9 @@ export class BurgerConstructor extends React.Component<{ingredients: IngredientI
         <div className={wrapperClassName}>
           {
             this.props.ingredients.map((ingredient,ix)=>
-              <div className={draggableItemClassName}>
+              <div className={draggableItemClassName} key={ingredient._id}>
                 <DragIcon type="primary" />
-                <ConstructorElement key={ingredient._id}
-                                    type={ix === 0 ? 'top' : (ix === this.props.ingredients.length - 1  ? 'bottom' : undefined )}
+                <ConstructorElement type={ix === 0 ? 'top' : (ix === this.props.ingredients.length - 1  ? 'bottom' : undefined )}
                                     text={ingredient.name}
                                     price={ingredient.price}
                                     thumbnail={ingredient.image}/>
