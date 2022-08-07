@@ -35,9 +35,9 @@ export class BurgerIngredients extends React.Component<{ingredients: IngredientI
     const gridClassName= `${styles.cardsGrid} pl-2 pr-2 pt-6`;
     return (
     <>
-      <p className="text text_type_main-large mt-10 mb-5">
+      <h1 className="text text_type_main-large mt-10 mb-5">
         Соберите бургер
-      </p>
+      </h1>
       <div style={{ display: 'flex' }}>
         {Object.keys(this.categories).map((category)=>{
           return <Tab key={category}
@@ -54,9 +54,9 @@ export class BurgerIngredients extends React.Component<{ingredients: IngredientI
           Object.keys(this.categories).map((category)=>{
             return (
               <section key={category} className='mt-10 mb-6'>
-                <p className="text text_type_main-medium">
+                <h2 className="text text_type_main-medium">
                   {this.categories[category]}
-                </p>
+                </h2>
                 <div className={gridClassName}>
                   {
                     this.props.ingredients
