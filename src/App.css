@@ -9,3 +9,13 @@ main{
   grid-gap: 40px;
   max-width: var(--maxIfaceWidth);
 }
+.ingredientsWrapper, .constructorWrapper{
+  display: flex;
+  flex-direction: column;
+}
+.ingredientsWrapper{
+  height: calc(100vh - 88px);
+}
+.constructorWrapper{
+  height: calc(100vh - 188px);
+}

@@ -1,7 +1,10 @@
 :root{
   --maxIfaceWidth: 1240px;
+  --pageBottomMargin: 52px;
 }
 body {
   margin: 0;
   background: var(--background-alt);
+  overflow: hidden;
+  height: 100vh;
 }

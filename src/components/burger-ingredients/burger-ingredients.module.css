@@ -1,5 +1,6 @@
 .ingredientsByCategories{
-  overflow: auto;
+  overflow-y: scroll;
+  margin-bottom: var(--pageBottomMargin);
 }
 
 .cardsGrid{

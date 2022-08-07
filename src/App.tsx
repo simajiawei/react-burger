@@ -29,10 +29,10 @@ class App extends React.Component {
         <AppHeader />
         <main>
           <div className='mainWrapper'>
-            <div>
+            <div className='ingredientsWrapper'>
               <BurgerIngredients ingredients={this.state.ingredients} />
             </div>
-            <div className='pl-4 pr-4 pt-25'>
+            <div className='constructorWrapper pl-4 pr-4 pt-25'>
               <BurgerConstructor ingredients={this.state.ingredients} />
             </div>
           </div>
