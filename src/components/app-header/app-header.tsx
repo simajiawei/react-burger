@@ -1,14 +1,16 @@
 import React from 'react';
 import styles from './app-header.module.css';
 import {BurgerIcon, ListIcon, Logo, ProfileIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {AppHeaderStateInterface, Tabs} from "./app-header.interface";
 import {AppHeaderTab} from "./app-header-tab/app-header-tab";
+import {Tabs} from "../../enums/tabs.enum";
 
 
-
+interface State{
+  active: Tabs
+}
 
 export class AppHeader extends React.Component {
-  state:AppHeaderStateInterface = {
+  state:State = {
     active: Tabs.CONSTRUCTOR
   }
 

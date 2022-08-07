@@ -3,8 +3,3 @@ export enum Tabs  {
   ORDERS = 'ORDERS',
   PROFILE = 'PROFILE'
 }
-
-
-export interface AppHeaderStateInterface{
-  active: Tabs
-}

@@ -1,4 +1,7 @@
+:root{
+  --maxIfaceWidth: 1240px;
+}
 body {
   margin: 0;
-  background: var(--background);
+  background: var(--background-alt);
 }

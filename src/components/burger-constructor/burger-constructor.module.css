@@ -1,0 +1,24 @@
+.constructor{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.total{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.totalPrice{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.draggableItem{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.draggableItem > svg{
+  flex-shrink: 0;
+}

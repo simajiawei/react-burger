@@ -1,10 +1,13 @@
+header{
+  background: var(--background);
+}
 .navWrapper{
   display: flex;
   justify-content: center;
 }
 
 .nav{
-  width: 1240px;
+  width: calc(var(--maxIfaceWidth) + 40px);
   display: flex;
   justify-content: space-between;
 }

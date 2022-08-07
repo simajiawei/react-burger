@@ -7,8 +7,8 @@ export interface HeaderTabPropsInterface {
   icon?: ReactElement;
 }
 
-export function AppHeaderTab(props:HeaderTabPropsInterface){
-  const tabClassName = `${styles.tab} pl-5 pr-5 pt-4 pb-4`
+export const AppHeaderTab = (props:HeaderTabPropsInterface) => {
+  const tabClassName = `${styles.tab} ml-5 mr-5 mt-4 mb-4`
   const tabTextClassName= `${styles.title} ${props.active && styles.active} text text_type_main-default`
   const tabIconClassName = `${styles.icon} mr-2`
   return (
