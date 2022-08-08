@@ -1,19 +1,18 @@
 import React from 'react';
 import styles from './app.module.css';
-import {AppHeader} from '../app-header/app-header';
-import {BurgerIngredients} from '../burger-ingredients/burger-ingredients';
-import {BurgerConstructor} from '../burger-constructor/burger-constructor';
-import jsonData from "../../utils/data.json";
-import {IngredientInterface} from "../../interfaces/ingredient.interface";
-import {CategoryKey} from "../../enums/category-key.enum";
+import { AppHeader } from '../app-header/app-header';
+import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
+import { BurgerConstructor } from '../burger-constructor/burger-constructor';
+import jsonData from '../../utils/data.json';
+import { IngredientInterface } from '../../interfaces/ingredient.interface';
+import { CategoryKey } from '../../enums/category-key.enum';
 
-interface State{
-  ingredients: IngredientInterface[],
-  bun: IngredientInterface | undefined
+interface State {
+  ingredients: IngredientInterface[];
+  bun: IngredientInterface | undefined;
 }
 
 class App extends React.Component {
-
   state: State = {
     ingredients: [],
     bun: undefined
@@ -21,16 +20,18 @@ class App extends React.Component {
 
   componentDidMount() {
     const ingredients = jsonData as IngredientInterface[];
-    const bun:IngredientInterface = ingredients.find((ingredient)=> ingredient.type === CategoryKey.BUN) as IngredientInterface
+    const bun: IngredientInterface = ingredients.find(
+      (ingredient) => ingredient.type === CategoryKey.BUN
+    ) as IngredientInterface;
     this.setState({
       ...this.state,
       ingredients,
       bun
-    })
+    });
   }
 
-  render(){
-    const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`
+  render() {
+    const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`;
     return (
       <>
         <AppHeader />
@@ -42,19 +43,16 @@ class App extends React.Component {
             <div className={constructorWrapperClassName}>
               <BurgerConstructor
                 bun={this.state.bun as IngredientInterface}
-                ingredients={
-                  this.state.ingredients
-                    .filter((ingredient)=>
-                      [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type))
-                } />
+                ingredients={this.state.ingredients.filter((ingredient) =>
+                  [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
+                )}
+              />
             </div>
           </div>
         </main>
       </>
     );
   }
-
 }
-
 
 export default App;
