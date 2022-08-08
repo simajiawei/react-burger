@@ -25,7 +25,7 @@ export class AppHeader extends React.Component {
   render() {
     const navClassName = `${styles.nav} p-4`;
     const logoClassName = `${styles.logo}`
-    return <header>
+    return (<header>
       <div className={styles.navWrapper}>
         <nav className={navClassName}>
           <div className={styles.navLeft}>
@@ -41,6 +41,6 @@ export class AppHeader extends React.Component {
         </nav>
       </div>
 
-    </header>;
+    </header>);
   }
 }

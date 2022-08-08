@@ -1,7 +1,16 @@
-.constructor{
+.itemsList{
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.constructor{
+  composes: itemsList;
+  overflow: hidden;
+}
+
+.constructorDynamic{
+  composes: itemsList;
   overflow-y: scroll;
 }
 
