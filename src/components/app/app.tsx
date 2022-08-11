@@ -1,58 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor';
-import jsonData from '../../utils/data.json';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
 
-interface State {
-  ingredients: IngredientInterface[];
-  bun: IngredientInterface | undefined;
-}
+const ingredientsApiUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
-class App extends React.Component {
-  state: State = {
-    ingredients: [],
-    bun: undefined
-  };
+function App() {
+  const [ingredients, setIngredients]: [IngredientInterface[], any] = useState([]);
+  const [bun, setBun]: [IngredientInterface | undefined, any] = useState();
 
-  componentDidMount() {
-    const ingredients = jsonData as IngredientInterface[];
+  useEffect(() => {
+    const getIngredients = async () => {
+      try {
+        const response: { data: IngredientInterface[]; success: boolean } = await fetch(ingredientsApiUrl).then(
+          (response) => response.json()
+        );
+        setIngredients(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getIngredients();
+  }, []);
+
+  useEffect(() => {
     const bun: IngredientInterface = ingredients.find(
       (ingredient) => ingredient.type === CategoryKey.BUN
     ) as IngredientInterface;
-    this.setState({
-      ...this.state,
-      ingredients,
-      bun
-    });
-  }
+    setBun(bun);
+  }, [ingredients]);
 
-  render() {
-    const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`;
-    return (
-      <>
-        <AppHeader />
-        <main>
-          <div className={styles.mainWrapper}>
-            <div className={styles.ingredientsWrapper}>
-              <BurgerIngredients ingredients={this.state.ingredients} />
-            </div>
-            <div className={constructorWrapperClassName}>
-              <BurgerConstructor
-                bun={this.state.bun as IngredientInterface}
-                ingredients={this.state.ingredients.filter((ingredient) =>
-                  [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
-                )}
-              />
-            </div>
+  const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`;
+
+  return (
+    <>
+      <AppHeader />
+      <main>
+        <div className={styles.mainWrapper}>
+          <div className={styles.ingredientsWrapper}>
+            <BurgerIngredients ingredients={ingredients} />
           </div>
-        </main>
-      </>
-    );
-  }
+          <div className={constructorWrapperClassName}>
+            <BurgerConstructor
+              bun={bun as IngredientInterface}
+              ingredients={ingredients.filter((ingredient) =>
+                [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
+              )}
+            />
+          </div>
+        </div>
+      </main>
+    </>
+  );
 }
 
 export default App;
