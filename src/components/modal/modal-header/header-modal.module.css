@@ -1,0 +1,11 @@
+.header{
+  display: flex;
+}
+.closeIcon{
+  background-image:url('images/close.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}

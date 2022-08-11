@@ -1,10 +1,13 @@
 :root{
   --maxIfaceWidth: 1240px;
   --pageBottomMargin: 52px;
+  --z-low:1;
+  --z-middle: 100;
+  --z-high: 1000;
 }
 body {
   margin: 0;
-  background: var(--background-alt);
+  background: var(--background);
   overflow: hidden;
   height: 100vh;
 }

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { OrderDetails } from '../order-details/order-details';
 
 interface Props {
   ingredients: IngredientInterface[];
@@ -9,11 +10,22 @@ interface Props {
 }
 
 export const BurgerConstructor = (props: Props) => {
+  const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
+
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
   const totalPriceClassName = `${styles.totalPrice} text text_type_digits-medium mr-10`;
   const draggableItemClassName = `${styles.draggableItem}`;
   const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
+
+  const handleOrderClick = (e: SyntheticEvent) => {
+    setIsOrderDisplayed(true);
+  };
+
+  const onCloseOrderDetails = (e: SyntheticEvent) => {
+    setIsOrderDisplayed(false);
+  };
+
   return (
     <>
       <div className={wrapperClassName}>
@@ -62,10 +74,13 @@ export const BurgerConstructor = (props: Props) => {
         </p>
         <Button
           type="primary"
+          onClick={handleOrderClick}
           size="large">
           Оформить заказ
         </Button>
       </div>
+
+      {isOrderDisplayed && <OrderDetails onClose={onCloseOrderDetails} />}
     </>
   );
 };
