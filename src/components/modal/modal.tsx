@@ -18,7 +18,7 @@ export function Modal(props: ModalProps) {
     <>
       <div className={modalClassName}>
         <HeaderModal onClose={props.onClose}>{props.title}</HeaderModal>
-        {props.children}
+        <div className={styles.modalBody}>{props.children}</div>
       </div>
       <ModalBackdrop onClose={props.onClose} />
     </>,

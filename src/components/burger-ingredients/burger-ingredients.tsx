@@ -6,16 +6,12 @@ import { Ingredient } from './ingredient/ingredient';
 import styles from './burger-ingredients.module.css';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 
-interface State {
-  category: CategoryKey;
-}
-
 interface BurgerIngredientsProps {
   ingredients: IngredientInterface[];
 }
 
 export function BurgerIngredients(props: BurgerIngredientsProps) {
-  const [category, setCategory] = useState(CategoryKey.BUN);
+  const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
   const [selectedIngredient, setSelectedIngredient]: [IngredientInterface | undefined, any] = useState();
   const categories: { [key: string]: string } = {
     [CategoryKey.BUN]: 'Булки',
@@ -24,7 +20,7 @@ export function BurgerIngredients(props: BurgerIngredientsProps) {
   };
 
   const handleTabClick = (category: string) => {
-    setCategory(category as CategoryKey);
+    setSelectedCategory(category as CategoryKey);
   };
 
   const onCloseDetails = (e: SyntheticEvent) => {
@@ -46,7 +42,7 @@ export function BurgerIngredients(props: BurgerIngredientsProps) {
               key={category}
               value={category}
               onClick={handleTabClick}
-              active={category === category}>
+              active={category === selectedCategory}>
               {categories[category]}
             </Tab>
           );
@@ -59,16 +55,17 @@ export function BurgerIngredients(props: BurgerIngredientsProps) {
               key={category}
               className="mt-10 mb-6">
               <h2 className="text text_type_main-medium">{categories[category]}</h2>
-              {props.ingredients
-                .filter((ingredient) => ingredient.type === category)
-                .map((ingredient) => (
-                  <div
-                    key={ingredient._id}
-                    className={gridClassName}
-                    onClick={(e) => onCardClick(ingredient)}>
-                    <Ingredient {...ingredient} />
-                  </div>
-                ))}
+              <div className={gridClassName}>
+                {props.ingredients
+                  .filter((ingredient) => ingredient.type === category)
+                  .map((ingredient) => (
+                    <div
+                      key={ingredient._id}
+                      onClick={(e) => onCardClick(ingredient)}>
+                      <Ingredient {...ingredient} />
+                    </div>
+                  ))}
+              </div>
             </section>
           );
         })}

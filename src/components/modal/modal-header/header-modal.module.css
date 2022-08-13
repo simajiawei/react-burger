@@ -1,5 +1,7 @@
 .header{
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .closeIcon{
   background-image:url('images/close.svg');

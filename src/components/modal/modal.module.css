@@ -1,7 +1,7 @@
 .modal{
   position: absolute;
   width: 720px;
-  height: 718px;
+  height: fit-content;
   margin: auto;
   left: 0;
   right: 0;
@@ -10,4 +10,8 @@
   border-radius:40px;
   background: var(--background-alt);
   z-index: var(--z-middle);
+}
+.modalBody{
+  max-width: 520px;
+  margin: auto;
 }

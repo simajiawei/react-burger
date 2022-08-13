@@ -7,9 +7,12 @@ interface HeaderModalProps {
   onClose: MouseEventHandler<HTMLElement>;
 }
 export function HeaderModal(props: HeaderModalProps) {
+  const headerClassName = `${styles.header} mt-10 ml-10 mr-10`;
+  const titleClassName = `text text_type_main-large`;
+
   return (
-    <div className={styles.header}>
-      <h1>{props.children}</h1>
+    <div className={headerClassName}>
+      <h1 className={titleClassName}>{props.children}</h1>
       <div
         className={styles.closeIcon}
         onClick={props.onClose}
