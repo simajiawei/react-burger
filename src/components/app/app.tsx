@@ -8,26 +8,28 @@ import { CategoryKey } from '../../enums/category-key.enum';
 
 const ingredientsApiUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
+interface IngrediendsResponseInterface {
+  data: IngredientInterface[];
+  success: boolean;
+}
+
 function App() {
   const [ingredients, setIngredients]: [IngredientInterface[], any] = useState([]);
   const [bun, setBun]: [IngredientInterface | undefined, any] = useState();
 
   useEffect(() => {
-    const getIngredients = async () => {
-      const response = await fetch(ingredientsApiUrl)
-        .then((response) => response.json())
-        .then((data: { data: IngredientInterface[]; success: boolean }) => {
-          if (!data.success) {
-            throw Error('Status is not ok');
+    const getIngredients = () => {
+      fetch(ingredientsApiUrl)
+        .then((response) => {
+          if (response.ok) {
+            return response.json() as Promise<IngrediendsResponseInterface>;
           }
-          return data;
+          return Promise.reject(`Ошибка ${response.status}`);
         })
+        .then((responseData) => setIngredients(responseData.data))
         .catch((error) => {
           console.error('Error fetching ingredients', error);
         });
-      if (!!response) {
-        setIngredients(response.data);
-      }
     };
     getIngredients();
   }, []);
