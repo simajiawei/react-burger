@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import styles from './modal.module.css';
 import { HeaderModal } from './modal-header/header-modal';
-import { ModalBackdrop } from './modal-backdrop/modal-backdrop';
+import { ModalOverlay } from './modal-overlay/modal-overlay';
 import { MouseEventHandler, SyntheticEvent, useEffect } from 'react';
 import React from 'react';
 
@@ -32,7 +32,7 @@ export function Modal(props: ModalProps) {
         <HeaderModal onClose={props.onClose}>{props.title}</HeaderModal>
         <div className={styles.modalBody}>{props.children}</div>
       </div>
-      <ModalBackdrop onClose={props.onClose} />
+      <ModalOverlay onClose={props.onClose} />
     </>,
     modalRoot
   );

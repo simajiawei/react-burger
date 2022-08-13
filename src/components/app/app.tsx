@@ -14,8 +14,14 @@ function App() {
 
   useEffect(() => {
     const getIngredients = async () => {
-      const response: { data: IngredientInterface[]; success: boolean } = await fetch(ingredientsApiUrl)
+      const response = await fetch(ingredientsApiUrl)
         .then((response) => response.json())
+        .then((data: { data: IngredientInterface[]; success: boolean }) => {
+          if (!data.success) {
+            throw Error('Status is not ok');
+          }
+          return data;
+        })
         .catch((error) => {
           console.error('Error fetching ingredients', error);
         });

@@ -1,12 +1,12 @@
-import styles from './modal-backdrop.module.css';
+import styles from './modal-overlay.module.css';
 import { MouseEventHandler } from 'react';
 import React from 'react';
 
-interface ModalBackdropProps {
+interface ModalOverlayProps {
   onClose: MouseEventHandler<HTMLElement>;
 }
 
-export function ModalBackdrop(props: ModalBackdropProps) {
+export function ModalOverlay(props: ModalOverlayProps) {
   return (
     <div
       className={styles.backdrop}

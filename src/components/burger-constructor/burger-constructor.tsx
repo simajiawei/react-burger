@@ -3,6 +3,7 @@ import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
+import { Modal } from '../modal/modal';
 
 interface Props {
   ingredients: IngredientInterface[];
@@ -80,7 +81,11 @@ export const BurgerConstructor = (props: Props) => {
         </Button>
       </div>
 
-      {isOrderDisplayed && <OrderDetails onClose={onCloseOrderDetails} />}
+      {isOrderDisplayed && (
+        <Modal onClose={onCloseOrderDetails}>
+          <OrderDetails />
+        </Modal>
+      )}
     </>
   );
 };

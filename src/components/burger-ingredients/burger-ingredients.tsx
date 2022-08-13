@@ -5,6 +5,7 @@ import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Ingredient } from './ingredient/ingredient';
 import styles from './burger-ingredients.module.css';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { Modal } from '../modal/modal';
 
 interface BurgerIngredientsProps {
   ingredients: IngredientInterface[];
@@ -71,10 +72,11 @@ export function BurgerIngredients(props: BurgerIngredientsProps) {
         })}
       </div>
       {!!selectedIngredient && (
-        <IngredientDetails
+        <Modal
           onClose={onCloseDetails}
-          ingredient={selectedIngredient as IngredientInterface}
-        />
+          title="Детали ингредиента">
+          <IngredientDetails ingredient={selectedIngredient as IngredientInterface} />
+        </Modal>
       )}
     </>
   );
