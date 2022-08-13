@@ -17,7 +17,7 @@ export function IngredientDetails(props: IngredientDetailsProps) {
     ['Углеводы, г', props.ingredient.carbohydrates]
   ];
 
-  const imageClassName = `${styles.imageContainer} pl-5 pr-5 mb-4`;
+  const imageClassName = `${styles.imageWrapper} pl-5 pr-5 mb-4`;
   const contentsClassName = `${styles.contentsWrapper} mb-15`;
   return (
     <Modal

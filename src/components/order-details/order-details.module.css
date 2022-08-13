@@ -1,0 +1,12 @@
+.card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.imageWrapper{
+  height: 120px;
+}
+img{
+  height: 100%;
+}
