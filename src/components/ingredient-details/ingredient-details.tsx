@@ -1,5 +1,4 @@
-import React, { MouseEventHandler } from 'react';
-import { Modal } from '../modal/modal';
+import React from 'react';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import styles from './ingredient-details.module.css';
 import { IngredientContentItem } from './ingredient-content-item/ingredient-content-item';

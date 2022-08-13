@@ -11,6 +11,7 @@ interface ModalProps {
   title?: string;
   children?: React.ReactNode;
   onClose: MouseEventHandler<HTMLElement>;
+  isOpen: boolean;
 }
 export function Modal(props: ModalProps) {
   const modalClassName = `${styles.modal}`;
@@ -22,9 +23,11 @@ export function Modal(props: ModalProps) {
         props.onClose(e);
       }
     };
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
-  }, []);
+    if (props.isOpen) {
+      document.addEventListener('keydown', close);
+      return () => document.removeEventListener('keydown', close);
+    }
+  }, [props.isOpen]);
 
   return createPortal(
     <>

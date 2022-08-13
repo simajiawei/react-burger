@@ -82,7 +82,9 @@ export const BurgerConstructor = (props: Props) => {
       </div>
 
       {isOrderDisplayed && (
-        <Modal onClose={onCloseOrderDetails}>
+        <Modal
+          onClose={onCloseOrderDetails}
+          isOpen={isOrderDisplayed}>
           <OrderDetails />
         </Modal>
       )}

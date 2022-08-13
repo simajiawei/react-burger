@@ -73,6 +73,7 @@ export function BurgerIngredients(props: BurgerIngredientsProps) {
       </div>
       {!!selectedIngredient && (
         <Modal
+          isOpen={!!selectedIngredient}
           onClose={onCloseDetails}
           title="Детали ингредиента">
           <IngredientDetails ingredient={selectedIngredient as IngredientInterface} />
