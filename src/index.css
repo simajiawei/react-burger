@@ -1,13 +1,13 @@
+:root{
+  --maxIfaceWidth: 1240px;
+  --pageBottomMargin: 52px;
+  --z-low:1;
+  --z-middle: 100;
+  --z-high: 1000;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  background: var(--background);
+  overflow: hidden;
+  height: 100vh;
 }

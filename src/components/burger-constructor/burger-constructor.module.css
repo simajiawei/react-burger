@@ -1,0 +1,35 @@
+.itemsList{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.constructor{
+  composes: itemsList;
+  overflow: hidden;
+}
+
+.constructorDynamic{
+  composes: itemsList;
+  overflow-y: scroll;
+}
+
+.total{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-bottom: var(--pageBottomMargin);
+}
+.totalPrice{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.draggableItem{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.draggableItem > svg{
+  flex-shrink: 0;
+}

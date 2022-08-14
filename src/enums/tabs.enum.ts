@@ -1,0 +1,5 @@
+export enum Tabs  {
+  CONSTRUCTOR = 'CONSTRUCTOR',
+  ORDERS = 'ORDERS',
+  PROFILE = 'PROFILE'
+}

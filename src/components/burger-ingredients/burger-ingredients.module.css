@@ -1,0 +1,11 @@
+.ingredientsByCategories{
+  overflow-y: scroll;
+  margin-bottom: var(--pageBottomMargin);
+}
+
+.cardsGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 24px;
+  grid-row-gap: 32px;
+}
