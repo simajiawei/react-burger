@@ -5,6 +5,7 @@ import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
+import { SelectedIngredientsContext } from '../../services/burger-constructor';
 
 const ingredientsApiUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -15,7 +16,7 @@ interface IngrediendsResponseInterface {
 
 function App() {
   const [ingredients, setIngredients]: [IngredientInterface[], any] = useState([]);
-  const [bun, setBun]: [IngredientInterface | undefined, any] = useState();
+  const [selectedIngredients, setSelectedIngredients]: [IngredientInterface[], any] = useState([]);
 
   useEffect(() => {
     const getIngredients = () => {
@@ -38,8 +39,12 @@ function App() {
     const bun: IngredientInterface = ingredients.find(
       (ingredient) => ingredient.type === CategoryKey.BUN
     ) as IngredientInterface;
-    setBun(bun);
-  }, [ingredients]);
+    if (!bun) {
+      return;
+    }
+    const betweenBuns: IngredientInterface[] = ingredients.filter((item) => item.type !== CategoryKey.BUN);
+    setSelectedIngredients([bun, ...betweenBuns]);
+  }, [JSON.stringify(ingredients)]);
 
   const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`;
 
@@ -52,12 +57,9 @@ function App() {
             <BurgerIngredients ingredients={ingredients} />
           </div>
           <div className={constructorWrapperClassName}>
-            <BurgerConstructor
-              bun={bun as IngredientInterface}
-              ingredients={ingredients.filter((ingredient) =>
-                [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
-              )}
-            />
+            <SelectedIngredientsContext.Provider value={selectedIngredients}>
+              <BurgerConstructor />
+            </SelectedIngredientsContext.Provider>
           </div>
         </div>
       </main>

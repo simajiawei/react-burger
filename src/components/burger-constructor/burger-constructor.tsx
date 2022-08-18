@@ -1,16 +1,18 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
+import { SelectedIngredientsContext } from '../../services/burger-constructor';
+import { CategoryKey } from '../../enums/category-key.enum';
 
-interface Props {
-  ingredients: IngredientInterface[];
-  bun: IngredientInterface;
-}
+export const BurgerConstructor = () => {
+  const ingredients = useContext(SelectedIngredientsContext);
 
-export const BurgerConstructor = (props: Props) => {
+  const [bun, setBun] = useState<IngredientInterface>();
+  const [betweenBuns, setBetweenBuns] = useState<IngredientInterface[]>([]);
+
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
 
   const wrapperClassName = `${styles.constructor}`;
@@ -27,22 +29,31 @@ export const BurgerConstructor = (props: Props) => {
     setIsOrderDisplayed(false);
   };
 
+  useEffect(() => {
+    const _betweenBuns = ingredients.filter((ingredient) =>
+      [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
+    );
+    const _bun: IngredientInterface | undefined = ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN);
+    setBun(_bun);
+    setBetweenBuns(_betweenBuns);
+  }, [JSON.stringify(ingredients)]);
+
   return (
     <>
       <div className={wrapperClassName}>
-        {props.bun && (
+        {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={`${props.bun.name} (верх)`}
-              price={props.bun.price}
-              thumbnail={props.bun.image}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
         <div className={constructorDynamicClassName}>
-          {props.ingredients.map((ingredient, ix) => (
+          {betweenBuns.map((ingredient, ix) => (
             <div
               className={draggableItemClassName}
               key={ingredient._id}>
@@ -56,14 +67,14 @@ export const BurgerConstructor = (props: Props) => {
           ))}
         </div>
 
-        {props.bun && (
+        {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
               type="bottom"
               isLocked={true}
-              text={`${props.bun.name} (низ)`}
-              price={props.bun.price}
-              thumbnail={props.bun.image}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
