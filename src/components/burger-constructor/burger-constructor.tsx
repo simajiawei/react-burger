@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useContext, useEffect, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,12 +7,27 @@ import { Modal } from '../modal/modal';
 import { SelectedIngredientsContext } from '../../services/burger-constructor';
 import { CategoryKey } from '../../enums/category-key.enum';
 
+interface TotalStateInterface {
+  total: number;
+}
+
+const totalInitialState: TotalStateInterface = {
+  total: 0
+};
+
+function totalReducer(state: TotalStateInterface, prices: number[]) {
+  return {
+    total: prices.reduce((prev, cur) => prev + cur, totalInitialState.total)
+  };
+}
+
 export const BurgerConstructor = () => {
   const ingredients = useContext(SelectedIngredientsContext);
 
   const [bun, setBun] = useState<IngredientInterface>();
   const [betweenBuns, setBetweenBuns] = useState<IngredientInterface[]>([]);
 
+  const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
 
   const wrapperClassName = `${styles.constructor}`;
@@ -29,14 +44,26 @@ export const BurgerConstructor = () => {
     setIsOrderDisplayed(false);
   };
 
+  // update burger if ingredients changed
   useEffect(() => {
     const _betweenBuns = ingredients.filter((ingredient) =>
       [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
     );
-    const _bun: IngredientInterface | undefined = ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN);
+    const _bun: IngredientInterface = ingredients.find(
+      (ingredient) => ingredient.type === CategoryKey.BUN
+    ) as IngredientInterface;
     setBun(_bun);
     setBetweenBuns(_betweenBuns);
   }, [JSON.stringify(ingredients)]);
+
+  // update total if burger changed
+  useEffect(() => {
+    let prices = betweenBuns.map((ingredient) => ingredient.price);
+    if (bun) {
+      prices = [...prices, bun.price * 2];
+    }
+    dispatchTotal(prices);
+  }, [betweenBuns, bun]);
 
   return (
     <>
@@ -81,7 +108,7 @@ export const BurgerConstructor = () => {
       </div>
       <div className={totalClassName}>
         <p className={totalPriceClassName}>
-          610
+          {totalState.total}
           <CurrencyIcon type="primary" />
         </p>
         <Button
