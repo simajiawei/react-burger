@@ -5,9 +5,10 @@ import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
-import { SelectedIngredientsContext } from '../../services/burger-constructor';
+import { SelectedIngredientsContext } from '../../services/burger-constructor-context';
+import { apiBaseUrl } from '../../app.constants';
 
-const ingredientsApiUrl = 'https://norma.nomoreparties.space/api/ingredients';
+const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
 
 interface IngrediendsResponseInterface {
   data: IngredientInterface[];

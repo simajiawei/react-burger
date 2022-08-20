@@ -4,11 +4,22 @@ import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
-import { SelectedIngredientsContext } from '../../services/burger-constructor';
+import { SelectedIngredientsContext } from '../../services/burger-constructor-context';
 import { CategoryKey } from '../../enums/category-key.enum';
+import { apiBaseUrl } from '../../app.constants';
+
+const ordersURL = `${apiBaseUrl}/orders`;
 
 interface TotalStateInterface {
   total: number;
+}
+
+interface NewOrderInterface {
+  name: string;
+  order: {
+    number: number;
+  };
+  success: boolean;
 }
 
 const totalInitialState: TotalStateInterface = {
@@ -29,6 +40,7 @@ export const BurgerConstructor = () => {
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
+  const [orderId, setOrderId] = useState<number>();
 
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
@@ -36,7 +48,28 @@ export const BurgerConstructor = () => {
   const draggableItemClassName = `${styles.draggableItem}`;
   const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
 
-  const handleOrderClick = (e: SyntheticEvent) => {
+  const handleOrderClick = async (e: SyntheticEvent) => {
+    const orderIds = ingredients.map((ingredient) => ingredient._id);
+    await fetch(ordersURL, {
+      method: 'POST',
+      body: JSON.stringify({
+        ingredients: orderIds
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json() as Promise<NewOrderInterface>;
+        }
+        return Promise.reject(`Ошибка ${response.status}`);
+      })
+      .then((responseData) => setOrderId(responseData.order.number))
+      .catch((err) => {
+        console.log('Error on add submit new order', err);
+      });
+
     setIsOrderDisplayed(true);
   };
 
@@ -119,11 +152,11 @@ export const BurgerConstructor = () => {
         </Button>
       </div>
 
-      {isOrderDisplayed && (
+      {isOrderDisplayed && !!orderId && (
         <Modal
           onClose={onCloseOrderDetails}
           isOpen={isOrderDisplayed}>
-          <OrderDetails />
+          <OrderDetails order={orderId} />
         </Modal>
       )}
     </>
