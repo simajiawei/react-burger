@@ -6,7 +6,8 @@ import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { SelectedIngredientsContext } from '../../services/burger-constructor-context';
 import { CategoryKey } from '../../enums/category-key.enum';
-import { apiBaseUrl } from '../../app.constants';
+import { apiBaseUrl } from '../../utils/app.constants';
+import { checkResponse } from '../../utils/check-response';
 
 const ordersURL = `${apiBaseUrl}/orders`;
 
@@ -59,13 +60,8 @@ export const BurgerConstructor = () => {
         'Content-Type': 'application/json'
       }
     })
-      .then((response) => {
-        if (response.ok) {
-          return response.json() as Promise<NewOrderInterface>;
-        }
-        return Promise.reject(`Ошибка ${response.status}`);
-      })
-      .then((responseData) => setOrderId(responseData.order.number))
+      .then<NewOrderInterface>(checkResponse)
+      .then((responseData: NewOrderInterface) => setOrderId(responseData.order.number))
       .catch((err) => {
         console.log('Error on add submit new order', err);
       });

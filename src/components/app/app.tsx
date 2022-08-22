@@ -6,7 +6,8 @@ import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { SelectedIngredientsContext } from '../../services/burger-constructor-context';
-import { apiBaseUrl } from '../../app.constants';
+import { apiBaseUrl } from '../../utils/app.constants';
+import { checkResponse } from '../../utils/check-response';
 
 const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
 
@@ -22,12 +23,7 @@ function App() {
   useEffect(() => {
     const getIngredients = () => {
       fetch(ingredientsApiUrl)
-        .then((response) => {
-          if (response.ok) {
-            return response.json() as Promise<IngrediendsResponseInterface>;
-          }
-          return Promise.reject(`Ошибка ${response.status}`);
-        })
+        .then<IngrediendsResponseInterface>(checkResponse)
         .then((responseData) => setIngredients(responseData.data))
         .catch((error) => {
           console.error('Error fetching ingredients', error);
