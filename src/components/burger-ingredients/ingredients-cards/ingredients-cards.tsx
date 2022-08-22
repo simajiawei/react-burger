@@ -1,25 +1,25 @@
 import { Ingredient } from '../ingredient/ingredient';
 import React, { ReactElement } from 'react';
-import { CategoryKey } from '../../../enums/category-key.enum';
 import { IngredientInterface } from '../../../interfaces/ingredient.interface';
 import styles from './ingredients-cards.module.css';
+import { CategoryInterface } from '../burger-ingredients';
 
 interface IngredientCardInterface {
-  categories: { [key: string]: string };
+  categories: CategoryInterface;
   ingredients: IngredientInterface[];
   onCardClick: (ingredient: IngredientInterface) => void;
 }
 export function IngredientsCards({ categories, ingredients, onCardClick }: IngredientCardInterface): ReactElement {
   const gridClassName = `${styles.cardsGrid} pl-2 pr-2 pt-6`;
-
   return (
     <>
       {Object.keys(categories).map((category) => {
         return (
           <section
+            ref={categories[category].ref}
             key={category}
             className="mt-10 mb-6">
-            <h2 className="text text_type_main-medium">{categories[category]}</h2>
+            <h2 className="text text_type_main-medium">{categories[category].name}</h2>
             <div className={gridClassName}>
               {ingredients
                 .filter((ingredient) => ingredient.type === category)
