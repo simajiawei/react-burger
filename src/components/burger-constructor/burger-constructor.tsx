@@ -1,13 +1,13 @@
-import React, { SyntheticEvent, useContext, useEffect, useReducer, useState } from 'react';
+import React, { SyntheticEvent, useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
-import { SelectedIngredientsContext } from '../../services/burger-constructor-context';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { apiBaseUrl } from '../../utils/app.constants';
 import { checkResponse } from '../../utils/check-response';
+import { BurgerContext } from '../../services/burger-context';
 
 const ordersURL = `${apiBaseUrl}/orders`;
 
@@ -34,10 +34,7 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 }
 
 export const BurgerConstructor = () => {
-  const ingredients = useContext(SelectedIngredientsContext);
-
-  const [bun, setBun] = useState<IngredientInterface>();
-  const [betweenBuns, setBetweenBuns] = useState<IngredientInterface[]>([]);
+  const ingredients = useContext(BurgerContext);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -49,8 +46,24 @@ export const BurgerConstructor = () => {
   const draggableItemClassName = `${styles.draggableItem}`;
   const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
 
+  const orderIds: string[] = useMemo(() => ingredients.map((ingredient) => ingredient._id), [ingredients]);
+  const betweenBuns: IngredientInterface[] = useMemo(
+    () => ingredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
+    [ingredients]
+  );
+  const bun: IngredientInterface = ingredients.find(
+    (ingredient) => ingredient.type === CategoryKey.BUN
+  ) as IngredientInterface;
+
+  let prices = useMemo(() => {
+    let _prices = betweenBuns.map((ingredient) => ingredient.price);
+    if (bun) {
+      _prices = [..._prices, bun.price * 2];
+    }
+    return _prices;
+  }, [betweenBuns, bun]);
+
   const handleOrderClick = async (e: SyntheticEvent) => {
-    const orderIds = ingredients.map((ingredient) => ingredient._id);
     await fetch(ordersURL, {
       method: 'POST',
       body: JSON.stringify({
@@ -73,26 +86,10 @@ export const BurgerConstructor = () => {
     setIsOrderDisplayed(false);
   };
 
-  // update burger if ingredients changed
+  // update total if prices list is changed
   useEffect(() => {
-    const _betweenBuns = ingredients.filter((ingredient) =>
-      [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)
-    );
-    const _bun: IngredientInterface = ingredients.find(
-      (ingredient) => ingredient.type === CategoryKey.BUN
-    ) as IngredientInterface;
-    setBun(_bun);
-    setBetweenBuns(_betweenBuns);
-  }, [JSON.stringify(ingredients)]);
-
-  // update total if burger changed
-  useEffect(() => {
-    let prices = betweenBuns.map((ingredient) => ingredient.price);
-    if (bun) {
-      prices = [...prices, bun.price * 2];
-    }
     dispatchTotal(prices);
-  }, [betweenBuns, bun]);
+  }, [prices]);
 
   return (
     <>
