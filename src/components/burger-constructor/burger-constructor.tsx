@@ -51,9 +51,10 @@ export const BurgerConstructor = () => {
     () => ingredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
     [ingredients]
   );
-  const bun: IngredientInterface = ingredients.find(
-    (ingredient) => ingredient.type === CategoryKey.BUN
-  ) as IngredientInterface;
+  const bun: IngredientInterface = useMemo(
+    () => ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN) as IngredientInterface,
+    [ingredients]
+  );
 
   let prices = useMemo(() => {
     let _prices = betweenBuns.map((ingredient) => ingredient.price);
