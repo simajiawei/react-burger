@@ -8,19 +8,12 @@ import { CategoryKey } from '../../enums/category-key.enum';
 import { apiBaseUrl } from '../../utils/app.constants';
 import { checkResponse } from '../../utils/check-response';
 import { BurgerContext } from '../../services/burger-context';
+import { NewOrderInterface } from '../../interfaces/new-order.interface';
 
 const ordersURL = `${apiBaseUrl}/orders`;
 
 interface TotalStateInterface {
   total: number;
-}
-
-interface NewOrderInterface {
-  name: string;
-  order: {
-    number: number;
-  };
-  success: boolean;
 }
 
 const totalInitialState: TotalStateInterface = {
