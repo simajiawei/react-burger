@@ -6,7 +6,7 @@ import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootStateInterface } from '../../services/reducers';
+import { RootStateInterface, StoreInterface } from '../../services/reducers';
 import { AppActions, submitNewOrder } from '../../services/actions';
 import { ThunkDispatch } from 'redux-thunk';
 
@@ -26,11 +26,10 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 
 export const BurgerConstructor = () => {
   const dispatch: ThunkDispatch<any, any, AppActions> = useDispatch();
-  const ingredients = useSelector((store: RootStateInterface) => store.ingredients);
+  const { ingredients, order } = useSelector((store: StoreInterface) => store.burger);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
-  const [orderId, setOrderId] = useState<number>();
 
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
@@ -124,11 +123,11 @@ export const BurgerConstructor = () => {
         </Button>
       </div>
 
-      {isOrderDisplayed && !!orderId && (
+      {isOrderDisplayed && !!order && (
         <Modal
           onClose={onCloseOrderDetails}
           isOpen={isOrderDisplayed}>
-          <OrderDetails order={orderId} />
+          <OrderDetails order={order} />
         </Modal>
       )}
     </>

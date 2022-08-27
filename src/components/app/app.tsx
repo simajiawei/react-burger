@@ -9,6 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 
 function App() {
   const dispatch: ThunkDispatch<any, any, AppActions> = useDispatch();
+
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);

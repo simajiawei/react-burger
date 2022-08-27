@@ -7,7 +7,7 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootStateInterface } from '../../services/reducers';
+import { StoreInterface } from '../../services/reducers';
 import { DESELECT_INGREDIENT, SELECT_INGREDIENT, SelectIngredientActionInterface } from '../../services/actions';
 
 export interface CategoryInterface {
@@ -19,7 +19,8 @@ export interface CategoryInterface {
 
 export function BurgerIngredients() {
   const dispatch = useDispatch();
-  const { ingredients, selectedIngredient } = useSelector((store: RootStateInterface) => store);
+  const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
+  console.log('burger ingredients: ', ingredients);
   const categories: CategoryInterface = {
     [CategoryKey.BUN]: {
       name: 'Булки',

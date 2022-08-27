@@ -1,18 +1,20 @@
-import { Action, combineReducers } from 'redux';
+import { combineReducers, Reducer, Store } from 'redux';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
-import { NewOrderInterface } from '../../interfaces/new-order.interface';
 import {
   AppActions,
-  BURGER_ACTIONS,
   DESELECT_INGREDIENT,
   IngredientsActionInterface,
-  SET_NEW_ORDER,
   SELECT_INGREDIENT,
   SelectIngredientActionInterface,
+  SET_NEW_ORDER,
+  SetNewOrderActionInterface,
   UPDATE_CONSTRUCTOR_INGREDIENTS,
-  UPDATE_INGREDIENTS,
-  SetNewOrderActionInterface
+  UPDATE_INGREDIENTS
 } from '../actions';
+
+export interface StoreInterface {
+  burger: RootStateInterface;
+}
 
 export interface RootStateInterface {
   ingredients: IngredientInterface[];
@@ -28,7 +30,10 @@ export const initialState: RootStateInterface = {
   order: null
 };
 
-const burgerReducer = (state = initialState, action: AppActions): RootStateInterface => {
+const burgerReducer: Reducer<RootStateInterface, AppActions> = (
+  state = initialState,
+  action: AppActions
+): RootStateInterface => {
   switch (action.type) {
     case SET_NEW_ORDER:
       action = action as SetNewOrderActionInterface;
@@ -62,4 +67,6 @@ const burgerReducer = (state = initialState, action: AppActions): RootStateInter
   }
 };
 
-export const rootReducer = combineReducers({ burgerReducer });
+export const rootReducer = combineReducers<StoreInterface>({
+  burger: burgerReducer
+});
