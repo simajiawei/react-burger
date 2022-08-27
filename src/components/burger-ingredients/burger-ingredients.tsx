@@ -1,12 +1,14 @@
-import React, { MutableRefObject, SyntheticEvent, useContext, useMemo, useRef, useState } from 'react';
+import React, { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import styles from './burger-ingredients.module.css';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
-import { BurgerContext } from '../../services/burger-context';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootStateInterface } from '../../services/reducers';
+import { DESELECT_INGREDIENT, SELECT_INGREDIENT, SelectIngredientActionInterface } from '../../services/actions';
 
 export interface CategoryInterface {
   [key: string]: {
@@ -16,7 +18,8 @@ export interface CategoryInterface {
 }
 
 export function BurgerIngredients() {
-  const ingredients = useContext(BurgerContext);
+  const dispatch = useDispatch();
+  const { ingredients, selectedIngredient } = useSelector((store: RootStateInterface) => store);
   const categories: CategoryInterface = {
     [CategoryKey.BUN]: {
       name: 'Булки',
@@ -32,7 +35,7 @@ export function BurgerIngredients() {
     }
   };
   const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
-  const [selectedIngredient, setSelectedIngredient]: [IngredientInterface | undefined, any] = useState();
+  // const [selectedIngredient, setSelectedIngredient]: [IngredientInterface | undefined, any] = useState();
 
   const handleTabClick = (category: string) => {
     (categories[category].ref.current as HTMLElement).scrollIntoView({
@@ -42,11 +45,16 @@ export function BurgerIngredients() {
   };
 
   const onCloseDetails = (e: SyntheticEvent) => {
-    setSelectedIngredient();
+    dispatch({
+      type: DESELECT_INGREDIENT
+    });
   };
 
   const onCardClick = (ingredient: IngredientInterface) => {
-    setSelectedIngredient(ingredient);
+    dispatch<SelectIngredientActionInterface>({
+      type: SELECT_INGREDIENT,
+      item: ingredient
+    });
   };
 
   const ingrediendsCards = useMemo(

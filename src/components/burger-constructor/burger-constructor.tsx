@@ -1,16 +1,14 @@
-import React, { SyntheticEvent, useContext, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
-import { apiBaseUrl } from '../../utils/app.constants';
-import { checkResponse } from '../../utils/check-response';
-import { BurgerContext } from '../../services/burger-context';
-import { NewOrderInterface } from '../../interfaces/new-order.interface';
-
-const ordersURL = `${apiBaseUrl}/orders`;
+import { useDispatch, useSelector } from 'react-redux';
+import { RootStateInterface } from '../../services/reducers';
+import { AppActions, submitNewOrder } from '../../services/actions';
+import { ThunkDispatch } from 'redux-thunk';
 
 interface TotalStateInterface {
   total: number;
@@ -27,7 +25,8 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 }
 
 export const BurgerConstructor = () => {
-  const ingredients = useContext(BurgerContext);
+  const dispatch: ThunkDispatch<any, any, AppActions> = useDispatch();
+  const ingredients = useSelector((store: RootStateInterface) => store.ingredients);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -58,21 +57,7 @@ export const BurgerConstructor = () => {
   }, [betweenBuns, bun]);
 
   const handleOrderClick = async (e: SyntheticEvent) => {
-    await fetch(ordersURL, {
-      method: 'POST',
-      body: JSON.stringify({
-        ingredients: orderIds
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then<NewOrderInterface>(checkResponse)
-      .then((responseData: NewOrderInterface) => setOrderId(responseData.order.number))
-      .catch((err) => {
-        console.log('Error on add submit new order', err);
-      });
-
+    dispatch(submitNewOrder(orderIds));
     setIsOrderDisplayed(true);
   };
 

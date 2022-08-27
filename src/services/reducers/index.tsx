@@ -6,17 +6,19 @@ import {
   BURGER_ACTIONS,
   DESELECT_INGREDIENT,
   IngredientsActionInterface,
-  MAKE_ORDER,
+  SET_NEW_ORDER,
   SELECT_INGREDIENT,
+  SelectIngredientActionInterface,
   UPDATE_CONSTRUCTOR_INGREDIENTS,
-  UPDATE_INGREDIENTS
+  UPDATE_INGREDIENTS,
+  SetNewOrderActionInterface
 } from '../actions';
 
 export interface RootStateInterface {
   ingredients: IngredientInterface[];
   constructorIngredients: IngredientInterface[];
   selectedIngredient: IngredientInterface | null;
-  order: NewOrderInterface | null;
+  order: number | null;
 }
 
 export const initialState: RootStateInterface = {
@@ -28,26 +30,32 @@ export const initialState: RootStateInterface = {
 
 const burgerReducer = (state = initialState, action: AppActions): RootStateInterface => {
   switch (action.type) {
-    case MAKE_ORDER:
+    case SET_NEW_ORDER:
+      action = action as SetNewOrderActionInterface;
       return {
-        ...state
+        ...state,
+        order: action.orderNumber
       };
     case SELECT_INGREDIENT:
+      action = action as SelectIngredientActionInterface;
       return {
-        ...state
+        ...state,
+        selectedIngredient: action.item
       };
     case DESELECT_INGREDIENT:
       return {
-        ...state
+        ...state,
+        selectedIngredient: null
       };
     case UPDATE_CONSTRUCTOR_INGREDIENTS:
       return {
         ...state
       };
     case UPDATE_INGREDIENTS:
+      action = action as IngredientsActionInterface;
       return {
         ...state,
-        ingredients: (action as IngredientsActionInterface).items
+        ingredients: action.items
       };
     default:
       return initialState;
