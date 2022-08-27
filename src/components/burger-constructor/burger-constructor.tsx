@@ -1,17 +1,44 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent, useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
+import { CategoryKey } from '../../enums/category-key.enum';
+import { apiBaseUrl } from '../../utils/app.constants';
+import { checkResponse } from '../../utils/check-response';
+import { BurgerContext } from '../../services/burger-context';
 
-interface Props {
-  ingredients: IngredientInterface[];
-  bun: IngredientInterface;
+const ordersURL = `${apiBaseUrl}/orders`;
+
+interface TotalStateInterface {
+  total: number;
 }
 
-export const BurgerConstructor = (props: Props) => {
+interface NewOrderInterface {
+  name: string;
+  order: {
+    number: number;
+  };
+  success: boolean;
+}
+
+const totalInitialState: TotalStateInterface = {
+  total: 0
+};
+
+function totalReducer(state: TotalStateInterface, prices: number[]) {
+  return {
+    total: prices.reduce((prev, cur) => prev + cur, totalInitialState.total)
+  };
+}
+
+export const BurgerConstructor = () => {
+  const ingredients = useContext(BurgerContext);
+
+  const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
+  const [orderId, setOrderId] = useState<number>();
 
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
@@ -19,7 +46,40 @@ export const BurgerConstructor = (props: Props) => {
   const draggableItemClassName = `${styles.draggableItem}`;
   const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
 
-  const handleOrderClick = (e: SyntheticEvent) => {
+  const orderIds: string[] = useMemo(() => ingredients.map((ingredient) => ingredient._id), [ingredients]);
+  const betweenBuns: IngredientInterface[] = useMemo(
+    () => ingredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
+    [ingredients]
+  );
+  const bun: IngredientInterface = useMemo(
+    () => ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN) as IngredientInterface,
+    [ingredients]
+  );
+
+  let prices = useMemo(() => {
+    let _prices = betweenBuns.map((ingredient) => ingredient.price);
+    if (bun) {
+      _prices = [..._prices, bun.price * 2];
+    }
+    return _prices;
+  }, [betweenBuns, bun]);
+
+  const handleOrderClick = async (e: SyntheticEvent) => {
+    await fetch(ordersURL, {
+      method: 'POST',
+      body: JSON.stringify({
+        ingredients: orderIds
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then<NewOrderInterface>(checkResponse)
+      .then((responseData: NewOrderInterface) => setOrderId(responseData.order.number))
+      .catch((err) => {
+        console.log('Error on add submit new order', err);
+      });
+
     setIsOrderDisplayed(true);
   };
 
@@ -27,22 +87,27 @@ export const BurgerConstructor = (props: Props) => {
     setIsOrderDisplayed(false);
   };
 
+  // update total if prices list is changed
+  useEffect(() => {
+    dispatchTotal(prices);
+  }, [prices]);
+
   return (
     <>
       <div className={wrapperClassName}>
-        {props.bun && (
+        {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={`${props.bun.name} (верх)`}
-              price={props.bun.price}
-              thumbnail={props.bun.image}
+              text={`${bun.name} (верх)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
         <div className={constructorDynamicClassName}>
-          {props.ingredients.map((ingredient, ix) => (
+          {betweenBuns.map((ingredient, ix) => (
             <div
               className={draggableItemClassName}
               key={ingredient._id}>
@@ -56,21 +121,21 @@ export const BurgerConstructor = (props: Props) => {
           ))}
         </div>
 
-        {props.bun && (
+        {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
               type="bottom"
               isLocked={true}
-              text={`${props.bun.name} (низ)`}
-              price={props.bun.price}
-              thumbnail={props.bun.image}
+              text={`${bun.name} (низ)`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
       </div>
       <div className={totalClassName}>
         <p className={totalPriceClassName}>
-          610
+          {totalState.total}
           <CurrencyIcon type="primary" />
         </p>
         <Button
@@ -81,11 +146,11 @@ export const BurgerConstructor = (props: Props) => {
         </Button>
       </div>
 
-      {isOrderDisplayed && (
+      {isOrderDisplayed && !!orderId && (
         <Modal
           onClose={onCloseOrderDetails}
           isOpen={isOrderDisplayed}>
-          <OrderDetails />
+          <OrderDetails order={orderId} />
         </Modal>
       )}
     </>
