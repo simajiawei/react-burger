@@ -5,7 +5,7 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import { DndIngredientType } from '../../../utils/app.types';
 
-export const Ingredient = ({ image, name, price, _id }: IngredientInterface) => {
+export const Ingredient = ({ image, name, price, _id, count }: IngredientInterface) => {
   const priceClassName = `${styles.price} mt-1 mb-1`;
   const titleClassName = `${styles.title} text text_type_main-default`;
 
@@ -21,10 +21,12 @@ export const Ingredient = ({ image, name, price, _id }: IngredientInterface) => 
       ref={ref}>
       {/* todo: remove hardcode */}
       <div className={styles.counter}>
-        <Counter
-          count={1}
-          size="default"
-        />
+        {count > 0 && (
+          <Counter
+            count={count}
+            size="default"
+          />
+        )}
       </div>
 
       <div className="pl-4 pr-4">

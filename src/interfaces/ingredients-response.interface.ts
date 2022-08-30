@@ -1,6 +1,6 @@
-import { IngredientInterface } from './ingredient.interface';
+import { IngredientResponseInterface } from './ingredient.interface';
 
 export interface IngrediendsResponseInterface {
-  data: IngredientInterface[];
+  data: IngredientResponseInterface[];
   success: boolean;
 }

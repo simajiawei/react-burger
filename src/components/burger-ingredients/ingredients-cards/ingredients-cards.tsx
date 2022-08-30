@@ -11,7 +11,6 @@ interface IngredientCardInterface {
 }
 export function IngredientsCards({ categories, ingredients, onCardClick }: IngredientCardInterface): ReactElement {
   const gridClassName = `${styles.cardsGrid} pl-2 pr-2 pt-6`;
-  console.log(ingredients);
   return (
     <>
       {Object.keys(categories).map((category) => {

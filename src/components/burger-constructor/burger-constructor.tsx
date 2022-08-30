@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
-import { IngredientInterface } from '../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface, IngredientInterface } from '../../interfaces/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
@@ -15,7 +15,11 @@ import {
 import { ThunkDispatch } from 'redux-thunk';
 import { useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
-import { AddIngredientToConstructorInterface, BURGER_ACTIONS } from '../../services/actions/actions.interface';
+import {
+  AddIngredientToConstructorInterface,
+  BURGER_ACTIONS,
+  RemoveIngredientFromConstructorInterface
+} from '../../services/actions/actions.interface';
 
 interface TotalStateInterface {
   total: number;
@@ -48,13 +52,16 @@ export const BurgerConstructor = () => {
     () => constructorIngredients.map((ingredient) => ingredient._id),
     [constructorIngredients]
   );
-  const betweenBuns: IngredientInterface[] = useMemo(
+  const betweenBuns: ConstructorIngredientInterface[] = useMemo(
     () =>
       constructorIngredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
     [constructorIngredients]
   );
-  const bun: IngredientInterface = useMemo(
-    () => constructorIngredients.find((ingredient) => ingredient.type === CategoryKey.BUN) as IngredientInterface,
+  const bun: ConstructorIngredientInterface = useMemo(
+    () =>
+      constructorIngredients.find(
+        (ingredient) => ingredient.type === CategoryKey.BUN
+      ) as ConstructorIngredientInterface,
     [constructorIngredients]
   );
 
@@ -91,10 +98,11 @@ export const BurgerConstructor = () => {
     });
   };
 
-  const handleRemove = (id: string) => {
-    dispatch({
+  const handleRemove = (ingredient: ConstructorIngredientInterface) => {
+    dispatch<RemoveIngredientFromConstructorInterface>({
       type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-      id
+      id: ingredient._id,
+      constructorId: ingredient.constructorId
     });
   };
 
@@ -141,10 +149,10 @@ export const BurgerConstructor = () => {
           {betweenBuns.map((ingredient, ix) => (
             <div
               className={draggableItemClassName}
-              key={ingredient._id}>
+              key={ix}>
               <DragIcon type="primary" />
               <ConstructorElement
-                handleClose={() => handleRemove(ingredient._id)}
+                handleClose={() => handleRemove(ingredient)}
                 text={ingredient.name}
                 price={ingredient.price}
                 thumbnail={ingredient.image}

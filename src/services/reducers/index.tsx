@@ -1,5 +1,5 @@
 import { combineReducers, Reducer } from 'redux';
-import { IngredientInterface } from '../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface, IngredientInterface } from '../../interfaces/ingredient.interface';
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   DESELECT_INGREDIENT,
@@ -9,6 +9,7 @@ import {
   UPDATE_INGREDIENTS
 } from '../actions';
 import { BURGER_ACTIONS } from '../actions/actions.interface';
+import { uniqueId } from '../../utils/generate-id';
 
 export interface StoreInterface {
   burger: RootStateInterface;
@@ -16,7 +17,7 @@ export interface StoreInterface {
 
 export interface RootStateInterface {
   ingredients: IngredientInterface[];
-  constructorIngredients: IngredientInterface[];
+  constructorIngredients: ConstructorIngredientInterface[];
   selectedIngredient: IngredientInterface | null;
   order: number | null;
 }
@@ -49,22 +50,53 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
         selectedIngredient: null
       };
     case ADD_INGREDIENT_TO_CONSTRUCTOR:
+      console.log(action.id);
       return {
         ...state,
+        ingredients: state.ingredients.map((ingredient) =>
+          ingredient._id === action.id
+            ? {
+                ...ingredient,
+                count: ingredient.count + 1
+              }
+            : ingredient
+        ),
         constructorIngredients: [
           ...state.constructorIngredients,
-          ...state.ingredients.filter((ingredient) => ingredient._id === action.id)
+          ...state.ingredients
+            .filter((ingredient) => ingredient._id === action.id)
+            .map((ingredient) => {
+              return {
+                ...ingredient,
+                constructorId: uniqueId()
+              };
+            })
         ]
       };
     case REMOVE_INGREDIENT_FROM_CONSTRUCTOR:
       return {
         ...state,
-        constructorIngredients: state.constructorIngredients.filter((item) => item._id !== action.id)
+        ingredients: state.ingredients.map((ingredient) =>
+          ingredient._id === action.id
+            ? {
+                ...ingredient,
+                count: ingredient.count - 1
+              }
+            : ingredient
+        ),
+        constructorIngredients: state.constructorIngredients.filter(
+          (item) => item.constructorId !== action.constructorId
+        )
       };
     case UPDATE_INGREDIENTS:
       return {
         ...state,
-        ingredients: action.items
+        ingredients: action.items.map((item) => {
+          return {
+            ...item,
+            count: 0
+          };
+        })
       };
     default:
       return initialState;
