@@ -89,7 +89,7 @@ export function BurgerIngredients() {
           isOpen={!!selectedIngredient}
           onClose={onCloseDetails}
           title="Детали ингредиента">
-          <IngredientDetails ingredient={selectedIngredient as IngredientInterface} />
+          <IngredientDetails />
         </Modal>
       )}
     </>
