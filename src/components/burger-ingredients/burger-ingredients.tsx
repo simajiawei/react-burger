@@ -21,7 +21,6 @@ export interface CategoryInterface {
 export function BurgerIngredients() {
   const dispatch = useDispatch();
   const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
-  console.log('burger ingredients: ', ingredients);
   const categories: CategoryInterface = {
     [CategoryKey.BUN]: {
       name: 'Булки',

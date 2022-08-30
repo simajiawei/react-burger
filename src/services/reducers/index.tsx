@@ -10,6 +10,7 @@ import {
 } from '../actions';
 import { BURGER_ACTIONS } from '../actions/actions.interface';
 import { uniqueId } from '../../utils/generate-id';
+import { CategoryKey } from '../../enums/category-key.enum';
 
 export interface StoreInterface {
   burger: RootStateInterface;
@@ -50,10 +51,29 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
         selectedIngredient: null
       };
     case ADD_INGREDIENT_TO_CONSTRUCTOR:
-      console.log(action.id);
+      let constructorIngredients = [...state.constructorIngredients];
+      let ingredients = [...state.ingredients];
+      const newConstructorIngredient = {
+        ...(ingredients.find((ingredient) => ingredient._id === action.id) as IngredientInterface),
+        constructorId: uniqueId()
+      };
+      if (newConstructorIngredient.type === CategoryKey.BUN) {
+        const pos = constructorIngredients.findIndex((ingredient) => ingredient.type === CategoryKey.BUN);
+        constructorIngredients.splice(pos, 1, newConstructorIngredient);
+        ingredients = ingredients.map((ingredient) =>
+          ingredient.type === CategoryKey.BUN
+            ? {
+                ...ingredient,
+                count: 0
+              }
+            : ingredient
+        );
+      } else {
+        constructorIngredients.push(newConstructorIngredient);
+      }
       return {
         ...state,
-        ingredients: state.ingredients.map((ingredient) =>
+        ingredients: ingredients.map((ingredient) =>
           ingredient._id === action.id
             ? {
                 ...ingredient,
@@ -61,17 +81,7 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
               }
             : ingredient
         ),
-        constructorIngredients: [
-          ...state.constructorIngredients,
-          ...state.ingredients
-            .filter((ingredient) => ingredient._id === action.id)
-            .map((ingredient) => {
-              return {
-                ...ingredient,
-                constructorId: uniqueId()
-              };
-            })
-        ]
+        constructorIngredients
       };
     case REMOVE_INGREDIENT_FROM_CONSTRUCTOR:
       return {

@@ -146,10 +146,10 @@ export const BurgerConstructor = () => {
           </div>
         )}
         <div className={constructorDynamicClassName}>
-          {betweenBuns.map((ingredient, ix) => (
+          {betweenBuns.map((ingredient) => (
             <div
               className={draggableItemClassName}
-              key={ix}>
+              key={ingredient.constructorId}>
               <DragIcon type="primary" />
               <ConstructorElement
                 handleClose={() => handleRemove(ingredient)}
