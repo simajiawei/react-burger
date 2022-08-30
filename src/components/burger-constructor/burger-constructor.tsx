@@ -6,9 +6,16 @@ import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootStateInterface, StoreInterface } from '../../services/reducers';
-import { AppActions, submitNewOrder } from '../../services/actions';
+import { StoreInterface } from '../../services/reducers';
+import {
+  ADD_INGREDIENT_TO_CONSTRUCTOR,
+  REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+  submitNewOrder
+} from '../../services/actions';
 import { ThunkDispatch } from 'redux-thunk';
+import { useDrop } from 'react-dnd';
+import { DndIngredientType } from '../../utils/app.types';
+import { AddIngredientToConstructorInterface, BURGER_ACTIONS } from '../../services/actions/actions.interface';
 
 interface TotalStateInterface {
   total: number;
@@ -25,8 +32,8 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 }
 
 export const BurgerConstructor = () => {
-  const dispatch: ThunkDispatch<any, any, AppActions> = useDispatch();
-  const { ingredients, order } = useSelector((store: StoreInterface) => store.burger);
+  const dispatch: ThunkDispatch<any, any, BURGER_ACTIONS> = useDispatch();
+  const { constructorIngredients, order, ingredients } = useSelector((store: StoreInterface) => store.burger);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -37,15 +44,59 @@ export const BurgerConstructor = () => {
   const draggableItemClassName = `${styles.draggableItem}`;
   const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
 
-  const orderIds: string[] = useMemo(() => ingredients.map((ingredient) => ingredient._id), [ingredients]);
+  const orderIds: string[] = useMemo(
+    () => constructorIngredients.map((ingredient) => ingredient._id),
+    [constructorIngredients]
+  );
   const betweenBuns: IngredientInterface[] = useMemo(
-    () => ingredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
-    [ingredients]
+    () =>
+      constructorIngredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
+    [constructorIngredients]
   );
   const bun: IngredientInterface = useMemo(
-    () => ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN) as IngredientInterface,
-    [ingredients]
+    () => constructorIngredients.find((ingredient) => ingredient.type === CategoryKey.BUN) as IngredientInterface,
+    [constructorIngredients]
   );
+
+  useEffect(() => {
+    if (constructorIngredients.length > 0) {
+      return;
+    }
+    const anyBun = ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN);
+    console.log('anyBun', anyBun, ingredients);
+
+    if (!anyBun) {
+      return;
+    }
+    dispatch<AddIngredientToConstructorInterface>({
+      type: ADD_INGREDIENT_TO_CONSTRUCTOR,
+      id: anyBun._id
+    });
+  }, [ingredients]);
+
+  const [{ opacity }, dropTarget] = useDrop({
+    accept: DndIngredientType.ITEMS,
+    drop(item: { id: string }) {
+      onDropHandler(item.id);
+    },
+    collect: (monitor) => ({
+      opacity: monitor.isOver() ? 0.5 : 1
+    })
+  });
+
+  const onDropHandler = (itemId: string) => {
+    dispatch({
+      type: ADD_INGREDIENT_TO_CONSTRUCTOR,
+      id: itemId
+    });
+  };
+
+  const handleRemove = (id: string) => {
+    dispatch({
+      type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+      id
+    });
+  };
 
   let prices = useMemo(() => {
     let _prices = betweenBuns.map((ingredient) => ingredient.price);
@@ -71,7 +122,10 @@ export const BurgerConstructor = () => {
 
   return (
     <>
-      <div className={wrapperClassName}>
+      <div
+        style={{ opacity }}
+        className={wrapperClassName}
+        ref={dropTarget}>
         {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
@@ -90,6 +144,7 @@ export const BurgerConstructor = () => {
               key={ingredient._id}>
               <DragIcon type="primary" />
               <ConstructorElement
+                handleClose={() => handleRemove(ingredient._id)}
                 text={ingredient.name}
                 price={ingredient.price}
                 thumbnail={ingredient.image}

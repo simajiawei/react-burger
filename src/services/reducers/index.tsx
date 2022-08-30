@@ -1,16 +1,14 @@
-import { combineReducers, Reducer, Store } from 'redux';
+import { combineReducers, Reducer } from 'redux';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import {
-  AppActions,
+  ADD_INGREDIENT_TO_CONSTRUCTOR,
   DESELECT_INGREDIENT,
-  IngredientsActionInterface,
+  REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SELECT_INGREDIENT,
-  SelectIngredientActionInterface,
   SET_NEW_ORDER,
-  SetNewOrderActionInterface,
-  UPDATE_CONSTRUCTOR_INGREDIENTS,
   UPDATE_INGREDIENTS
 } from '../actions';
+import { BURGER_ACTIONS } from '../actions/actions.interface';
 
 export interface StoreInterface {
   burger: RootStateInterface;
@@ -30,19 +28,17 @@ export const initialState: RootStateInterface = {
   order: null
 };
 
-const burgerReducer: Reducer<RootStateInterface, AppActions> = (
+const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
   state = initialState,
-  action: AppActions
+  action: BURGER_ACTIONS
 ): RootStateInterface => {
   switch (action.type) {
     case SET_NEW_ORDER:
-      action = action as SetNewOrderActionInterface;
       return {
         ...state,
         order: action.orderNumber
       };
     case SELECT_INGREDIENT:
-      action = action as SelectIngredientActionInterface;
       return {
         ...state,
         selectedIngredient: action.item
@@ -52,12 +48,20 @@ const burgerReducer: Reducer<RootStateInterface, AppActions> = (
         ...state,
         selectedIngredient: null
       };
-    case UPDATE_CONSTRUCTOR_INGREDIENTS:
+    case ADD_INGREDIENT_TO_CONSTRUCTOR:
       return {
-        ...state
+        ...state,
+        constructorIngredients: [
+          ...state.constructorIngredients,
+          ...state.ingredients.filter((ingredient) => ingredient._id === action.id)
+        ]
+      };
+    case REMOVE_INGREDIENT_FROM_CONSTRUCTOR:
+      return {
+        ...state,
+        constructorIngredients: state.constructorIngredients.filter((item) => item._id !== action.id)
       };
     case UPDATE_INGREDIENTS:
-      action = action as IngredientsActionInterface;
       return {
         ...state,
         ingredients: action.items

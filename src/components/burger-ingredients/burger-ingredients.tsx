@@ -8,7 +8,8 @@ import { Modal } from '../modal/modal';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreInterface } from '../../services/reducers';
-import { DESELECT_INGREDIENT, SELECT_INGREDIENT, SelectIngredientActionInterface } from '../../services/actions';
+import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions';
+import { SelectIngredientActionInterface } from '../../services/actions/actions.interface';
 
 export interface CategoryInterface {
   [key: string]: {
