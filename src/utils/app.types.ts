@@ -1,3 +1,4 @@
 export enum DndIngredientType {
-  ITEMS = 'items'
+  ITEMS = 'items',
+  BETWEEN_BUNS = 'between_buns'
 }

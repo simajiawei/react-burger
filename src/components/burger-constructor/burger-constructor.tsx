@@ -13,13 +13,15 @@ import {
   submitNewOrder
 } from '../../services/actions';
 import { ThunkDispatch } from 'redux-thunk';
-import { useDrop } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
 import {
   AddIngredientToConstructorInterface,
   BURGER_ACTIONS,
   RemoveIngredientFromConstructorInterface
 } from '../../services/actions/actions.interface';
+import { BurgerConstructorItem } from './burger-constructor-item/burger-constructor-item';
+import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
 
 interface TotalStateInterface {
   total: number;
@@ -45,8 +47,6 @@ export const BurgerConstructor = () => {
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
   const totalPriceClassName = `${styles.totalPrice} text text_type_digits-medium mr-10`;
-  const draggableItemClassName = `${styles.draggableItem}`;
-  const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
 
   const orderIds: string[] = useMemo(
     () => constructorIngredients.map((ingredient) => ingredient._id),
@@ -98,14 +98,6 @@ export const BurgerConstructor = () => {
     });
   };
 
-  const handleRemove = (ingredient: ConstructorIngredientInterface) => {
-    dispatch<RemoveIngredientFromConstructorInterface>({
-      type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-      id: ingredient._id,
-      constructorId: ingredient.constructorId
-    });
-  };
-
   let prices = useMemo(() => {
     let _prices = betweenBuns.map((ingredient) => ingredient.price);
     if (bun) {
@@ -145,22 +137,7 @@ export const BurgerConstructor = () => {
             />
           </div>
         )}
-        <div className={constructorDynamicClassName}>
-          {betweenBuns.map((ingredient) => (
-            <div
-              className={draggableItemClassName}
-              key={ingredient.constructorId}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                handleClose={() => handleRemove(ingredient)}
-                text={ingredient.name}
-                price={ingredient.price}
-                thumbnail={ingredient.image}
-              />
-            </div>
-          ))}
-        </div>
-
+        <BurgerConstructorBetweenBuns ingredients={betweenBuns} />
         {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement

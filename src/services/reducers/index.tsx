@@ -6,6 +6,7 @@ import {
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SELECT_INGREDIENT,
   SET_NEW_ORDER,
+  UPDATE_CONSTRUCTOR_ELEMENTS,
   UPDATE_INGREDIENTS
 } from '../actions';
 import { BURGER_ACTIONS } from '../actions/actions.interface';
@@ -107,6 +108,12 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
             count: 0
           };
         })
+      };
+    case UPDATE_CONSTRUCTOR_ELEMENTS:
+      return {
+        ...state,
+        // храним булку всегда в топе и вседа одну
+        constructorIngredients: [state.constructorIngredients[0], ...action.items]
       };
     default:
       return initialState;

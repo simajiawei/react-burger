@@ -11,6 +11,7 @@ export const ADD_INGREDIENT_TO_CONSTRUCTOR = 'ADD_INGREDIENT_TO_CONSTRUCTOR';
 export const SELECT_INGREDIENT = 'SELECT_INGREDIENT';
 export const SET_NEW_ORDER = 'SET_NEW_ORDER';
 export const DESELECT_INGREDIENT = 'DESELECT_INGREDIENT';
+export const UPDATE_CONSTRUCTOR_ELEMENTS = 'UPDATE_CONSTRUCTOR_ELEMENTS';
 
 const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
 const ordersURL = `${apiBaseUrl}/orders`;
