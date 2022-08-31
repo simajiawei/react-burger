@@ -1,4 +1,4 @@
-import React, { MutableRefObject, SyntheticEvent, useMemo, useRef, useState } from 'react';
+import React, { LegacyRef, MutableRefObject, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
@@ -10,35 +10,61 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StoreInterface } from '../../services/reducers';
 import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions';
 import { SelectIngredientActionInterface } from '../../services/actions/actions.interface';
+import { useInView } from 'react-intersection-observer';
 
 export interface CategoryInterface {
   [key: string]: {
     name: string;
-    ref: MutableRefObject<HTMLElement | null>;
+    ref: LegacyRef<HTMLHeadingElement>;
+    itemsRef: LegacyRef<HTMLElement>;
   };
 }
 
 export function BurgerIngredients() {
   const dispatch = useDispatch();
   const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
+  const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
+
+  const [bunsRef, inViewBuns] = useInView({
+    threshold: 0
+  });
+  const [sauceRef, inViewSauce] = useInView({
+    threshold: 0
+  });
+  const [mainRef, inViewMain] = useInView({
+    threshold: 0
+  });
+
   const categories: CategoryInterface = {
     [CategoryKey.BUN]: {
       name: 'Булки',
-      ref: useRef<HTMLElement>(null)
+      ref: useRef<HTMLHeadingElement>(null),
+      itemsRef: bunsRef
     },
     [CategoryKey.SAUCE]: {
       name: 'Соусы',
-      ref: useRef<HTMLElement>(null)
+      ref: useRef<HTMLHeadingElement>(null),
+      itemsRef: sauceRef
     },
     [CategoryKey.MAIN]: {
       name: 'Начинки',
-      ref: useRef<HTMLElement>(null)
+      ref: useRef<HTMLHeadingElement>(null),
+      itemsRef: mainRef
     }
   };
-  const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
-  // const [selectedIngredient, setSelectedIngredient]: [IngredientInterface | undefined, any] = useState();
+
+  useEffect(() => {
+    if (inViewBuns) {
+      setSelectedCategory(CategoryKey.BUN);
+    } else if (inViewSauce) {
+      setSelectedCategory(CategoryKey.SAUCE);
+    } else if (inViewMain) {
+      setSelectedCategory(CategoryKey.MAIN);
+    }
+  }, [inViewMain, inViewBuns, inViewSauce]);
 
   const handleTabClick = (category: string) => {
+    // @ts-ignore
     (categories[category].ref.current as HTMLElement).scrollIntoView({
       behavior: 'smooth'
     });
