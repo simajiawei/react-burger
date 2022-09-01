@@ -3,20 +3,18 @@ import React, { useCallback } from 'react';
 import { ConstructorIngredientInterface } from '../../../interfaces/ingredient.interface';
 import styles from './burger-constructor-between-buns.module.css';
 import {
-  BURGER_ACTIONS,
   RemoveIngredientFromConstructorInterface,
   UpdateConstructorElementsInterface
 } from '../../../services/actions/actions.interface';
 import { REMOVE_INGREDIENT_FROM_CONSTRUCTOR, UPDATE_CONSTRUCTOR_ELEMENTS } from '../../../services/actions';
-import { ThunkDispatch } from 'redux-thunk';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../utils/hooks';
 
 export interface BurgerConstructorBetweenBunsPropsInterface {
   ingredients: ConstructorIngredientInterface[];
 }
 
 export function BurgerConstructorBetweenBuns({ ingredients }: BurgerConstructorBetweenBunsPropsInterface) {
-  const dispatch: ThunkDispatch<any, any, BURGER_ACTIONS> = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleRemove = (ingredient: ConstructorIngredientInterface) => {
     dispatch<RemoveIngredientFromConstructorInterface>({

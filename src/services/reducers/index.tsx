@@ -116,7 +116,7 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
         constructorIngredients: [state.constructorIngredients[0], ...action.items]
       };
     default:
-      return initialState;
+      return state;
   }
 };
 

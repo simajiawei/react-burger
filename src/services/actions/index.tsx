@@ -4,6 +4,7 @@ import { IngrediendsResponseInterface } from '../../interfaces/ingredients-respo
 import { Dispatch } from 'redux';
 import { NewOrderInterface } from '../../interfaces/new-order.interface';
 import { IngredientsActionInterface, SetNewOrderActionInterface } from './actions.interface';
+import { AppThunk } from '../store';
 
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';
@@ -16,7 +17,7 @@ export const UPDATE_CONSTRUCTOR_ELEMENTS = 'UPDATE_CONSTRUCTOR_ELEMENTS';
 const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
 const ordersURL = `${apiBaseUrl}/orders`;
 
-export function getIngredients() {
+export function getIngredients(): AppThunk {
   return function (dispatch: Dispatch<IngredientsActionInterface>) {
     fetch(ingredientsApiUrl)
       .then<IngrediendsResponseInterface>(checkResponse)
@@ -32,7 +33,7 @@ export function getIngredients() {
   };
 }
 
-export function submitNewOrder(orderIds: string[]) {
+export function submitNewOrder(orderIds: string[]): AppThunk {
   return function (dispatch: Dispatch) {
     fetch(ordersURL, {
       method: 'POST',

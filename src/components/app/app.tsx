@@ -3,15 +3,13 @@ import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
 import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../burger-constructor/burger-constructor';
-import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions';
-import { ThunkDispatch } from 'redux-thunk';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { BURGER_ACTIONS } from '../../services/actions/actions.interface';
+import { useAppDispatch } from '../../utils/hooks';
 
 function App() {
-  const dispatch: ThunkDispatch<any, any, BURGER_ACTIONS> = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getIngredients());

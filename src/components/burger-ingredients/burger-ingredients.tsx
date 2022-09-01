@@ -1,4 +1,4 @@
-import React, { LegacyRef, MutableRefObject, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { LegacyRef, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
@@ -6,11 +6,12 @@ import styles from './burger-ingredients.module.css';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StoreInterface } from '../../services/reducers';
 import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions';
 import { SelectIngredientActionInterface } from '../../services/actions/actions.interface';
 import { useInView } from 'react-intersection-observer';
+import { useAppDispatch } from '../../utils/hooks';
 
 export interface CategoryInterface {
   [key: string]: {
@@ -21,7 +22,7 @@ export interface CategoryInterface {
 }
 
 export function BurgerIngredients() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
   const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
 

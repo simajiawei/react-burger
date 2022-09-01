@@ -1,27 +1,18 @@
 import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
-import { ConstructorIngredientInterface, IngredientInterface } from '../../interfaces/ingredient.interface';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorIngredientInterface } from '../../interfaces/ingredient.interface';
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StoreInterface } from '../../services/reducers';
-import {
-  ADD_INGREDIENT_TO_CONSTRUCTOR,
-  REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-  submitNewOrder
-} from '../../services/actions';
-import { ThunkDispatch } from 'redux-thunk';
-import { useDrag, useDrop } from 'react-dnd';
+import { ADD_INGREDIENT_TO_CONSTRUCTOR, submitNewOrder } from '../../services/actions';
+import { useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
-import {
-  AddIngredientToConstructorInterface,
-  BURGER_ACTIONS,
-  RemoveIngredientFromConstructorInterface
-} from '../../services/actions/actions.interface';
-import { BurgerConstructorItem } from './burger-constructor-item/burger-constructor-item';
+import { AddIngredientToConstructorInterface } from '../../services/actions/actions.interface';
 import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
+import { useAppDispatch } from '../../utils/hooks';
 
 interface TotalStateInterface {
   total: number;
@@ -38,7 +29,7 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 }
 
 export const BurgerConstructor = () => {
-  const dispatch: ThunkDispatch<any, any, BURGER_ACTIONS> = useDispatch();
+  const dispatch = useAppDispatch();
   const { constructorIngredients, order, ingredients } = useSelector((store: StoreInterface) => store.burger);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
