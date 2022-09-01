@@ -6,6 +6,7 @@ import {
 } from '../../interfaces/ingredient.interface';
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
+  CLEAR_CONSTRUCTOR_ELEMENTS,
   DESELECT_INGREDIENT,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SELECT_INGREDIENT,
@@ -42,6 +43,7 @@ export interface UpdateConstructorElementsInterface extends Action<typeof UPDATE
 
 export type BURGER_ACTIONS =
   | Action<typeof DESELECT_INGREDIENT>
+  | Action<typeof CLEAR_CONSTRUCTOR_ELEMENTS>
   | IngredientsActionInterface
   | SelectIngredientActionInterface
   | SetNewOrderActionInterface

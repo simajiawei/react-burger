@@ -18,6 +18,7 @@ export const SELECT_INGREDIENT = 'SELECT_INGREDIENT';
 export const SET_NEW_ORDER = 'SET_NEW_ORDER';
 export const DESELECT_INGREDIENT = 'DESELECT_INGREDIENT';
 export const UPDATE_CONSTRUCTOR_ELEMENTS = 'UPDATE_CONSTRUCTOR_ELEMENTS';
+export const CLEAR_CONSTRUCTOR_ELEMENTS = 'CLEAR_CONSTRUCTOR_ELEMENTS';
 
 const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
 const ordersURL = `${apiBaseUrl}/orders`;
@@ -58,6 +59,11 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
       })
       .catch((err) => {
         console.log('Error on add submit new order', err);
+      })
+      .then(() => {
+        dispatch({
+          type: CLEAR_CONSTRUCTOR_ELEMENTS
+        });
       });
   };
 }

@@ -7,7 +7,8 @@ import {
   SELECT_INGREDIENT,
   SET_NEW_ORDER,
   UPDATE_CONSTRUCTOR_ELEMENTS,
-  UPDATE_INGREDIENTS
+  UPDATE_INGREDIENTS,
+  CLEAR_CONSTRUCTOR_ELEMENTS
 } from '../actions';
 import { BURGER_ACTIONS } from '../actions/actions.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
@@ -118,6 +119,11 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
         ...state,
         // храним булку всегда в топе и вседа одну
         constructorIngredients: [state.constructorIngredients[0], ...action.items]
+      };
+    case CLEAR_CONSTRUCTOR_ELEMENTS:
+      return {
+        ...state,
+        constructorIngredients: []
       };
     default:
       return state;
