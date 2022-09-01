@@ -5,10 +5,11 @@ import {
   DESELECT_INGREDIENT,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SELECT_INGREDIENT,
-  SET_NEW_ORDER,
+  SET_NEW_ORDER_SUCCESS,
   UPDATE_CONSTRUCTOR_ELEMENTS,
   UPDATE_INGREDIENTS,
-  CLEAR_CONSTRUCTOR_ELEMENTS
+  CLEAR_CONSTRUCTOR_ELEMENTS,
+  SET_NEW_ORDER
 } from '../actions';
 import { BURGER_ACTIONS } from '../actions/actions.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
@@ -22,13 +23,15 @@ export interface RootStateInterface {
   constructorIngredients: ConstructorIngredientInterface[];
   selectedIngredient: IngredientInterface | null;
   order: number | null;
+  orderIsProcessing: boolean;
 }
 
 export const initialState: RootStateInterface = {
   ingredients: [],
   constructorIngredients: [],
   selectedIngredient: null,
-  order: null
+  order: null,
+  orderIsProcessing: false
 };
 
 const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
@@ -39,8 +42,14 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
     case SET_NEW_ORDER:
       return {
         ...state,
+        orderIsProcessing: action.isProcessing
+      };
+    case SET_NEW_ORDER_SUCCESS:
+      return {
+        ...state,
         order: action.orderNumber
       };
+
     case SELECT_INGREDIENT:
       return {
         ...state,
@@ -125,6 +134,7 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
         ...state,
         constructorIngredients: []
       };
+
     default:
       return state;
   }

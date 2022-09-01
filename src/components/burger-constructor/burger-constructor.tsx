@@ -29,7 +29,9 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 
 export const BurgerConstructor = () => {
   const dispatch = useAppDispatch();
-  const { constructorIngredients, order, ingredients } = useSelector((store: StoreInterface) => store.burger);
+  const { constructorIngredients, order, ingredients, orderIsProcessing } = useSelector(
+    (store: StoreInterface) => store.burger
+  );
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -125,6 +127,7 @@ export const BurgerConstructor = () => {
           </div>
         )}
       </div>
+      {orderIsProcessing && <p className="text">Выполняется заказ, пожалуйста подождите</p>}
       <div className={totalClassName}>
         <p className={totalPriceClassName}>
           {totalState.total}
