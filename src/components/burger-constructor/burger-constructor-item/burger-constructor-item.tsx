@@ -108,8 +108,7 @@ export function BurgerConstructorItem({
       style={{ opacity }}
       onDrop={preventDefault}
       data-handler-id={handlerId}
-      className={draggableItemClassName}
-      key={constructorId}>
+      className={draggableItemClassName}>
       <DragIcon type="primary" />
       <ConstructorElement
         handleClose={handleRemove}

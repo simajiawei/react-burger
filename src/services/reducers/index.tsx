@@ -10,7 +10,6 @@ import {
   UPDATE_INGREDIENTS
 } from '../actions';
 import { BURGER_ACTIONS } from '../actions/actions.interface';
-import { uniqueId } from '../../utils/generate-id';
 import { CategoryKey } from '../../enums/category-key.enum';
 
 export interface StoreInterface {
@@ -56,7 +55,7 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
       let ingredients = [...state.ingredients];
       const newConstructorIngredient = {
         ...(ingredients.find((ingredient) => ingredient._id === action.id) as IngredientInterface),
-        constructorId: uniqueId()
+        constructorId: action.constructorId
       };
       if (newConstructorIngredient.type === CategoryKey.BUN) {
         const pos = constructorIngredients.findIndex((ingredient) => ingredient.type === CategoryKey.BUN);

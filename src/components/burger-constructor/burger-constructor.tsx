@@ -7,10 +7,9 @@ import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { useSelector } from 'react-redux';
 import { StoreInterface } from '../../services/reducers';
-import { ADD_INGREDIENT_TO_CONSTRUCTOR, submitNewOrder } from '../../services/actions';
+import { addIngredientToConstructor, submitNewOrder } from '../../services/actions';
 import { useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
-import { AddIngredientToConstructorInterface } from '../../services/actions/actions.interface';
 import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
 import { useAppDispatch } from '../../utils/hooks';
 
@@ -66,10 +65,7 @@ export const BurgerConstructor = () => {
     if (!anyBun) {
       return;
     }
-    dispatch<AddIngredientToConstructorInterface>({
-      type: ADD_INGREDIENT_TO_CONSTRUCTOR,
-      id: anyBun._id
-    });
+    dispatch(addIngredientToConstructor(anyBun._id));
   }, [ingredients]);
 
   const [{ opacity }, dropTarget] = useDrop({
@@ -83,10 +79,7 @@ export const BurgerConstructor = () => {
   });
 
   const onDropHandler = (itemId: string) => {
-    dispatch({
-      type: ADD_INGREDIENT_TO_CONSTRUCTOR,
-      id: itemId
-    });
+    dispatch(addIngredientToConstructor(itemId));
   };
 
   let prices = useMemo(() => {

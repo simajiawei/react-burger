@@ -3,8 +3,13 @@ import { apiBaseUrl } from '../../utils/app.constants';
 import { IngrediendsResponseInterface } from '../../interfaces/ingredients-response.interface';
 import { Dispatch } from 'redux';
 import { NewOrderInterface } from '../../interfaces/new-order.interface';
-import { IngredientsActionInterface, SetNewOrderActionInterface } from './actions.interface';
+import {
+  AddIngredientToConstructorInterface,
+  IngredientsActionInterface,
+  SetNewOrderActionInterface
+} from './actions.interface';
 import { AppThunk } from '../store';
+import { uniqueId } from '../../utils/generate-id';
 
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';
@@ -54,5 +59,13 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
       .catch((err) => {
         console.log('Error on add submit new order', err);
       });
+  };
+}
+
+export function addIngredientToConstructor(id: string): AddIngredientToConstructorInterface {
+  return {
+    type: ADD_INGREDIENT_TO_CONSTRUCTOR,
+    constructorId: uniqueId(),
+    id
   };
 }

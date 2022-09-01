@@ -28,6 +28,7 @@ export interface SetNewOrderActionInterface extends Action<typeof SET_NEW_ORDER>
 
 export interface AddIngredientToConstructorInterface extends Action<typeof ADD_INGREDIENT_TO_CONSTRUCTOR> {
   id: string;
+  constructorId: string;
 }
 
 export interface RemoveIngredientFromConstructorInterface extends Action<typeof REMOVE_INGREDIENT_FROM_CONSTRUCTOR> {
