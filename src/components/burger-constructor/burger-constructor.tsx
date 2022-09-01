@@ -55,18 +55,6 @@ export const BurgerConstructor = () => {
     [constructorIngredients]
   );
 
-  useEffect(() => {
-    if (constructorIngredients.length > 0) {
-      return;
-    }
-    const anyBun = ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN);
-    console.log('anyBun', anyBun, ingredients);
-
-    if (!anyBun) {
-      return;
-    }
-    dispatch(addIngredientToConstructor(anyBun._id));
-  }, [ingredients]);
 
   const [{ opacity }, dropTarget] = useDrop({
     accept: DndIngredientType.ITEMS,
@@ -110,6 +98,10 @@ export const BurgerConstructor = () => {
         style={{ opacity }}
         className={wrapperClassName}
         ref={dropTarget}>
+        {!bun && betweenBuns.length === 0 && (
+          <p className="text">Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа</p>
+        )}
+
         {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement

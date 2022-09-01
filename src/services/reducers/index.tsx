@@ -58,8 +58,13 @@ const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
         constructorId: action.constructorId
       };
       if (newConstructorIngredient.type === CategoryKey.BUN) {
-        const pos = constructorIngredients.findIndex((ingredient) => ingredient.type === CategoryKey.BUN);
-        constructorIngredients.splice(pos, 1, newConstructorIngredient);
+        let pos = constructorIngredients.findIndex((ingredient) => ingredient.type === CategoryKey.BUN);
+        let deleteCount = 1;
+        if (pos === -1) {
+          pos = 0;
+          deleteCount = 0;
+        }
+        constructorIngredients.splice(pos, deleteCount, newConstructorIngredient);
         ingredients = ingredients.map((ingredient) =>
           ingredient.type === CategoryKey.BUN
             ? {
