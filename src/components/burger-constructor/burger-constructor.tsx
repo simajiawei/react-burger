@@ -55,7 +55,6 @@ export const BurgerConstructor = () => {
     [constructorIngredients]
   );
 
-
   const [{ opacity }, dropTarget] = useDrop({
     accept: DndIngredientType.ITEMS,
     drop(item: { id: string }) {
@@ -134,6 +133,7 @@ export const BurgerConstructor = () => {
         <Button
           type="primary"
           onClick={handleOrderClick}
+          disabled={!bun}
           size="large">
           Оформить заказ
         </Button>
