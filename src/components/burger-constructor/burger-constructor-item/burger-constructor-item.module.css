@@ -1,0 +1,8 @@
+.draggableItem{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.draggableItem > svg{
+  flex-shrink: 0;
+}

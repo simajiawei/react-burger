@@ -1,40 +1,71 @@
-import React, { MutableRefObject, SyntheticEvent, useContext, useMemo, useRef, useState } from 'react';
+import React, { LegacyRef, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import styles from './burger-ingredients.module.css';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
-import { BurgerContext } from '../../services/burger-context';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../../services/reducers';
+import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions';
+import { SelectIngredientActionInterface } from '../../services/actions/actions.interface';
+import { useInView } from 'react-intersection-observer';
+import { useAppDispatch } from '../../utils/hooks';
 
 export interface CategoryInterface {
   [key: string]: {
     name: string;
-    ref: MutableRefObject<HTMLElement | null>;
+    ref: LegacyRef<HTMLHeadingElement>;
+    itemsRef: LegacyRef<HTMLElement>;
   };
 }
 
 export function BurgerIngredients() {
-  const ingredients = useContext(BurgerContext);
+  const dispatch = useAppDispatch();
+  const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
+  const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
+
+  const [bunsRef, inViewBuns] = useInView({
+    threshold: 0
+  });
+  const [sauceRef, inViewSauce] = useInView({
+    threshold: 0
+  });
+  const [mainRef, inViewMain] = useInView({
+    threshold: 0
+  });
+
   const categories: CategoryInterface = {
     [CategoryKey.BUN]: {
       name: 'Булки',
-      ref: useRef<HTMLElement>(null)
+      ref: useRef<HTMLHeadingElement>(null),
+      itemsRef: bunsRef
     },
     [CategoryKey.SAUCE]: {
       name: 'Соусы',
-      ref: useRef<HTMLElement>(null)
+      ref: useRef<HTMLHeadingElement>(null),
+      itemsRef: sauceRef
     },
     [CategoryKey.MAIN]: {
       name: 'Начинки',
-      ref: useRef<HTMLElement>(null)
+      ref: useRef<HTMLHeadingElement>(null),
+      itemsRef: mainRef
     }
   };
-  const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
-  const [selectedIngredient, setSelectedIngredient]: [IngredientInterface | undefined, any] = useState();
+
+  useEffect(() => {
+    if (inViewBuns) {
+      setSelectedCategory(CategoryKey.BUN);
+    } else if (inViewSauce) {
+      setSelectedCategory(CategoryKey.SAUCE);
+    } else if (inViewMain) {
+      setSelectedCategory(CategoryKey.MAIN);
+    }
+  }, [inViewMain, inViewBuns, inViewSauce]);
 
   const handleTabClick = (category: string) => {
+    // @ts-ignore
     (categories[category].ref.current as HTMLElement).scrollIntoView({
       behavior: 'smooth'
     });
@@ -42,11 +73,16 @@ export function BurgerIngredients() {
   };
 
   const onCloseDetails = (e: SyntheticEvent) => {
-    setSelectedIngredient();
+    dispatch({
+      type: DESELECT_INGREDIENT
+    });
   };
 
   const onCardClick = (ingredient: IngredientInterface) => {
-    setSelectedIngredient(ingredient);
+    dispatch<SelectIngredientActionInterface>({
+      type: SELECT_INGREDIENT,
+      item: ingredient
+    });
   };
 
   const ingrediendsCards = useMemo(
@@ -63,7 +99,7 @@ export function BurgerIngredients() {
   return (
     <>
       <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-      <div style={{ display: 'flex' }}>
+      <div className={styles.tabs}>
         {Object.keys(categories).map((category) => (
           <Tab
             key={category}
@@ -80,7 +116,7 @@ export function BurgerIngredients() {
           isOpen={!!selectedIngredient}
           onClose={onCloseDetails}
           title="Детали ингредиента">
-          <IngredientDetails ingredient={selectedIngredient as IngredientInterface} />
+          <IngredientDetails />
         </Modal>
       )}
     </>

@@ -1,26 +1,20 @@
-import React, { SyntheticEvent, useContext, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
-import { IngredientInterface } from '../../interfaces/ingredient.interface';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorIngredientInterface } from '../../interfaces/ingredient.interface';
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
-import { apiBaseUrl } from '../../utils/app.constants';
-import { checkResponse } from '../../utils/check-response';
-import { BurgerContext } from '../../services/burger-context';
-
-const ordersURL = `${apiBaseUrl}/orders`;
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../../services/reducers';
+import { addIngredientToConstructor, submitNewOrder } from '../../services/actions';
+import { useDrop } from 'react-dnd';
+import { DndIngredientType } from '../../utils/app.types';
+import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
+import { useAppDispatch } from '../../utils/hooks';
 
 interface TotalStateInterface {
   total: number;
-}
-
-interface NewOrderInterface {
-  name: string;
-  order: {
-    number: number;
-  };
-  success: boolean;
 }
 
 const totalInitialState: TotalStateInterface = {
@@ -34,27 +28,48 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 }
 
 export const BurgerConstructor = () => {
-  const ingredients = useContext(BurgerContext);
+  const dispatch = useAppDispatch();
+  const { constructorIngredients, order, ingredients, orderIsProcessing } = useSelector(
+    (store: StoreInterface) => store.burger
+  );
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
-  const [orderId, setOrderId] = useState<number>();
 
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
   const totalPriceClassName = `${styles.totalPrice} text text_type_digits-medium mr-10`;
-  const draggableItemClassName = `${styles.draggableItem}`;
-  const constructorDynamicClassName = `${styles.constructorDynamic} pr-2`;
 
-  const orderIds: string[] = useMemo(() => ingredients.map((ingredient) => ingredient._id), [ingredients]);
-  const betweenBuns: IngredientInterface[] = useMemo(
-    () => ingredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
-    [ingredients]
+  const orderIds: string[] = useMemo(
+    () => constructorIngredients.map((ingredient) => ingredient._id),
+    [constructorIngredients]
   );
-  const bun: IngredientInterface = useMemo(
-    () => ingredients.find((ingredient) => ingredient.type === CategoryKey.BUN) as IngredientInterface,
-    [ingredients]
+  const betweenBuns: ConstructorIngredientInterface[] = useMemo(
+    () =>
+      constructorIngredients.filter((ingredient) => [CategoryKey.MAIN, CategoryKey.SAUCE].includes(ingredient.type)),
+    [constructorIngredients]
   );
+  const bun: ConstructorIngredientInterface = useMemo(
+    () =>
+      constructorIngredients.find(
+        (ingredient) => ingredient.type === CategoryKey.BUN
+      ) as ConstructorIngredientInterface,
+    [constructorIngredients]
+  );
+
+  const [{ opacity }, dropTarget] = useDrop({
+    accept: DndIngredientType.ITEMS,
+    drop(item: { id: string }) {
+      onDropHandler(item.id);
+    },
+    collect: (monitor) => ({
+      opacity: monitor.isOver() ? 0.5 : 1
+    })
+  });
+
+  const onDropHandler = (itemId: string) => {
+    dispatch(addIngredientToConstructor(itemId));
+  };
 
   let prices = useMemo(() => {
     let _prices = betweenBuns.map((ingredient) => ingredient.price);
@@ -65,21 +80,7 @@ export const BurgerConstructor = () => {
   }, [betweenBuns, bun]);
 
   const handleOrderClick = async (e: SyntheticEvent) => {
-    await fetch(ordersURL, {
-      method: 'POST',
-      body: JSON.stringify({
-        ingredients: orderIds
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then<NewOrderInterface>(checkResponse)
-      .then((responseData: NewOrderInterface) => setOrderId(responseData.order.number))
-      .catch((err) => {
-        console.log('Error on add submit new order', err);
-      });
-
+    dispatch(submitNewOrder(orderIds));
     setIsOrderDisplayed(true);
   };
 
@@ -94,7 +95,14 @@ export const BurgerConstructor = () => {
 
   return (
     <>
-      <div className={wrapperClassName}>
+      <div
+        style={{ opacity }}
+        className={wrapperClassName}
+        ref={dropTarget}>
+        {!bun && betweenBuns.length === 0 && (
+          <p className="text">Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа</p>
+        )}
+
         {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
@@ -106,21 +114,7 @@ export const BurgerConstructor = () => {
             />
           </div>
         )}
-        <div className={constructorDynamicClassName}>
-          {betweenBuns.map((ingredient, ix) => (
-            <div
-              className={draggableItemClassName}
-              key={ingredient._id}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                text={ingredient.name}
-                price={ingredient.price}
-                thumbnail={ingredient.image}
-              />
-            </div>
-          ))}
-        </div>
-
+        <BurgerConstructorBetweenBuns ingredients={betweenBuns} />
         {bun && (
           <div className="ml-8 pr-4">
             <ConstructorElement
@@ -133,6 +127,7 @@ export const BurgerConstructor = () => {
           </div>
         )}
       </div>
+      {orderIsProcessing && <p className="text">Выполняется заказ, пожалуйста подождите</p>}
       <div className={totalClassName}>
         <p className={totalPriceClassName}>
           {totalState.total}
@@ -141,16 +136,17 @@ export const BurgerConstructor = () => {
         <Button
           type="primary"
           onClick={handleOrderClick}
+          disabled={!bun}
           size="large">
           Оформить заказ
         </Button>
       </div>
 
-      {isOrderDisplayed && !!orderId && (
+      {isOrderDisplayed && !!order && (
         <Modal
           onClose={onCloseOrderDetails}
           isOpen={isOrderDisplayed}>
-          <OrderDetails order={orderId} />
+          <OrderDetails order={order} />
         </Modal>
       )}
     </>

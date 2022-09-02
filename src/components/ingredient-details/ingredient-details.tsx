@@ -2,17 +2,19 @@ import React from 'react';
 import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import styles from './ingredient-details.module.css';
 import { IngredientContentItem } from './ingredient-content-item/ingredient-content-item';
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../../services/reducers';
 
-interface IngredientDetailsProps {
-  ingredient: IngredientInterface;
-}
+export function IngredientDetails() {
+  const { calories, proteins, fat, carbohydrates, image_large, name } = useSelector(
+    (store: StoreInterface) => store.burger.selectedIngredient as IngredientInterface
+  );
 
-export function IngredientDetails(props: IngredientDetailsProps) {
   const contents: [string, number][] = [
-    ['Калории, ккал', props.ingredient.calories],
-    ['Белки, г', props.ingredient.proteins],
-    ['Жиры, г', props.ingredient.fat],
-    ['Углеводы, г', props.ingredient.carbohydrates]
+    ['Калории, ккал', calories],
+    ['Белки, г', proteins],
+    ['Жиры, г', fat],
+    ['Углеводы, г', carbohydrates]
   ];
 
   const imageClassName = `${styles.imageWrapper} pl-5 pr-5 mb-4`;
@@ -21,11 +23,11 @@ export function IngredientDetails(props: IngredientDetailsProps) {
     <div className={styles.card}>
       <div className={imageClassName}>
         <img
-          src={props.ingredient.image_large}
-          alt={props.ingredient.name}
+          src={image_large}
+          alt={name}
         />
       </div>
-      <h2 className="text text_type_main-medium mb-8">{props.ingredient.name}</h2>
+      <h2 className="text text_type_main-medium mb-8">{name}</h2>
       <div className={contentsClassName}>
         {contents.map(([title, amount], ix) => (
           <IngredientContentItem

@@ -16,10 +16,14 @@ export function IngredientsCards({ categories, ingredients, onCardClick }: Ingre
       {Object.keys(categories).map((category) => {
         return (
           <section
-            ref={categories[category].ref}
+            ref={categories[category].itemsRef}
             key={category}
             className="mt-10 mb-6">
-            <h2 className="text text_type_main-medium">{categories[category].name}</h2>
+            <h2
+              className="text text_type_main-medium"
+              ref={categories[category].ref}>
+              {categories[category].name}
+            </h2>
             <div className={gridClassName}>
               {ingredients
                 .filter((ingredient) => ingredient.type === category)
