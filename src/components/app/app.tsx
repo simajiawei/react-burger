@@ -11,6 +11,7 @@ import { NotFoundPage } from '../../pages/not-found.page';
 import { Pages } from '../../enums/pages.enum';
 import { LoginPage } from '../../pages/login.page';
 import { RegisterPage } from '../../pages/register.page';
+import { ForgotPasswordPage } from '../../pages/forgot-password.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,6 +19,8 @@ function App() {
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
+
+  const authPageClassName = `${styles.authPage} mt-45`;
 
   return (
     <>
@@ -43,10 +46,13 @@ function App() {
               </Route>
               <Route
                 path={Pages.FORGOT_PASSWORD}
-                exact={true}></Route>
+                exact={true}>
+                <ForgotPasswordPage />
+              </Route>
               <Route
                 path={Pages.RESET_PASSWORD}
                 exact={true}></Route>
+
               <Route
                 path={Pages.PROFILE}
                 exact={true}></Route>
