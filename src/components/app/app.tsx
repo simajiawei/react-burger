@@ -12,6 +12,7 @@ import { Pages } from '../../enums/pages.enum';
 import { LoginPage } from '../../pages/login.page';
 import { RegisterPage } from '../../pages/register.page';
 import { ForgotPasswordPage } from '../../pages/forgot-password.page';
+import { ResetPasswordPage } from '../../pages/reset-password.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -51,7 +52,9 @@ function App() {
               </Route>
               <Route
                 path={Pages.RESET_PASSWORD}
-                exact={true}></Route>
+                exact={true}>
+                <ResetPasswordPage />
+              </Route>
 
               <Route
                 path={Pages.PROFILE}
