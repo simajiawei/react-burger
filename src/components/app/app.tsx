@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
-import { BurgerIngredients } from '../burger-ingredients/burger-ingredients';
-import { BurgerConstructor } from '../burger-constructor/burger-constructor';
 import { getIngredients } from '../../services/actions';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { useAppDispatch } from '../../utils/hooks';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { HomePage } from '../../pages/home.page';
+import { NotFoundPage } from '../../pages/not-found.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -15,21 +16,41 @@ function App() {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`;
-
   return (
     <>
       <AppHeader />
-      <main>
+      <main className={styles.main}>
         <DndProvider backend={HTML5Backend}>
-          <div className={styles.mainWrapper}>
-            <div className={styles.ingredientsWrapper}>
-              <BurgerIngredients />
-            </div>
-            <div className={constructorWrapperClassName}>
-              <BurgerConstructor />
-            </div>
-          </div>
+          <BrowserRouter>
+            <Route
+              path="/"
+              exact={true}>
+              <HomePage />
+            </Route>
+            <Route
+              path="/login"
+              exact={true}>
+
+            </Route>
+            <Route
+              path="/register"
+              exact={true}></Route>
+            <Route
+              path="/forgot-password"
+              exact={true}></Route>
+            <Route
+              path="/reset-password"
+              exact={true}></Route>
+            <Route
+              path="/profile"
+              exact={true}></Route>
+            <Route
+              path={'/ingredients/:id'}
+              exact={true}></Route>
+            <Route>
+              <NotFoundPage />
+            </Route>
+          </BrowserRouter>
         </DndProvider>
       </main>
     </>

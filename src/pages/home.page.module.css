@@ -1,0 +1,17 @@
+.mainWrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 40px;
+  max-width: var(--maxIfaceWidth);
+}
+
+.ingredientsWrapper, .constructorWrapper{
+  display: flex;
+  flex-direction: column;
+}
+.ingredientsWrapper{
+  height: calc(100vh - 88px);
+}
+.constructorWrapper{
+  height: calc(100vh - 188px);
+}
