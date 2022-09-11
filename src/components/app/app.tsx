@@ -10,6 +10,7 @@ import { HomePage } from '../../pages/home.page';
 import { NotFoundPage } from '../../pages/not-found.page';
 import { Pages } from '../../enums/pages.enum';
 import { LoginPage } from '../../pages/login.page';
+import { RegisterPage } from '../../pages/register.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,7 +38,9 @@ function App() {
               </Route>
               <Route
                 path={Pages.REGISTER}
-                exact={true}></Route>
+                exact={true}>
+                <RegisterPage />
+              </Route>
               <Route
                 path={Pages.FORGOT_PASSWORD}
                 exact={true}></Route>
