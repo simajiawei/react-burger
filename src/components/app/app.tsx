@@ -5,9 +5,11 @@ import { getIngredients } from '../../services/actions';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { useAppDispatch } from '../../utils/hooks';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { HomePage } from '../../pages/home.page';
 import { NotFoundPage } from '../../pages/not-found.page';
+import { Pages } from '../../enums/pages.enum';
+import { LoginPage } from '../../pages/login.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -22,34 +24,36 @@ function App() {
       <main className={styles.main}>
         <DndProvider backend={HTML5Backend}>
           <BrowserRouter>
-            <Route
-              path="/"
-              exact={true}>
-              <HomePage />
-            </Route>
-            <Route
-              path="/login"
-              exact={true}>
-
-            </Route>
-            <Route
-              path="/register"
-              exact={true}></Route>
-            <Route
-              path="/forgot-password"
-              exact={true}></Route>
-            <Route
-              path="/reset-password"
-              exact={true}></Route>
-            <Route
-              path="/profile"
-              exact={true}></Route>
-            <Route
-              path={'/ingredients/:id'}
-              exact={true}></Route>
-            <Route>
-              <NotFoundPage />
-            </Route>
+            <Switch>
+              <Route
+                path="/"
+                exact={true}>
+                <HomePage />
+              </Route>
+              <Route
+                path={Pages.LOGIN}
+                exact={true}>
+                <LoginPage />
+              </Route>
+              <Route
+                path={Pages.REGISTER}
+                exact={true}></Route>
+              <Route
+                path={Pages.FORGOT_PASSWORD}
+                exact={true}></Route>
+              <Route
+                path={Pages.RESET_PASSWORD}
+                exact={true}></Route>
+              <Route
+                path={Pages.PROFILE}
+                exact={true}></Route>
+              <Route
+                path={`${Pages.INGREDIENTS}/:id`}
+                exact={true}></Route>
+              <Route>
+                <NotFoundPage />
+              </Route>
+            </Switch>
           </BrowserRouter>
         </DndProvider>
       </main>

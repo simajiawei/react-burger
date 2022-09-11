@@ -11,3 +11,7 @@ body {
   overflow: hidden;
   height: 100vh;
 }
+.link{
+  color: var(--colors-interface-accent);
+  text-decoration: unset;
+}
