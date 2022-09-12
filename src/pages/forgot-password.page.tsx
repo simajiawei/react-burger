@@ -7,7 +7,7 @@ import { PasswordResetResponseInterface } from '../interfaces/password-reset-res
 import { checkResponse } from '../utils/check-response';
 import { apiBaseUrl } from '../utils/app.constants';
 
-const resetPasswordApiUrl = `${apiBaseUrl}/password-reset`;
+const forgotPasswordApiUrl = `${apiBaseUrl}/password-reset`;
 
 export function ForgotPasswordPage() {
   const history = useHistory();
@@ -23,7 +23,7 @@ export function ForgotPasswordPage() {
     });
   };
   const handleSubmit = () => {
-    fetch(resetPasswordApiUrl, {
+    fetch(forgotPasswordApiUrl, {
       method: 'POST',
       body: JSON.stringify(state),
       headers: {

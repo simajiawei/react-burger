@@ -1,13 +1,43 @@
 import styles from './reset-password.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React from 'react';
+import React, { useState } from 'react';
+import { PasswordResetResponseInterface } from '../interfaces/password-reset-response.interface';
+import { checkResponse } from '../utils/check-response';
+import { apiBaseUrl } from '../utils/app.constants';
+
+const resetPasswordApiUrl = `${apiBaseUrl}/password-reset/reset`;
 
 export function ResetPasswordPage() {
-  const handleInputChange = () => {};
+  const history = useHistory();
+  const [state, setState] = useState({
+    password: '',
+    token: ''
+  });
+
+  const handleInputChange = (event: any) => {
+    const name = event.target.name;
+    setState({
+      ...state,
+      [name]: event.target.value
+    });
+  };
   const handleSubmit = () => {
-    console.log('submit');
+    fetch(resetPasswordApiUrl, {
+      method: 'POST',
+      body: JSON.stringify(state),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then<PasswordResetResponseInterface>(checkResponse)
+      .then(() => {
+        history.replace({ pathname: Pages.LOGIN });
+      })
+      .catch((error) => {
+        console.error('Cannot perform password reset request', error);
+      });
   };
   return (
     <div className={styles.wrapper}>
@@ -15,15 +45,16 @@ export function ResetPasswordPage() {
 
       <div className="mb-6 mt-6">
         <PasswordInput
-          value=""
+          value={state.password}
           name="password"
           onChange={handleInputChange}
         />
       </div>
       <div className="mb-6 mt-6">
-        <PasswordInput
-          value=""
-          name="password"
+        <Input
+          value={state.token}
+          name="token"
+          placeholder="Введите код из письма"
           onChange={handleInputChange}
         />
       </div>
