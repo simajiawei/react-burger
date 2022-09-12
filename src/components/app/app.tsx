@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
-import { getIngredients } from '../../services/actions';
+import { getIngredients } from '../../services/actions/burger.actions';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { useAppDispatch } from '../../utils/hooks';

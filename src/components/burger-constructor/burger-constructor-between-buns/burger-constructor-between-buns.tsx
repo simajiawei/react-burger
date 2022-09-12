@@ -5,8 +5,11 @@ import styles from './burger-constructor-between-buns.module.css';
 import {
   RemoveIngredientFromConstructorInterface,
   UpdateConstructorElementsInterface
-} from '../../../services/actions/actions.interface';
-import { REMOVE_INGREDIENT_FROM_CONSTRUCTOR, UPDATE_CONSTRUCTOR_ELEMENTS } from '../../../services/actions';
+} from '../../../services/actions/burger.actions.interface';
+import {
+  REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+  UPDATE_CONSTRUCTOR_ELEMENTS
+} from '../../../services/actions/burger.actions';
 import { useAppDispatch } from '../../../utils/hooks';
 
 export interface BurgerConstructorBetweenBunsPropsInterface {

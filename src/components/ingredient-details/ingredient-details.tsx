@@ -3,7 +3,7 @@ import { IngredientInterface } from '../../interfaces/ingredient.interface';
 import styles from './ingredient-details.module.css';
 import { IngredientContentItem } from './ingredient-content-item/ingredient-content-item';
 import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/reducers';
+import { StoreInterface } from '../../services/reducers/burger.reducer';
 
 export function IngredientDetails() {
   const { calories, proteins, fat, carbohydrates, image_large, name } = useSelector(

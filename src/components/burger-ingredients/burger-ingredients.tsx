@@ -7,9 +7,9 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
 import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/reducers';
-import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions';
-import { SelectIngredientActionInterface } from '../../services/actions/actions.interface';
+import { StoreInterface } from '../../services/reducers/burger.reducer';
+import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions/burger.actions';
+import { SelectIngredientActionInterface } from '../../services/actions/burger.actions.interface';
 import { useInView } from 'react-intersection-observer';
 import { useAppDispatch } from '../../utils/hooks';
 

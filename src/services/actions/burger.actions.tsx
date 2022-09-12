@@ -7,7 +7,7 @@ import {
   AddIngredientToConstructorInterface,
   IngredientsActionInterface,
   SetNewOrderSuccessActionInterface
-} from './actions.interface';
+} from './burger.actions.interface';
 import { AppThunk } from '../store';
 import { uniqueId } from '../../utils/generate-id';
 import exp from 'constants';

@@ -1,19 +1,51 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styles from './forgot-password.page.module.css';
+import { PasswordResetResponseInterface } from '../interfaces/password-reset-response.interface';
+import { checkResponse } from '../utils/check-response';
+import { apiBaseUrl } from '../utils/app.constants';
+
+const resetPasswordApiUrl = `${apiBaseUrl}/password-reset`;
 
 export function ForgotPasswordPage() {
-  const handleInputChange = () => {};
-  const handleSubmit = () => {};
+  const history = useHistory();
+  const [state, setState] = useState({
+    email: ''
+  });
+
+  const handleInputChange = (event: any) => {
+    const name = event.target.name;
+    setState({
+      ...state,
+      [name]: event.target.value
+    });
+  };
+  const handleSubmit = () => {
+    fetch(resetPasswordApiUrl, {
+      method: 'POST',
+      body: JSON.stringify(state),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then<PasswordResetResponseInterface>(checkResponse)
+      .then(() => {
+        history.replace({ pathname: Pages.RESET_PASSWORD });
+      })
+      .catch((error) => {
+        console.error('Cannot perform password reset request', error);
+      });
+  };
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Восстановление пароля</h1>
 
       <div className="mb-6 mt-6">
         <Input
-          value=""
+          value={state.email}
+          name="email"
           onChange={handleInputChange}
           type="email"
           placeholder="Укажите e-mail"

@@ -14,7 +14,7 @@ import {
   SET_NEW_ORDER_SUCCESS,
   UPDATE_CONSTRUCTOR_ELEMENTS,
   UPDATE_INGREDIENTS
-} from './index';
+} from './burger.actions';
 
 export interface IngredientsActionInterface extends Action<typeof UPDATE_INGREDIENTS> {
   items: IngredientResponseInterface[];
