@@ -5,7 +5,7 @@ import { getIngredients } from '../../services/actions/burger.actions';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { useAppDispatch } from '../../utils/hooks';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { HomePage } from '../../pages/home.page';
 import { NotFoundPage } from '../../pages/not-found.page';
 import { Pages } from '../../enums/pages.enum';
@@ -13,6 +13,7 @@ import { LoginPage } from '../../pages/login.page';
 import { RegisterPage } from '../../pages/register.page';
 import { ForgotPasswordPage } from '../../pages/forgot-password.page';
 import { ResetPasswordPage } from '../../pages/reset-password.page';
+import { ProfilePage } from '../../pages/profile.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -21,54 +22,49 @@ function App() {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const authPageClassName = `${styles.authPage} mt-45`;
-
   return (
     <>
-      <AppHeader />
-      <main className={styles.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BrowserRouter>
-            <Switch>
+      <BrowserRouter>
+        <AppHeader />
+        <main className={styles.main}>
+          <DndProvider backend={HTML5Backend}>
+            <Routes>
               <Route
-                path="/"
-                exact={true}>
-                <HomePage />
-              </Route>
+                path={Pages.HOME}
+                element={<HomePage />}
+              />
               <Route
                 path={Pages.LOGIN}
-                exact={true}>
-                <LoginPage />
-              </Route>
+                element={<LoginPage />}
+              />
               <Route
                 path={Pages.REGISTER}
-                exact={true}>
-                <RegisterPage />
-              </Route>
-              <Route
-                path={Pages.FORGOT_PASSWORD}
-                exact={true}>
-                <ForgotPasswordPage />
-              </Route>
-              <Route
-                path={Pages.RESET_PASSWORD}
-                exact={true}>
-                <ResetPasswordPage />
-              </Route>
+                element={<RegisterPage />}
+              />
 
               <Route
-                path={Pages.PROFILE}
-                exact={true}></Route>
+                path={Pages.FORGOT_PASSWORD}
+                element={<ForgotPasswordPage />}
+              />
+
               <Route
-                path={`${Pages.INGREDIENTS}/:id`}
-                exact={true}></Route>
-              <Route>
-                <NotFoundPage />
-              </Route>
-            </Switch>
-          </BrowserRouter>
-        </DndProvider>
-      </main>
+                path={Pages.RESET_PASSWORD}
+                element={<ResetPasswordPage />}
+              />
+              <Route
+                path={Pages.PROFILE}
+                element={<ProfilePage />}
+              />
+
+              <Route path={`${Pages.INGREDIENTS}/:id`}></Route>
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              />
+            </Routes>
+          </DndProvider>
+        </main>
+      </BrowserRouter>
     </>
   );
 }

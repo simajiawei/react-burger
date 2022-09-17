@@ -1,6 +1,6 @@
 import styles from './reset-password.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import React, { useState } from 'react';
 import { PasswordResetResponseInterface } from '../interfaces/password-reset-response.interface';
@@ -10,7 +10,7 @@ import { apiBaseUrl } from '../utils/app.constants';
 const resetPasswordApiUrl = `${apiBaseUrl}/password-reset/reset`;
 
 export function ResetPasswordPage() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [state, setState] = useState({
     password: '',
     token: ''
@@ -33,7 +33,7 @@ export function ResetPasswordPage() {
     })
       .then<PasswordResetResponseInterface>(checkResponse)
       .then(() => {
-        history.replace({ pathname: Pages.LOGIN });
+        navigate(Pages.LOGIN, { replace: true });
       })
       .catch((error) => {
         console.error('Cannot perform password reset request', error);

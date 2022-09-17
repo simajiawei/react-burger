@@ -1,5 +1,5 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styles from './forgot-password.page.module.css';
@@ -10,7 +10,7 @@ import { apiBaseUrl } from '../utils/app.constants';
 const forgotPasswordApiUrl = `${apiBaseUrl}/password-reset`;
 
 export function ForgotPasswordPage() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [state, setState] = useState({
     email: ''
   });
@@ -32,7 +32,7 @@ export function ForgotPasswordPage() {
     })
       .then<PasswordResetResponseInterface>(checkResponse)
       .then(() => {
-        history.replace({ pathname: Pages.RESET_PASSWORD });
+        navigate(Pages.RESET_PASSWORD, { replace: true });
       })
       .catch((error) => {
         console.error('Cannot perform password reset request', error);
