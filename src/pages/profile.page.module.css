@@ -11,9 +11,7 @@
   display: flex;
   align-items: center;
 }
-.activeMenuItem{
-  color: var(--text-primary-color);
-}
+
 .userInfo{
 
 }

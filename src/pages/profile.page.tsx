@@ -21,22 +21,26 @@ export function ProfilePage() {
   const handleInputChange = (event: any) => {};
 
   const wrapperClassName = `${styles.wrapper}`;
-  const menuItemClassName = `${styles.menuItem} text text_type_main-medium text_color_inactive`;
+  const menuItemClassName = `${styles.menuItem} text text_type_main-medium`;
   const menuDisclaimerClassName = `${styles.menuDisclaimer} text text_type_main-default text_color_inactive`;
+  const menuLinkClassName = ({ isActive }: { isActive: boolean }) =>
+    isActive ? 'text_color_primary' : 'text_color_inactive';
   return (
     <div className={wrapperClassName}>
       <div className={styles.menu}>
         <NavLink
           to=""
-          className={styles.activeMenuItem}>
+          className={menuLinkClassName}>
           <p className={menuItemClassName}>Профиль</p>
         </NavLink>
         <NavLink
           to="orders"
-          className={styles.activeMenuItem}>
+          className={menuLinkClassName}>
           <p className={menuItemClassName}>История заказов</p>
         </NavLink>
-        <NavLink to="exit">
+        <NavLink
+          to="exit"
+          className={menuLinkClassName}>
           <p className={menuItemClassName}>Выход</p>
         </NavLink>
 
