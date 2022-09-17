@@ -9,7 +9,7 @@ import { NewUserInterface } from '../interfaces/requests/new-user.interface';
 
 export function RegisterPage() {
   const dispatch = useAppDispatch();
-  const [newUser, setNewUser] = useState<NewUserInterface>({
+  const [state, setState] = useState<NewUserInterface>({
     email: '',
     name: '',
     password: ''
@@ -17,13 +17,13 @@ export function RegisterPage() {
 
   const handleInputChange = (event: any) => {
     const name = event.target.name;
-    setNewUser({
-      ...newUser,
+    setState({
+      ...state,
       [name]: event.target.value
     });
   };
   const handleSubmit = () => {
-    dispatch(signUp(newUser));
+    dispatch(signUp(state));
   };
   return (
     <div className={styles.wrapper}>
@@ -31,7 +31,7 @@ export function RegisterPage() {
       <div className="mb-6 mt-6">
         <Input
           name="name"
-          value={newUser.name}
+          value={state.name}
           onChange={handleInputChange}
           type="text"
           placeholder="Имя"
@@ -40,7 +40,7 @@ export function RegisterPage() {
       <div className="mb-6 mt-6">
         <Input
           name="email"
-          value={newUser.email}
+          value={state.email}
           onChange={handleInputChange}
           type="email"
           placeholder="E-mail"
@@ -48,7 +48,7 @@ export function RegisterPage() {
       </div>
       <div className="mb-6 mt-6">
         <PasswordInput
-          value={newUser.password}
+          value={state.password}
           name="password"
           onChange={handleInputChange}
         />

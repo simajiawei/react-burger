@@ -2,11 +2,28 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import { Link } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import styles from './login.page.module.css';
+import { useAppDispatch } from '../utils/hooks';
+import { useState } from 'react';
+import { NewUserInterface } from '../interfaces/requests/new-user.interface';
+import { signIn, signUp } from '../services/actions/auth.actions';
+import { CredentialsInterface } from '../interfaces/requests/credentials.interface';
 
 export function LoginPage() {
-  const handleInputChange = () => {};
+  const dispatch = useAppDispatch();
+  const [state, setState] = useState<CredentialsInterface>({
+    email: '',
+    password: ''
+  });
+
+  const handleInputChange = (event: any) => {
+    const name = event.target.name;
+    setState({
+      ...state,
+      [name]: event.target.value
+    });
+  };
   const handleSubmit = () => {
-    console.log('submit');
+    dispatch(signIn(state));
   };
   return (
     <div className={styles.wrapper}>
@@ -14,7 +31,8 @@ export function LoginPage() {
 
       <div className="mb-6 mt-6">
         <Input
-          value=""
+          value={state.email}
+          name="email"
           onChange={handleInputChange}
           type="email"
           placeholder="E-mail"
@@ -22,7 +40,7 @@ export function LoginPage() {
       </div>
       <div className="mb-6 mt-6">
         <PasswordInput
-          value=""
+          value={state.password}
           name="password"
           onChange={handleInputChange}
         />

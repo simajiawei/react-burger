@@ -1,9 +1,11 @@
 import { AppThunk } from '../store';
 import { Dispatch } from 'redux';
 import { checkResponse } from '../../utils/check-response';
-import { signUpApiUrl } from '../../utils/app.constants';
+import { signInUrl, signUpApiUrl } from '../../utils/app.constants';
 import { SignUpResponseInterface } from '../../interfaces/responses/sign-up-response.interface';
 import { NewUserInterface } from '../../interfaces/requests/new-user.interface';
+import { CredentialsInterface } from '../../interfaces/requests/credentials.interface';
+import { SignInResponseInterface } from '../../interfaces/responses/sign-in-response.interface';
 
 export const UPDATE_TOKENS = 'UPDATE_TOKENS';
 export const SET_USER = 'SET_USER';
@@ -27,6 +29,27 @@ export function signUp(newUser: NewUserInterface): AppThunk {
       })
       .catch((error) => {
         console.error('Error signUp', error);
+      });
+  };
+}
+export function signIn(credentials: CredentialsInterface): AppThunk {
+  return function (dispatch: Dispatch) {
+    fetch(signInUrl, {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then<SignInResponseInterface>(checkResponse)
+      .then((responseData) => {
+        dispatch({
+          type: SET_USER,
+          data: responseData
+        });
+      })
+      .catch((error) => {
+        console.error('Error signIn', error);
       });
   };
 }
