@@ -1,6 +1,6 @@
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useRef } from 'react';
-import { ConstructorIngredientInterface } from '../../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import { useDrag, useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../../utils/app.types';
 import styles from './burger-constructor-item.module.css';

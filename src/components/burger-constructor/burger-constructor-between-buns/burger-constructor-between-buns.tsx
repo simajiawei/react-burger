@@ -1,6 +1,6 @@
 import { BurgerConstructorItem } from '../burger-constructor-item/burger-constructor-item';
 import React, { useCallback } from 'react';
-import { ConstructorIngredientInterface } from '../../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import styles from './burger-constructor-between-buns.module.css';
 import {
   RemoveIngredientFromConstructorInterface,

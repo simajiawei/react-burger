@@ -1,4 +1,4 @@
-import { IngredientInterface } from '../../../interfaces/ingredient.interface';
+import { IngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.css';
 import React from 'react';

@@ -1,6 +1,6 @@
 import { Ingredient } from '../ingredient/ingredient';
 import React, { ReactElement } from 'react';
-import { IngredientInterface } from '../../../interfaces/ingredient.interface';
+import { IngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import styles from './ingredients-cards.module.css';
 import { CategoryInterface } from '../burger-ingredients';
 

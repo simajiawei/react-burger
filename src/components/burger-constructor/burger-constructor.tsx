@@ -1,17 +1,17 @@
 import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
-import { ConstructorIngredientInterface } from '../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface } from '../../interfaces/models/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/reducers/burger.reducer';
 import { addIngredientToConstructor, submitNewOrder } from '../../services/actions/burger.actions';
 import { useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
 import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
 import { useAppDispatch } from '../../utils/hooks';
+import { StoreInterface } from '../../services/store.interface';
 
 interface TotalStateInterface {
   total: number;

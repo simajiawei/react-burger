@@ -3,7 +3,7 @@ import {
   ConstructorIngredientInterface,
   IngredientInterface,
   IngredientResponseInterface
-} from '../../interfaces/ingredient.interface';
+} from '../../interfaces/models/ingredient.interface';
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   CLEAR_CONSTRUCTOR_ELEMENTS,

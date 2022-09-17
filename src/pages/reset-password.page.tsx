@@ -3,7 +3,7 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import React, { useState } from 'react';
-import { PasswordResetResponseInterface } from '../interfaces/password-reset-response.interface';
+import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
 import { apiBaseUrl } from '../utils/app.constants';
 

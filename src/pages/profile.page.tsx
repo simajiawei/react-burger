@@ -1,17 +1,21 @@
 import styles from './profile.page.module.css';
 import { Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { UserInfoInterface } from '../interfaces/user-info.interface';
+import { UserInterface } from '../interfaces/models/user.interface';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../services/store.interface';
 
 export function ProfilePage() {
+  const user = useSelector((store: StoreInterface) => store.auth.user);
+
   const [isDisabled, setIsDisabled] = useState({
     name: true,
     email: true
   });
 
   const handleEditClick = (event: any) => {
-    const name: keyof UserInfoInterface = event.target.name;
+    const name: keyof UserInterface = event.target.name;
     setIsDisabled({
       ...isDisabled,
       [name]: !isDisabled[name]

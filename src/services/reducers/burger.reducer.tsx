@@ -1,32 +1,21 @@
-import { combineReducers, Reducer } from 'redux';
-import { ConstructorIngredientInterface, IngredientInterface } from '../../interfaces/ingredient.interface';
+import { Reducer } from 'redux';
+import { IngredientInterface } from '../../interfaces/models/ingredient.interface';
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
+  CLEAR_CONSTRUCTOR_ELEMENTS,
   DESELECT_INGREDIENT,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
   SELECT_INGREDIENT,
+  SET_NEW_ORDER,
   SET_NEW_ORDER_SUCCESS,
   UPDATE_CONSTRUCTOR_ELEMENTS,
-  UPDATE_INGREDIENTS,
-  CLEAR_CONSTRUCTOR_ELEMENTS,
-  SET_NEW_ORDER
+  UPDATE_INGREDIENTS
 } from '../actions/burger.actions';
 import { BURGER_ACTIONS } from '../actions/burger.actions.interface';
 import { CategoryKey } from '../../enums/category-key.enum';
+import { BurgerStateInterface } from './burger.state.interface';
 
-export interface StoreInterface {
-  burger: RootStateInterface;
-}
-
-export interface RootStateInterface {
-  ingredients: IngredientInterface[];
-  constructorIngredients: ConstructorIngredientInterface[];
-  selectedIngredient: IngredientInterface | null;
-  order: number | null;
-  orderIsProcessing: boolean;
-}
-
-export const initialState: RootStateInterface = {
+export const initialState: BurgerStateInterface = {
   ingredients: [],
   constructorIngredients: [],
   selectedIngredient: null,
@@ -34,10 +23,10 @@ export const initialState: RootStateInterface = {
   orderIsProcessing: false
 };
 
-export const burgerReducer: Reducer<RootStateInterface, BURGER_ACTIONS> = (
+export const burgerReducer: Reducer<BurgerStateInterface, BURGER_ACTIONS> = (
   state = initialState,
   action: BURGER_ACTIONS
-): RootStateInterface => {
+): BurgerStateInterface => {
   switch (action.type) {
     case SET_NEW_ORDER:
       return {

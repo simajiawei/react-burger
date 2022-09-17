@@ -1,8 +1,8 @@
 import { checkResponse } from '../../utils/check-response';
-import { apiBaseUrl } from '../../utils/app.constants';
-import { IngrediendsResponseInterface } from '../../interfaces/ingredients-response.interface';
+import { apiBaseUrl, ingredientsApiUrl, ordersApiUrl } from '../../utils/app.constants';
+import { IngrediendsResponseInterface } from '../../interfaces/responses/ingredients-response.interface';
 import { Dispatch } from 'redux';
-import { NewOrderInterface } from '../../interfaces/new-order.interface';
+import { NewOrderResponseInterface } from '../../interfaces/responses/new-order-response.interface';
 import {
   AddIngredientToConstructorInterface,
   IngredientsActionInterface,
@@ -23,8 +23,6 @@ export const SET_NEW_ORDER_SUCCESS = 'SET_NEW_ORDER_SUCCESS';
 export const DESELECT_INGREDIENT = 'DESELECT_INGREDIENT';
 export const UPDATE_CONSTRUCTOR_ELEMENTS = 'UPDATE_CONSTRUCTOR_ELEMENTS';
 export const CLEAR_CONSTRUCTOR_ELEMENTS = 'CLEAR_CONSTRUCTOR_ELEMENTS';
-const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
-const ordersURL = `${apiBaseUrl}/orders`;
 
 export function getIngredients(): AppThunk {
   return function (dispatch: Dispatch<IngredientsActionInterface>) {
@@ -46,7 +44,7 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
   return function (dispatch: Dispatch) {
     dispatch(setNewOrder(true));
 
-    fetch(ordersURL, {
+    fetch(ordersApiUrl, {
       method: 'POST',
       body: JSON.stringify({
         ingredients: orderIds
@@ -55,8 +53,8 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
         'Content-Type': 'application/json'
       }
     })
-      .then<NewOrderInterface>(checkResponse)
-      .then((responseData: NewOrderInterface) => {
+      .then<NewOrderResponseInterface>(checkResponse)
+      .then((responseData: NewOrderResponseInterface) => {
         dispatch<SetNewOrderSuccessActionInterface>({
           type: SET_NEW_ORDER_SUCCESS,
           orderNumber: responseData.order.number

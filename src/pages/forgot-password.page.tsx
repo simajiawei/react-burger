@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styles from './forgot-password.page.module.css';
-import { PasswordResetResponseInterface } from '../interfaces/password-reset-response.interface';
+import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
 import { apiBaseUrl } from '../utils/app.constants';
 
