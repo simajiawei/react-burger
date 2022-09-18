@@ -1,9 +1,9 @@
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import styles from './login.page.module.css';
 import { useAppDispatch } from '../utils/hooks';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { signIn } from '../services/actions/auth.actions';
 import { CredentialsInterface } from '../interfaces/models/credentials.interface';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,9 @@ import { StoreInterface } from '../services/store.interface';
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
+  const location = useLocation();
+
   const [state, setState] = useState<CredentialsInterface>({
     email: '',
     password: ''
@@ -29,7 +31,12 @@ export function LoginPage() {
   };
 
   if (user) {
-    navigate(Pages.HOME, { replace: true });
+    return (
+      <Navigate
+        to={location.state.from ? location.state.from : Pages.HOME}
+        replace={true}
+      />
+    );
   }
 
   return (
