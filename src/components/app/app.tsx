@@ -14,6 +14,7 @@ import { RegisterPage } from '../../pages/register.page';
 import { ForgotPasswordPage } from '../../pages/forgot-password.page';
 import { ResetPasswordPage } from '../../pages/reset-password.page';
 import { ProfilePage } from '../../pages/profile.page';
+import { ProtectedRoutes } from '../protected-route';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -51,12 +52,16 @@ function App() {
                 path={Pages.RESET_PASSWORD}
                 element={<ResetPasswordPage />}
               />
-              <Route
-                path={Pages.PROFILE}
-                element={<ProfilePage />}
-              />
 
-              <Route path={`${Pages.INGREDIENTS}/:id`}></Route>
+              <Route path={`${Pages.INGREDIENTS}/:id`} />
+
+              <Route element={<ProtectedRoutes />}>
+                <Route
+                  path={Pages.PROFILE}
+                  element={<ProfilePage />}
+                />
+              </Route>
+
               <Route
                 path="*"
                 element={<NotFoundPage />}

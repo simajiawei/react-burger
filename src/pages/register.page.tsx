@@ -5,7 +5,7 @@ import { Pages } from '../enums/pages.enum';
 import React, { useState } from 'react';
 import { useAppDispatch } from '../utils/hooks';
 import { signUp } from '../services/actions/auth.actions';
-import { NewUserInterface } from '../interfaces/requests/new-user.interface';
+import { NewUserInterface } from '../interfaces/models/new-user.interface';
 
 export function RegisterPage() {
   const dispatch = useAppDispatch();

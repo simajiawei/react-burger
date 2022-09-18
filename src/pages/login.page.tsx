@@ -5,7 +5,7 @@ import styles from './login.page.module.css';
 import { useAppDispatch } from '../utils/hooks';
 import { useState } from 'react';
 import { signIn } from '../services/actions/auth.actions';
-import { CredentialsInterface } from '../interfaces/requests/credentials.interface';
+import { CredentialsInterface } from '../interfaces/models/credentials.interface';
 import { useSelector } from 'react-redux';
 import { StoreInterface } from '../services/store.interface';
 
