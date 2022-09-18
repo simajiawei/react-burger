@@ -1,14 +1,9 @@
-import React, { LegacyRef, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { LegacyRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
-import { IngredientInterface } from '../../interfaces/models/ingredient.interface';
 import styles from './burger-ingredients.module.css';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { Modal } from '../modal/modal';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
 import { useSelector } from 'react-redux';
-import { DESELECT_INGREDIENT, SELECT_INGREDIENT } from '../../services/actions/burger.actions';
-import { SelectIngredientActionInterface } from '../../services/actions/burger.actions.interface';
 import { useInView } from 'react-intersection-observer';
 import { useAppDispatch } from '../../utils/hooks';
 import { StoreInterface } from '../../services/store.interface';
@@ -72,25 +67,11 @@ export function BurgerIngredients() {
     setSelectedCategory(category as CategoryKey);
   };
 
-  const onCloseDetails = (e: SyntheticEvent) => {
-    dispatch({
-      type: DESELECT_INGREDIENT
-    });
-  };
-
-  const onCardClick = (ingredient: IngredientInterface) => {
-    dispatch<SelectIngredientActionInterface>({
-      type: SELECT_INGREDIENT,
-      item: ingredient
-    });
-  };
-
   const ingrediendsCards = useMemo(
     () => (
       <IngredientsCards
         categories={categories}
         ingredients={ingredients}
-        onCardClick={onCardClick}
       />
     ),
     [ingredients]
@@ -111,14 +92,6 @@ export function BurgerIngredients() {
         ))}
       </div>
       <div className={styles.ingredientsByCategories}>{ingrediendsCards}</div>
-      {!!selectedIngredient && (
-        <Modal
-          isOpen={!!selectedIngredient}
-          onClose={onCloseDetails}
-          title="Детали ингредиента">
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 }

@@ -3,9 +3,7 @@ import { IngredientInterface } from '../../interfaces/models/ingredient.interfac
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   CLEAR_CONSTRUCTOR_ELEMENTS,
-  DESELECT_INGREDIENT,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-  SELECT_INGREDIENT,
   SET_NEW_ORDER,
   SET_NEW_ORDER_SUCCESS,
   UPDATE_CONSTRUCTOR_ELEMENTS,
@@ -39,16 +37,6 @@ export const burgerReducer: Reducer<BurgerStateInterface, BURGER_ACTIONS> = (
         order: action.orderNumber
       };
 
-    case SELECT_INGREDIENT:
-      return {
-        ...state,
-        selectedIngredient: action.item
-      };
-    case DESELECT_INGREDIENT:
-      return {
-        ...state,
-        selectedIngredient: null
-      };
     case ADD_INGREDIENT_TO_CONSTRUCTOR:
       let constructorIngredients = [...state.constructorIngredients];
       let ingredients = [...state.ingredients];

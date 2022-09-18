@@ -16,7 +16,7 @@ export const refreshTokenRequest = () => {
   }).then<RefreshTokenResponseInterface>(checkResponse);
 };
 
-export const fetchWithRefresh = async <Response>(url: string, options: any): Promise<Response> => {
+export const fetchWithRefresh = async <Response>(url: string, options: RequestInit): Promise<Response> => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);

@@ -1,15 +1,12 @@
 import { Action } from 'redux';
 import {
   ConstructorIngredientInterface,
-  IngredientInterface,
   IngredientResponseInterface
 } from '../../interfaces/models/ingredient.interface';
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   CLEAR_CONSTRUCTOR_ELEMENTS,
-  DESELECT_INGREDIENT,
   REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-  SELECT_INGREDIENT,
   SET_NEW_ORDER,
   SET_NEW_ORDER_SUCCESS,
   UPDATE_CONSTRUCTOR_ELEMENTS,
@@ -18,10 +15,6 @@ import {
 
 export interface IngredientsActionInterface extends Action<typeof UPDATE_INGREDIENTS> {
   items: IngredientResponseInterface[];
-}
-
-export interface SelectIngredientActionInterface extends Action<typeof SELECT_INGREDIENT> {
-  item: IngredientInterface;
 }
 
 export interface SetNewOrderInterface extends Action<typeof SET_NEW_ORDER> {
@@ -46,11 +39,9 @@ export interface UpdateConstructorElementsInterface extends Action<typeof UPDATE
 }
 
 export type BURGER_ACTIONS =
-  | Action<typeof DESELECT_INGREDIENT>
   | Action<typeof CLEAR_CONSTRUCTOR_ELEMENTS>
   | SetNewOrderInterface
   | IngredientsActionInterface
-  | SelectIngredientActionInterface
   | SetNewOrderSuccessActionInterface
   | AddIngredientToConstructorInterface
   | RemoveIngredientFromConstructorInterface

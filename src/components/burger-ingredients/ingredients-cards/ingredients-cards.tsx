@@ -7,9 +7,8 @@ import { CategoryInterface } from '../burger-ingredients';
 interface IngredientCardInterface {
   categories: CategoryInterface;
   ingredients: IngredientInterface[];
-  onCardClick: (ingredient: IngredientInterface) => void;
 }
-export function IngredientsCards({ categories, ingredients, onCardClick }: IngredientCardInterface): ReactElement {
+export function IngredientsCards({ categories, ingredients }: IngredientCardInterface): ReactElement {
   const gridClassName = `${styles.cardsGrid} pl-2 pr-2 pt-6`;
   return (
     <>
@@ -28,9 +27,7 @@ export function IngredientsCards({ categories, ingredients, onCardClick }: Ingre
               {ingredients
                 .filter((ingredient) => ingredient.type === category)
                 .map((ingredient) => (
-                  <div
-                    key={ingredient._id}
-                    onClick={(e) => onCardClick(ingredient)}>
+                  <div key={ingredient._id}>
                     <Ingredient {...ingredient} />
                   </div>
                 ))}

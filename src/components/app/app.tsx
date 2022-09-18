@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
 import { getIngredients } from '../../services/actions/burger.actions';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { useAppDispatch } from '../../utils/hooks';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { HomePage } from '../../pages/home.page';
 import { NotFoundPage } from '../../pages/not-found.page';
 import { Pages } from '../../enums/pages.enum';
@@ -16,26 +16,42 @@ import { ResetPasswordPage } from '../../pages/reset-password.page';
 import { ProfilePage } from '../../pages/profile.page';
 import { PrivateRoutes } from '../private-routes';
 import { PublicRoutes } from '../public-routes';
+import { Modal } from '../modal/modal';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../../services/store.interface';
 
 function App() {
-  const dispatch = useAppDispatch();
+  const ModalSwitch = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { ingredients } = useSelector((store: StoreInterface) => store.burger);
 
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
+    let background = location.state && location.state.background;
 
-  return (
-    <>
-      <BrowserRouter>
+    const onCloseDetails = (e: SyntheticEvent) => {
+      navigate(-1);
+    };
+
+    useEffect(() => {
+      dispatch(getIngredients());
+    }, [dispatch]);
+
+    return (
+      <>
         <AppHeader />
         <main className={styles.main}>
           <DndProvider backend={HTML5Backend}>
-            <Routes>
+            <Routes location={background || location}>
               <Route
                 path={Pages.HOME}
-                element={<HomePage />}
+                element={<HomePage />}></Route>
+
+              <Route
+                path={`${Pages.INGREDIENTS}/:ingredientId`}
+                element={ingredients.length > 0 && <IngredientDetails />}
               />
-              <Route path={`${Pages.INGREDIENTS}/:id`} />
 
               {/* ONLY NOT AUTHENTICATED USERS */}
               <Route element={<PublicRoutes />}>
@@ -65,14 +81,34 @@ function App() {
                   element={<ProfilePage />}
                 />
               </Route>
-
               <Route
                 path="*"
                 element={<NotFoundPage />}
               />
             </Routes>
+            <Routes>
+              {background && ingredients.length > 0 && (
+                <Route
+                  path={`${Pages.INGREDIENTS}/:ingredientId`}
+                  element={
+                    <Modal
+                      onClose={onCloseDetails}
+                      title="Детали ингредиента">
+                      <IngredientDetails />
+                    </Modal>
+                  }></Route>
+              )}
+            </Routes>
           </DndProvider>
         </main>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <BrowserRouter>
+        <ModalSwitch />
       </BrowserRouter>
     </>
   );
