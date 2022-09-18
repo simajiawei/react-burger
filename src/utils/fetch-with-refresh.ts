@@ -1,6 +1,6 @@
 import { checkResponse } from './check-response';
 import { updateTokenUrl } from './app.constants';
-import { ContentTypeJsonHeader } from './http-headers';
+import { ContentTypeJsonHeader, getAuthHeader } from './http-headers';
 import { getTokenFromLS, saveTokensToLS } from './token';
 import { RefreshTokenResponseInterface } from '../interfaces/responses/refresh-token-response.interface';
 
@@ -28,8 +28,8 @@ export const fetchWithRefresh = async <Response>(url: string, options: RequestIn
       const response = await fetch(url, {
         ...options,
         headers: {
-          ...options.headers,
-          authorization: accessToken
+          ...getAuthHeader(),
+          ...ContentTypeJsonHeader
         }
       });
       return await checkResponse(response);

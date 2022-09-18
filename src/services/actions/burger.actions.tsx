@@ -15,12 +15,10 @@ import exp from 'constants';
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';
 export const ADD_INGREDIENT_TO_CONSTRUCTOR = 'ADD_INGREDIENT_TO_CONSTRUCTOR';
-export const SELECT_INGREDIENT = 'SELECT_INGREDIENT';
 
 export const SET_NEW_ORDER = 'SET_NEW_ORDER';
 export const SET_NEW_ORDER_SUCCESS = 'SET_NEW_ORDER_SUCCESS';
 
-export const DESELECT_INGREDIENT = 'DESELECT_INGREDIENT';
 export const UPDATE_CONSTRUCTOR_ELEMENTS = 'UPDATE_CONSTRUCTOR_ELEMENTS';
 export const CLEAR_CONSTRUCTOR_ELEMENTS = 'CLEAR_CONSTRUCTOR_ELEMENTS';
 
@@ -40,7 +38,7 @@ export function getIngredients(): AppThunk {
   };
 }
 
-export function submitNewOrder(orderIds: string[]): AppThunk {
+export function submitNewOrder(orderIds: string[], cb: Function): AppThunk {
   return function (dispatch: Dispatch) {
     dispatch(setNewOrder(true));
 
@@ -69,6 +67,7 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
         dispatch({
           type: CLEAR_CONSTRUCTOR_ELEMENTS
         });
+        cb();
       });
   };
 }

@@ -33,7 +33,7 @@ export function LoginPage() {
   if (user) {
     return (
       <Navigate
-        to={location.state.from ? location.state.from : Pages.HOME}
+        to={location.state?.from ? location.state.from : Pages.HOME}
         replace={true}
       />
     );

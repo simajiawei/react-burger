@@ -6,12 +6,15 @@ import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { useSelector } from 'react-redux';
-import { addIngredientToConstructor, submitNewOrder } from '../../services/actions/burger.actions';
+import { addIngredientToConstructor, submitNewOrder, UPDATE_INGREDIENTS } from '../../services/actions/burger.actions';
 import { useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
 import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
 import { useAppDispatch } from '../../utils/hooks';
 import { StoreInterface } from '../../services/store.interface';
+import { getTokenFromLS } from '../../utils/token';
+import { useNavigate } from 'react-router-dom';
+import { Pages } from '../../enums/pages.enum';
 
 interface TotalStateInterface {
   total: number;
@@ -29,7 +32,11 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 
 export const BurgerConstructor = () => {
   const dispatch = useAppDispatch();
-  const { constructorIngredients, order, orderIsProcessing } = useSelector((store: StoreInterface) => store.burger);
+  const navigate = useNavigate();
+  const { constructorIngredients, order, orderIsProcessing, ingredients } = useSelector(
+    (store: StoreInterface) => store.burger
+  );
+  const accessToken = getTokenFromLS('accessToken');
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -78,7 +85,18 @@ export const BurgerConstructor = () => {
   }, [betweenBuns, bun]);
 
   const handleOrderClick = async (e: SyntheticEvent) => {
-    dispatch(submitNewOrder(orderIds));
+    if (!accessToken) {
+      navigate(Pages.LOGIN);
+      return;
+    }
+    dispatch(
+      submitNewOrder(orderIds, () => {
+        dispatch({
+          type: UPDATE_INGREDIENTS,
+          items: ingredients
+        });
+      })
+    );
     setIsOrderDisplayed(true);
   };
 
