@@ -14,7 +14,8 @@ import { RegisterPage } from '../../pages/register.page';
 import { ForgotPasswordPage } from '../../pages/forgot-password.page';
 import { ResetPasswordPage } from '../../pages/reset-password.page';
 import { ProfilePage } from '../../pages/profile.page';
-import { ProtectedRoutes } from '../protected-route';
+import { PrivateRoutes } from '../private-routes';
+import { PublicRoutes } from '../public-routes';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -34,28 +35,31 @@ function App() {
                 path={Pages.HOME}
                 element={<HomePage />}
               />
-              <Route
-                path={Pages.LOGIN}
-                element={<LoginPage />}
-              />
-              <Route
-                path={Pages.REGISTER}
-                element={<RegisterPage />}
-              />
-
-              <Route
-                path={Pages.FORGOT_PASSWORD}
-                element={<ForgotPasswordPage />}
-              />
-
-              <Route
-                path={Pages.RESET_PASSWORD}
-                element={<ResetPasswordPage />}
-              />
-
               <Route path={`${Pages.INGREDIENTS}/:id`} />
 
-              <Route element={<ProtectedRoutes />}>
+              {/* ONLY NOT AUTHENTICATED USERS */}
+              <Route element={<PublicRoutes />}>
+                <Route
+                  path={Pages.FORGOT_PASSWORD}
+                  element={<ForgotPasswordPage />}
+                />
+
+                <Route
+                  path={Pages.RESET_PASSWORD}
+                  element={<ResetPasswordPage />}
+                />
+                <Route
+                  path={Pages.LOGIN}
+                  element={<LoginPage />}
+                />
+                <Route
+                  path={Pages.REGISTER}
+                  element={<RegisterPage />}
+                />
+              </Route>
+
+              {/* ONLY AUTHENTICATED USERS */}
+              <Route element={<PrivateRoutes />}>
                 <Route
                   path={Pages.PROFILE}
                   element={<ProfilePage />}
