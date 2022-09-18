@@ -11,6 +11,7 @@ import { ContentTypeJsonHeader, getAuthHeader } from '../../utils/http-headers';
 import { GetUserResponseInterface } from '../../interfaces/responses/get-user-response.interface';
 import { UserInterface } from '../../interfaces/models/user.interface';
 import { UpdateUserResponseInterface } from '../../interfaces/responses/update-user-response.interface';
+import { fetchWithRefresh } from '../../utils/fetch-with-refresh';
 
 export const UPDATE_TOKENS = 'UPDATE_TOKENS';
 export const SET_AUTH = 'SET_AUTH';
@@ -87,12 +88,11 @@ export function logout(cb: Function): AppThunk {
 
 export function getUser(): AppThunk {
   return function (dispatch) {
-    fetch(userApiUrl, {
+    fetchWithRefresh<GetUserResponseInterface>(userApiUrl, {
       headers: {
         ...getAuthHeader()
       }
     })
-      .then<GetUserResponseInterface>(checkResponse)
       .then((responseData) => {
         dispatch({
           type: SET_USER,
@@ -107,7 +107,7 @@ export function getUser(): AppThunk {
 
 export function updateUser(user: UserInterface): AppThunk {
   return function (dispatch) {
-    fetch(userApiUrl, {
+    fetchWithRefresh<UpdateUserResponseInterface>(userApiUrl, {
       method: 'PATCH',
       body: JSON.stringify(user),
       headers: {
@@ -115,7 +115,6 @@ export function updateUser(user: UserInterface): AppThunk {
         ...ContentTypeJsonHeader
       }
     })
-      .then<UpdateUserResponseInterface>(checkResponse)
       .then((responseData) => {
         dispatch({
           type: SET_USER,
