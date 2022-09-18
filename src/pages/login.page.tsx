@@ -1,20 +1,22 @@
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import styles from './login.page.module.css';
 import { useAppDispatch } from '../utils/hooks';
 import { useState } from 'react';
-import { NewUserInterface } from '../interfaces/requests/new-user.interface';
-import { signIn, signUp } from '../services/actions/auth.actions';
+import { signIn } from '../services/actions/auth.actions';
 import { CredentialsInterface } from '../interfaces/requests/credentials.interface';
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../services/store.interface';
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [state, setState] = useState<CredentialsInterface>({
     email: '',
     password: ''
   });
-
+  const { user } = useSelector((store: StoreInterface) => store.auth);
   const handleInputChange = (event: any) => {
     const name = event.target.name;
     setState({
@@ -25,6 +27,11 @@ export function LoginPage() {
   const handleSubmit = () => {
     dispatch(signIn(state));
   };
+
+  if (user) {
+    navigate(Pages.HOME, { replace: true });
+  }
+
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Вход</h1>

@@ -5,8 +5,11 @@ import { UserInterface } from '../interfaces/models/user.interface';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { StoreInterface } from '../services/store.interface';
+import { useAppDispatch } from '../utils/hooks';
+import { logout } from '../services/actions/auth.actions';
 
 export function ProfilePage() {
+  const dispatch = useAppDispatch();
   const user = useSelector((store: StoreInterface) => store.auth.user);
 
   const [isDisabled, setIsDisabled] = useState({
@@ -21,14 +24,18 @@ export function ProfilePage() {
       [name]: !isDisabled[name]
     });
   };
-
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   const handleInputChange = (event: any) => {};
 
   const wrapperClassName = `${styles.wrapper}`;
   const menuItemClassName = `${styles.menuItem} text text_type_main-medium`;
+  const logoutItemClassName = `${menuItemClassName} ${styles.logout} text_color_inactive`;
   const menuDisclaimerClassName = `${styles.menuDisclaimer} text text_type_main-default text_color_inactive`;
   const menuLinkClassName = ({ isActive }: { isActive: boolean }) =>
     isActive ? 'text_color_primary' : 'text_color_inactive';
+
   return (
     <div className={wrapperClassName}>
       <div className={styles.menu}>
@@ -42,11 +49,12 @@ export function ProfilePage() {
           className={menuLinkClassName}>
           <p className={menuItemClassName}>История заказов</p>
         </NavLink>
-        <NavLink
-          to="exit"
-          className={menuLinkClassName}>
-          <p className={menuItemClassName}>Выход</p>
-        </NavLink>
+
+        <p
+          className={logoutItemClassName}
+          onClick={handleLogout}>
+          Выход
+        </p>
 
         <div className="mt-20">
           <p className={menuDisclaimerClassName}>В этом разделе вы можете изменить свои персональные данные</p>
