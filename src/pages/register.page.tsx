@@ -16,13 +16,7 @@ export function RegisterPage() {
     password: ''
   });
 
-  const handleInputChange = (event: any) => {
-    const name = event.target.name;
-    setValues({
-      ...values,
-      [name]: event.target.value
-    });
-  };
+
   const handleSubmit = () => {
     dispatch(signUp(values));
   };
@@ -33,7 +27,7 @@ export function RegisterPage() {
         <Input
           name="name"
           value={values.name}
-          onChange={handleInputChange}
+          onChange={handleChange}
           type="text"
           placeholder="Имя"
         />
@@ -42,7 +36,7 @@ export function RegisterPage() {
         <Input
           name="email"
           value={values.email}
-          onChange={handleInputChange}
+          onChange={handleChange}
           type="email"
           placeholder="E-mail"
         />
@@ -51,7 +45,7 @@ export function RegisterPage() {
         <PasswordInput
           value={values.password}
           name="password"
-          onChange={handleInputChange}
+          onChange={handleChange}
         />
       </div>
       <div className="mb-20">

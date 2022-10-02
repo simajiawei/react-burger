@@ -1,5 +1,5 @@
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useRef } from 'react';
+import React, {SyntheticEvent, useRef} from 'react';
 import { ConstructorIngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import { useDrag, useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../../utils/app.types';
@@ -98,7 +98,7 @@ export function BurgerConstructorItem({
   drag(drop(ref));
   // Прерываем базовую функция для onDrop
   // потому что браузер по умолчанию не сбрасывает наш элемент в контейнер
-  const preventDefault = (e: any) => e.preventDefault();
+  const preventDefault = (e: SyntheticEvent) => e.preventDefault();
 
   const draggableItemClassName = `${styles.draggableItem}`;
 
