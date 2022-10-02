@@ -1,35 +1,33 @@
 import { AuthStateInterface } from './auth.state.interface';
 import { Reducer } from 'redux';
 import { AuthActions } from '../actions/auth.actions.interface';
-import { SET_AUTH, SET_USER, UNSET_USER } from '../actions/auth.actions';
-import { deleteTokensFromLS, saveTokensToLS } from '../../utils/token';
+import { SET_USER, UNSET_USER, SET_IS_LOGGED_IN } from '../actions/auth.actions';
 
 export const initialState: AuthStateInterface = {
-  user: null
+  user: null,
+  isLoggedIn: null
 };
 export const authReducer: Reducer<AuthStateInterface, AuthActions> = (
   state = initialState,
   action: AuthActions
 ): AuthStateInterface => {
   switch (action.type) {
-    case SET_AUTH:
-      saveTokensToLS({
-        refreshToken: action.data.refreshToken,
-        accessToken: action.data.accessToken
-      });
-      return {
-        ...state,
-        user: action.data.user
-      };
     case SET_USER:
       return {
         ...state,
-        user: action.data.user
+        user: action.user,
+        isLoggedIn: true
       };
     case UNSET_USER:
-      deleteTokensFromLS();
       return {
-        ...initialState
+        ...state,
+        user: null,
+        isLoggedIn: false
+      };
+    case SET_IS_LOGGED_IN:
+      return {
+        ...state,
+        isLoggedIn: action.isLoggedIn
       };
     default:
       return state;

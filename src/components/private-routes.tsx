@@ -1,12 +1,18 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import { getTokenFromLS } from '../utils/token';
+import { useSelector } from 'react-redux';
+import { StoreInterface } from '../services/store.interface';
 
 export function PrivateRoutes() {
-  const accessToken = getTokenFromLS('accessToken');
+  const { isLoggedIn } = useSelector((store: StoreInterface) => store.auth);
   const location = useLocation();
-  return accessToken ? (
+
+  if (isLoggedIn == null) {
+    return null;
+  }
+
+  return isLoggedIn ? (
     <Outlet />
   ) : (
     <Navigate

@@ -1,18 +1,11 @@
 import { Action } from 'redux';
-import { SET_AUTH, SET_USER, UNSET_USER, UPDATE_TOKENS } from './auth.actions';
-import { SignUpResponseInterface } from '../../interfaces/responses/sign-up-response.interface';
-import { GetUserResponseInterface } from '../../interfaces/responses/get-user-response.interface';
-
-export interface SetAuthInterface extends Action<typeof SET_AUTH> {
-  data: SignUpResponseInterface;
-}
+import { SET_IS_LOGGED_IN, SET_USER, UNSET_USER } from './auth.actions';
+import { UserInterface } from '../../interfaces/models/user.interface';
 
 export interface SetUserInterface extends Action<typeof SET_USER> {
-  data: GetUserResponseInterface;
+  user: UserInterface;
 }
-
-export type AuthActions =
-  | Action<typeof UPDATE_TOKENS>
-  | SetAuthInterface
-  | SetUserInterface
-  | Action<typeof UNSET_USER>;
+export interface SetIsLoggedInInterface extends Action<typeof SET_IS_LOGGED_IN> {
+  isLoggedIn: boolean;
+}
+export type AuthActions = SetUserInterface | SetIsLoggedInInterface | Action<typeof UNSET_USER>;

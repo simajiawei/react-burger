@@ -12,7 +12,6 @@ import { DndIngredientType } from '../../utils/app.types';
 import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
 import { useAppDispatch } from '../../utils/hooks';
 import { StoreInterface } from '../../services/store.interface';
-import { getTokenFromLS } from '../../utils/token';
 import { useNavigate } from 'react-router-dom';
 import { Pages } from '../../enums/pages.enum';
 
@@ -36,7 +35,7 @@ export const BurgerConstructor = () => {
   const { constructorIngredients, order, orderIsProcessing, ingredients } = useSelector(
     (store: StoreInterface) => store.burger
   );
-  const accessToken = getTokenFromLS('accessToken');
+  const { isLoggedIn } = useSelector((store: StoreInterface) => store.auth);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -85,7 +84,7 @@ export const BurgerConstructor = () => {
   }, [betweenBuns, bun]);
 
   const handleOrderClick = async (e: SyntheticEvent) => {
-    if (!accessToken) {
+    if (!isLoggedIn) {
       navigate(Pages.LOGIN);
       return;
     }

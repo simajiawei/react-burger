@@ -1,7 +1,7 @@
-import { getTokenFromLS } from './token';
+import { ACCESS_TOKEN, getCookie } from './browser-storage';
 
 export function getAuthHeader(): HeadersInit {
-  const accessToken = getTokenFromLS('accessToken');
+  const accessToken = getCookie(ACCESS_TOKEN);
   return {
     Authorization: `${accessToken}`
   };

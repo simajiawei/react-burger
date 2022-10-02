@@ -20,6 +20,8 @@ import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { useSelector } from 'react-redux';
 import { StoreInterface } from '../../services/store.interface';
+import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../utils/browser-storage';
+import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
 
 function App() {
   const ModalSwitch = () => {
@@ -36,6 +38,20 @@ function App() {
 
     useEffect(() => {
       dispatch(getIngredients());
+    }, [dispatch]);
+
+    useEffect(() => {
+      if (getCookie(ACCESS_TOKEN)) {
+        // if token exists in cookies, then user definitely logged in
+        // otherwise token will be automaticallt removed by TTL
+        dispatch(setIsLoggedIn(true));
+      } else if (getTokenFromLS(REFRESH_TOKEN)) {
+        // if token does not exist in cookies, but refresh token exists, try to fetch user with
+        // refreshToken
+        dispatch(updateToken());
+      } else {
+        setIsLoggedIn(false);
+      }
     }, [dispatch]);
 
     return (
