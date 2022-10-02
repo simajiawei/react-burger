@@ -122,11 +122,9 @@ function App() {
   };
 
   return (
-    <>
-      <BrowserRouter>
-        <ModalSwitch />
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <ModalSwitch />
+    </BrowserRouter>
   );
 }
 
