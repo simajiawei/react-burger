@@ -50,7 +50,7 @@ function App() {
         // refreshToken
         dispatch(updateToken());
       } else {
-        setIsLoggedIn(false);
+        dispatch(setIsLoggedIn(false));
       }
     }, [dispatch]);
 

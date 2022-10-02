@@ -1,31 +1,26 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import React from 'react';
 import styles from './forgot-password.page.module.css';
 import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
 import { apiBaseUrl } from '../utils/app.constants';
+import { useForm } from '../utils/use-form';
 
 const forgotPasswordApiUrl = `${apiBaseUrl}/password-reset`;
 
 export function ForgotPasswordPage() {
   const navigate = useNavigate();
-  const [state, setState] = useState({
+
+  const { values, handleChange } = useForm({
     email: ''
   });
 
-  const handleInputChange = (event: any) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-  };
   const handleSubmit = () => {
     fetch(forgotPasswordApiUrl, {
       method: 'POST',
-      body: JSON.stringify(state),
+      body: JSON.stringify(values),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -44,9 +39,9 @@ export function ForgotPasswordPage() {
 
       <div className="mb-6 mt-6">
         <Input
-          value={state.email}
+          value={values.email}
           name="email"
-          onChange={handleInputChange}
+          onChange={handleChange}
           type="email"
           placeholder="Укажите e-mail"
         />

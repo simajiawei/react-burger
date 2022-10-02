@@ -2,14 +2,15 @@ import styles from './register.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppDispatch } from '../utils/hooks';
 import { signUp } from '../services/actions/auth.actions';
 import { NewUserInterface } from '../interfaces/models/new-user.interface';
+import { useForm } from '../utils/use-form';
 
 export function RegisterPage() {
   const dispatch = useAppDispatch();
-  const [state, setState] = useState<NewUserInterface>({
+  const { values, handleChange, setValues } = useForm<NewUserInterface>({
     email: '',
     name: '',
     password: ''
@@ -17,13 +18,13 @@ export function RegisterPage() {
 
   const handleInputChange = (event: any) => {
     const name = event.target.name;
-    setState({
-      ...state,
+    setValues({
+      ...values,
       [name]: event.target.value
     });
   };
   const handleSubmit = () => {
-    dispatch(signUp(state));
+    dispatch(signUp(values));
   };
   return (
     <div className={styles.wrapper}>
@@ -31,7 +32,7 @@ export function RegisterPage() {
       <div className="mb-6 mt-6">
         <Input
           name="name"
-          value={state.name}
+          value={values.name}
           onChange={handleInputChange}
           type="text"
           placeholder="Имя"
@@ -40,7 +41,7 @@ export function RegisterPage() {
       <div className="mb-6 mt-6">
         <Input
           name="email"
-          value={state.email}
+          value={values.email}
           onChange={handleInputChange}
           type="email"
           placeholder="E-mail"
@@ -48,7 +49,7 @@ export function RegisterPage() {
       </div>
       <div className="mb-6 mt-6">
         <PasswordInput
-          value={state.password}
+          value={values.password}
           name="password"
           onChange={handleInputChange}
         />

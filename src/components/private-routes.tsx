@@ -17,7 +17,7 @@ export function PrivateRoutes() {
   ) : (
     <Navigate
       to={Pages.LOGIN}
-      state={{ from: location }}
+      state={{ from: location.pathname }}
     />
   );
 }

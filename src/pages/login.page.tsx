@@ -1,43 +1,25 @@
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import styles from './login.page.module.css';
 import { useAppDispatch } from '../utils/hooks';
-import React, { useState } from 'react';
+import React from 'react';
 import { signIn } from '../services/actions/auth.actions';
 import { CredentialsInterface } from '../interfaces/models/credentials.interface';
-import { useSelector } from 'react-redux';
-import { StoreInterface } from '../services/store.interface';
+import { useForm } from '../utils/use-form';
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
 
   const location = useLocation();
-
-  const [state, setState] = useState<CredentialsInterface>({
+  const { values, handleChange } = useForm<CredentialsInterface>({
     email: '',
     password: ''
   });
-  const { user } = useSelector((store: StoreInterface) => store.auth);
-  const handleInputChange = (event: any) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-  };
-  const handleSubmit = () => {
-    dispatch(signIn(state));
-  };
 
-  if (user) {
-    return (
-      <Navigate
-        to={location.state?.from ? location.state.from : Pages.HOME}
-        replace={true}
-      />
-    );
-  }
+  const handleSubmit = () => {
+    dispatch(signIn(values));
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -45,18 +27,18 @@ export function LoginPage() {
 
       <div className="mb-6 mt-6">
         <Input
-          value={state.email}
+          value={values.email}
           name="email"
-          onChange={handleInputChange}
+          onChange={handleChange}
           type="email"
           placeholder="E-mail"
         />
       </div>
       <div className="mb-6 mt-6">
         <PasswordInput
-          value={state.password}
+          value={values.password}
           name="password"
-          onChange={handleInputChange}
+          onChange={handleChange}
         />
       </div>
       <div className="mb-20">

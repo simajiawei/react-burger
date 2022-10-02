@@ -2,31 +2,25 @@ import styles from './reset-password.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React, { useState } from 'react';
+import React from 'react';
 import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
 import { apiBaseUrl } from '../utils/app.constants';
+import { useForm } from '../utils/use-form';
 
 const resetPasswordApiUrl = `${apiBaseUrl}/password-reset/reset`;
 
 export function ResetPasswordPage() {
   const navigate = useNavigate();
-  const [state, setState] = useState({
+  const { values, handleChange, setValues } = useForm({
     password: '',
     token: ''
   });
 
-  const handleInputChange = (event: any) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-  };
   const handleSubmit = () => {
     fetch(resetPasswordApiUrl, {
       method: 'POST',
-      body: JSON.stringify(state),
+      body: JSON.stringify(values),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -45,17 +39,17 @@ export function ResetPasswordPage() {
 
       <div className="mb-6 mt-6">
         <PasswordInput
-          value={state.password}
+          value={values.password}
           name="password"
-          onChange={handleInputChange}
+          onChange={handleChange}
         />
       </div>
       <div className="mb-6 mt-6">
         <Input
-          value={state.token}
+          value={values.token}
           name="token"
           placeholder="Введите код из письма"
-          onChange={handleInputChange}
+          onChange={handleChange}
         />
       </div>
       <div className="mb-20">

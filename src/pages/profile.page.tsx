@@ -8,6 +8,7 @@ import { StoreInterface } from '../services/store.interface';
 import { useAppDispatch } from '../utils/hooks';
 import { getUser, logout, updateUser } from '../services/actions/auth.actions';
 import { Pages } from '../enums/pages.enum';
+import { useForm } from '../utils/use-form';
 
 const disabledInitialState = {
   name: true,
@@ -15,12 +16,11 @@ const disabledInitialState = {
 };
 
 export function ProfilePage() {
-  console.log('ProfilePage');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useSelector((store: StoreInterface) => store.auth.user);
 
-  const [state, setState] = useState<UserInterface>({
+  const { values, handleChange, setValues } = useForm<UserInterface>({
     email: '',
     name: ''
   });
@@ -32,8 +32,8 @@ export function ProfilePage() {
 
   // sync user data with the one from server
   useEffect(() => {
-    setState({
-      ...state,
+    setValues({
+      ...values,
       ...user
     });
   }, [user]);
@@ -51,21 +51,14 @@ export function ProfilePage() {
       })
     );
   };
-  const handleInputChange = (event: any) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value
-    });
-  };
 
   const handleSubmit = () => {
-    dispatch(updateUser(state));
+    dispatch(updateUser(values));
   };
 
   const handleCancel = () => {
     setIsDisabled(disabledInitialState);
-    setState(user as UserInterface);
+    setValues(user as UserInterface);
   };
 
   const wrapperClassName = `${styles.wrapper}`;
@@ -105,8 +98,8 @@ export function ProfilePage() {
           <>
             <div className="mb-6">
               <Input
-                value={state.name}
-                onChange={handleInputChange}
+                value={values.name}
+                onChange={handleChange}
                 type="text"
                 onIconClick={() => handleEditClick('name')}
                 name="name"
@@ -117,8 +110,8 @@ export function ProfilePage() {
             </div>
             <div className="mb-6 mt-6">
               <Input
-                value={state.email}
-                onChange={handleInputChange}
+                value={values.email}
+                onChange={handleChange}
                 onIconClick={() => handleEditClick('email')}
                 type="email"
                 name="email"
@@ -138,7 +131,7 @@ export function ProfilePage() {
                 placeholder="Пароль"
                 disabled={true}
                 icon="EditIcon"
-                onChange={handleInputChange}
+                onChange={handleChange}
               />
             </div>
 
