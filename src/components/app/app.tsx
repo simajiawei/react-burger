@@ -30,7 +30,7 @@ function App() {
     const dispatch = useAppDispatch();
     const { ingredients } = useSelector((store: StoreInterface) => store.burger);
 
-    let background = location.state && location.state.background;
+    const background = location.state && location.state.background;
 
     const onCloseDetails = (e: SyntheticEvent) => {
       navigate(-1);
