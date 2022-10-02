@@ -36,24 +36,30 @@ export function ForgotPasswordPage() {
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Восстановление пароля</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}>
+        <div className="mb-6 mt-6">
+          <Input
+            value={values.email}
+            name="email"
+            onChange={handleChange}
+            type="email"
+            placeholder="Укажите e-mail"
+          />
+        </div>
+        <div className="mb-20">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium">
+            Восстановить
+          </Button>
+        </div>
+      </form>
 
-      <div className="mb-6 mt-6">
-        <Input
-          value={values.email}
-          name="email"
-          onChange={handleChange}
-          type="email"
-          placeholder="Укажите e-mail"
-        />
-      </div>
-      <div className="mb-20">
-        <Button
-          type="primary"
-          size="medium"
-          onClick={handleSubmit}>
-          Восстановить
-        </Button>
-      </div>
       <p className="text text_type_main-default text_color_inactive">
         Вспомнили пароль?{' '}
         <Link

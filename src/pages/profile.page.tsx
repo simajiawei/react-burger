@@ -28,7 +28,7 @@ export function ProfilePage() {
 
   useEffect(() => {
     dispatch(getUser());
-  }, [dispatch]);
+  }, []);
 
   // sync user data with the one from server
   useEffect(() => {
@@ -36,6 +36,7 @@ export function ProfilePage() {
       ...values,
       ...user
     });
+    console.log('values', values);
   }, [user]);
 
   const handleEditClick = (name: keyof UserInterface) => {
@@ -95,7 +96,11 @@ export function ProfilePage() {
 
       <div className={styles.userInfo}>
         {user && (
-          <>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}>
             <div className="mb-6">
               <Input
                 value={values.name}
@@ -143,13 +148,13 @@ export function ProfilePage() {
                 Отмена
               </Button>
               <Button
+                htmlType="submit"
                 type="primary"
-                size="medium"
-                onClick={handleSubmit}>
+                size="medium">
                 Сохранить
               </Button>
             </div>
-          </>
+          </form>
         )}
       </div>
     </div>

@@ -6,6 +6,7 @@ export function useForm<T>(inputValues: T) {
   const handleChange = (event: SyntheticEvent) => {
     // @ts-ignore
     const { value, name } = event.target as EventTarget;
+    console.log(value, name);
     setValues({ ...values, [name]: value });
   };
   return { values, handleChange, setValues };

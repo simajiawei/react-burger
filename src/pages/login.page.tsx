@@ -11,7 +11,6 @@ import { useForm } from '../utils/use-form';
 export function LoginPage() {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
   const { values, handleChange } = useForm<CredentialsInterface>({
     email: '',
     password: ''
@@ -24,32 +23,36 @@ export function LoginPage() {
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Вход</h1>
-
-      <div className="mb-6 mt-6">
-        <Input
-          value={values.email}
-          name="email"
-          onChange={handleChange}
-          type="email"
-          placeholder="E-mail"
-        />
-      </div>
-      <div className="mb-6 mt-6">
-        <PasswordInput
-          value={values.password}
-          name="password"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-20">
-        <Button
-          type="primary"
-          size="medium"
-          onClick={handleSubmit}>
-          Войти
-        </Button>
-      </div>
-
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}>
+        <div className="mb-6 mt-6">
+          <Input
+            value={values.email}
+            name="email"
+            onChange={handleChange}
+            type="email"
+            placeholder="E-mail"
+          />
+        </div>
+        <div className="mb-6 mt-6">
+          <PasswordInput
+            value={values.password}
+            name="password"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-20">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium">
+            Войти
+          </Button>
+        </div>
+      </form>
       <p className="text text_type_main-default text_color_inactive  mb-1">
         Вы – новый пользователь?{' '}
         <Link

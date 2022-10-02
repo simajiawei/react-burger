@@ -16,46 +16,52 @@ export function RegisterPage() {
     password: ''
   });
 
-
   const handleSubmit = () => {
     dispatch(signUp(values));
   };
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Регистрация</h1>
-      <div className="mb-6 mt-6">
-        <Input
-          name="name"
-          value={values.name}
-          onChange={handleChange}
-          type="text"
-          placeholder="Имя"
-        />
-      </div>
-      <div className="mb-6 mt-6">
-        <Input
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-          type="email"
-          placeholder="E-mail"
-        />
-      </div>
-      <div className="mb-6 mt-6">
-        <PasswordInput
-          value={values.password}
-          name="password"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-20">
-        <Button
-          type="primary"
-          size="medium"
-          onClick={handleSubmit}>
-          Зарегистрироваться
-        </Button>
-      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}>
+        <div className="mb-6 mt-6">
+          <Input
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+            type="text"
+            placeholder="Имя"
+          />
+        </div>
+        <div className="mb-6 mt-6">
+          <Input
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            type="email"
+            placeholder="E-mail"
+          />
+        </div>
+        <div className="mb-6 mt-6">
+          <PasswordInput
+            value={values.password}
+            name="password"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-20">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            onClick={handleSubmit}>
+            Зарегистрироваться
+          </Button>
+        </div>
+      </form>
 
       <p className="text text_type_main-default text_color_inactive">
         Уже зарегистрированы?&nbsp;
