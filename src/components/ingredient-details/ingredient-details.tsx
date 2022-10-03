@@ -1,14 +1,19 @@
 import React from 'react';
-import { IngredientInterface } from '../../interfaces/ingredient.interface';
+import { IngredientInterface } from '../../interfaces/models/ingredient.interface';
 import styles from './ingredient-details.module.css';
 import { IngredientContentItem } from './ingredient-content-item/ingredient-content-item';
 import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/reducers';
+import { StoreInterface } from '../../services/store.interface';
+import { useParams } from 'react-router-dom';
 
 export function IngredientDetails() {
-  const { calories, proteins, fat, carbohydrates, image_large, name } = useSelector(
-    (store: StoreInterface) => store.burger.selectedIngredient as IngredientInterface
-  );
+  const { ingredientId } = useParams();
+
+  const { ingredients } = useSelector((store: StoreInterface) => store.burger);
+
+  const { calories, proteins, fat, carbohydrates, image_large, name } = ingredients.find(
+    (ingredient) => ingredient._id === ingredientId
+  ) as IngredientInterface;
 
   const contents: [string, number][] = [
     ['Калории, ккал', calories],

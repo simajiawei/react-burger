@@ -1,4 +1,4 @@
-import { CategoryKey } from '../enums/category-key.enum';
+import { CategoryKey } from '../../enums/category-key.enum';
 
 export interface IngredientResponseInterface {
   _id: string;

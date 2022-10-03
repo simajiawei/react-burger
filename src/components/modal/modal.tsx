@@ -11,31 +11,29 @@ interface ModalProps {
   title?: string;
   children?: React.ReactNode;
   onClose: MouseEventHandler<HTMLElement>;
-  isOpen: boolean;
 }
-export function Modal(props: ModalProps) {
+export function Modal({ title, children, onClose }: ModalProps) {
   const modalClassName = `${styles.modal}`;
 
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
         // @ts-ignore
-        props.onClose(e);
+        onClose(e);
       }
     };
-    if (props.isOpen) {
-      document.addEventListener('keydown', close);
-      return () => document.removeEventListener('keydown', close);
-    }
-  }, [props.isOpen]);
+
+    document.addEventListener('keydown', close);
+    return () => document.removeEventListener('keydown', close);
+  }, [onClose]);
 
   return createPortal(
     <>
       <div className={modalClassName}>
-        <HeaderModal onClose={props.onClose}>{props.title}</HeaderModal>
-        <div className={styles.modalBody}>{props.children}</div>
+        <HeaderModal onClose={onClose}>{title}</HeaderModal>
+        <div className={styles.modalBody}>{children}</div>
       </div>
-      <ModalOverlay onClose={props.onClose} />
+      <ModalOverlay onClose={onClose} />
     </>,
     modalRoot
   );

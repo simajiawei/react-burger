@@ -1,13 +1,13 @@
 import { checkResponse } from '../../utils/check-response';
-import { apiBaseUrl } from '../../utils/app.constants';
-import { IngrediendsResponseInterface } from '../../interfaces/ingredients-response.interface';
+import { apiBaseUrl, ingredientsApiUrl, ordersApiUrl } from '../../utils/app.constants';
+import { IngrediendsResponseInterface } from '../../interfaces/responses/ingredients-response.interface';
 import { Dispatch } from 'redux';
-import { NewOrderInterface } from '../../interfaces/new-order.interface';
+import { NewOrderResponseInterface } from '../../interfaces/responses/new-order-response.interface';
 import {
   AddIngredientToConstructorInterface,
   IngredientsActionInterface,
   SetNewOrderSuccessActionInterface
-} from './actions.interface';
+} from './burger.actions.interface';
 import { AppThunk } from '../store';
 import { uniqueId } from '../../utils/generate-id';
 import exp from 'constants';
@@ -15,16 +15,12 @@ import exp from 'constants';
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';
 export const ADD_INGREDIENT_TO_CONSTRUCTOR = 'ADD_INGREDIENT_TO_CONSTRUCTOR';
-export const SELECT_INGREDIENT = 'SELECT_INGREDIENT';
 
 export const SET_NEW_ORDER = 'SET_NEW_ORDER';
 export const SET_NEW_ORDER_SUCCESS = 'SET_NEW_ORDER_SUCCESS';
 
-export const DESELECT_INGREDIENT = 'DESELECT_INGREDIENT';
 export const UPDATE_CONSTRUCTOR_ELEMENTS = 'UPDATE_CONSTRUCTOR_ELEMENTS';
 export const CLEAR_CONSTRUCTOR_ELEMENTS = 'CLEAR_CONSTRUCTOR_ELEMENTS';
-const ingredientsApiUrl = `${apiBaseUrl}/ingredients`;
-const ordersURL = `${apiBaseUrl}/orders`;
 
 export function getIngredients(): AppThunk {
   return function (dispatch: Dispatch<IngredientsActionInterface>) {
@@ -42,11 +38,11 @@ export function getIngredients(): AppThunk {
   };
 }
 
-export function submitNewOrder(orderIds: string[]): AppThunk {
+export function submitNewOrder(orderIds: string[], cb: Function): AppThunk {
   return function (dispatch: Dispatch) {
     dispatch(setNewOrder(true));
 
-    fetch(ordersURL, {
+    fetch(ordersApiUrl, {
       method: 'POST',
       body: JSON.stringify({
         ingredients: orderIds
@@ -55,8 +51,8 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
         'Content-Type': 'application/json'
       }
     })
-      .then<NewOrderInterface>(checkResponse)
-      .then((responseData: NewOrderInterface) => {
+      .then<NewOrderResponseInterface>(checkResponse)
+      .then((responseData: NewOrderResponseInterface) => {
         dispatch<SetNewOrderSuccessActionInterface>({
           type: SET_NEW_ORDER_SUCCESS,
           orderNumber: responseData.order.number
@@ -71,6 +67,7 @@ export function submitNewOrder(orderIds: string[]): AppThunk {
         dispatch({
           type: CLEAR_CONSTRUCTOR_ELEMENTS
         });
+        cb();
       });
   };
 }

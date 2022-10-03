@@ -1,17 +1,19 @@
 import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
-import { ConstructorIngredientInterface } from '../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface } from '../../interfaces/models/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderDetails } from '../order-details/order-details';
 import { Modal } from '../modal/modal';
 import { CategoryKey } from '../../enums/category-key.enum';
 import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/reducers';
-import { addIngredientToConstructor, submitNewOrder } from '../../services/actions';
+import { addIngredientToConstructor, submitNewOrder, UPDATE_INGREDIENTS } from '../../services/actions/burger.actions';
 import { useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../utils/app.types';
 import { BurgerConstructorBetweenBuns } from './burger-constructor-between-buns/burger-constructor-between-buns';
 import { useAppDispatch } from '../../utils/hooks';
+import { StoreInterface } from '../../services/store.interface';
+import { useNavigate } from 'react-router-dom';
+import { Pages } from '../../enums/pages.enum';
 
 interface TotalStateInterface {
   total: number;
@@ -29,9 +31,11 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
 
 export const BurgerConstructor = () => {
   const dispatch = useAppDispatch();
-  const { constructorIngredients, order, ingredients, orderIsProcessing } = useSelector(
+  const navigate = useNavigate();
+  const { constructorIngredients, order, orderIsProcessing, ingredients } = useSelector(
     (store: StoreInterface) => store.burger
   );
+  const { isLoggedIn } = useSelector((store: StoreInterface) => store.auth);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
   const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
@@ -80,7 +84,18 @@ export const BurgerConstructor = () => {
   }, [betweenBuns, bun]);
 
   const handleOrderClick = async (e: SyntheticEvent) => {
-    dispatch(submitNewOrder(orderIds));
+    if (!isLoggedIn) {
+      navigate(Pages.LOGIN);
+      return;
+    }
+    dispatch(
+      submitNewOrder(orderIds, () => {
+        dispatch({
+          type: UPDATE_INGREDIENTS,
+          items: ingredients
+        });
+      })
+    );
     setIsOrderDisplayed(true);
   };
 
@@ -143,9 +158,7 @@ export const BurgerConstructor = () => {
       </div>
 
       {isOrderDisplayed && !!order && (
-        <Modal
-          onClose={onCloseOrderDetails}
-          isOpen={isOrderDisplayed}>
+        <Modal onClose={onCloseOrderDetails}>
           <OrderDetails order={order} />
         </Modal>
       )}

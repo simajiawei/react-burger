@@ -8,7 +8,6 @@
 
 .title{
   display: flex;
-  color: var(--text-inactive-color);
   align-items: center;
 }
 
@@ -16,7 +15,5 @@
   display: flex;
 }
 
-.active{
-  color: var(--text-primary-color);
-}
+
 

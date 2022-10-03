@@ -1,12 +1,15 @@
 import { BurgerConstructorItem } from '../burger-constructor-item/burger-constructor-item';
 import React, { useCallback } from 'react';
-import { ConstructorIngredientInterface } from '../../../interfaces/ingredient.interface';
+import { ConstructorIngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import styles from './burger-constructor-between-buns.module.css';
 import {
   RemoveIngredientFromConstructorInterface,
   UpdateConstructorElementsInterface
-} from '../../../services/actions/actions.interface';
-import { REMOVE_INGREDIENT_FROM_CONSTRUCTOR, UPDATE_CONSTRUCTOR_ELEMENTS } from '../../../services/actions';
+} from '../../../services/actions/burger.actions.interface';
+import {
+  REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+  UPDATE_CONSTRUCTOR_ELEMENTS
+} from '../../../services/actions/burger.actions';
 import { useAppDispatch } from '../../../utils/hooks';
 
 export interface BurgerConstructorBetweenBunsPropsInterface {
