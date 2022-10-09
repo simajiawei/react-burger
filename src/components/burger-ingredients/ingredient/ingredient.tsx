@@ -1,13 +1,13 @@
 import { IngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.css';
-import React from 'react';
+import React, { FC } from 'react';
 import { useDrag } from 'react-dnd';
 import { DndIngredientType } from '../../../utils/app.types';
 import { Link, useLocation } from 'react-router-dom';
 import { Pages } from '../../../enums/pages.enum';
 
-export const Ingredient = ({ image, name, price, _id, count }: IngredientInterface) => {
+export const Ingredient: FC<IngredientInterface> = ({ image, name, price, _id, count }) => {
   const ingredientDetailsPath = `${Pages.INGREDIENTS}/${_id}`;
   const location = useLocation();
 

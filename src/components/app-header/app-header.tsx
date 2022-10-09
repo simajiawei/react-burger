@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React, { FC, useRef } from 'react';
 import styles from './app-header.module.css';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { AppHeaderTab } from './app-header-tab/app-header-tab';
 import { NavLink } from 'react-router-dom';
 import { Pages } from '../../enums/pages.enum';
 
-export function AppHeader() {
+export const AppHeader: FC = () => {
   const navClassName = `${styles.nav} p-4`;
   const logoClassName = `${styles.logo}`;
   const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
@@ -42,4 +42,4 @@ export function AppHeader() {
       </div>
     </header>
   );
-}
+};

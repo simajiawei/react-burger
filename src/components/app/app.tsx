@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect } from 'react';
+import React, { FC, SyntheticEvent, useEffect } from 'react';
 import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
 import { getIngredients } from '../../services/actions/burger.actions';
@@ -23,7 +23,7 @@ import { StoreInterface } from '../../services/store.interface';
 import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../utils/browser-storage';
 import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
 
-function App() {
+const App: FC = () => {
   const ModalSwitch = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -126,6 +126,6 @@ function App() {
       <ModalSwitch />
     </BrowserRouter>
   );
-}
+};
 
 export default App;

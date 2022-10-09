@@ -3,12 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import styles from './login.page.module.css';
 import { useAppDispatch } from '../utils/hooks';
-import React from 'react';
+import React, { FC } from 'react';
 import { signIn } from '../services/actions/auth.actions';
 import { CredentialsInterface } from '../interfaces/models/credentials.interface';
 import { useForm } from '../utils/use-form';
 
-export function LoginPage() {
+export const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
 
   const { values, handleChange } = useForm<CredentialsInterface>({
@@ -71,4 +71,4 @@ export function LoginPage() {
       </p>
     </div>
   );
-}
+};

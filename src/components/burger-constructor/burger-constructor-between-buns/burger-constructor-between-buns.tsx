@@ -1,5 +1,5 @@
 import { BurgerConstructorItem } from '../burger-constructor-item/burger-constructor-item';
-import React, { useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { ConstructorIngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import styles from './burger-constructor-between-buns.module.css';
 import {
@@ -16,7 +16,7 @@ export interface BurgerConstructorBetweenBunsPropsInterface {
   ingredients: ConstructorIngredientInterface[];
 }
 
-export function BurgerConstructorBetweenBuns({ ingredients }: BurgerConstructorBetweenBunsPropsInterface) {
+export const BurgerConstructorBetweenBuns: FC<BurgerConstructorBetweenBunsPropsInterface> = ({ ingredients }) => {
   const dispatch = useAppDispatch();
 
   const handleRemove = (ingredient: ConstructorIngredientInterface) => {
@@ -56,4 +56,4 @@ export function BurgerConstructorBetweenBuns({ ingredients }: BurgerConstructorB
       ))}
     </div>
   );
-}
+};

@@ -1,12 +1,12 @@
 import styles from './order-details.module.css';
-import React from 'react';
+import React, { FC } from 'react';
 import done from 'images/done.svg';
 
 interface OrderDetailsProps {
   order: number;
 }
 
-export function OrderDetails({ order }: OrderDetailsProps) {
+export const OrderDetails: FC<OrderDetailsProps> = ({ order }) => {
   const cardClassName = `${styles.card} mb-30`;
   const imageWrapperClassName = `${styles.imageWrapper} mb-15`;
   return (
@@ -23,4 +23,4 @@ export function OrderDetails({ order }: OrderDetailsProps) {
       <p className="text text_type_main-default text_color_inactive">Дождитесь готовности на орбитальной станции</p>
     </div>
   );
-}
+};

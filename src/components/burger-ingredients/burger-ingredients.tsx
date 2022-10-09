@@ -1,4 +1,4 @@
-import React, { LegacyRef, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, LegacyRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
 import styles from './burger-ingredients.module.css';
@@ -16,10 +16,9 @@ export interface CategoryInterface {
   };
 }
 
-export function BurgerIngredients() {
-  const dispatch = useAppDispatch();
+export const BurgerIngredients: FC = () => {
   const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
-  const [selectedCategory, setSelectedCategory] = useState(CategoryKey.BUN);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>(CategoryKey.BUN);
 
   const [bunsRef, inViewBuns] = useInView({
     threshold: 0
@@ -94,4 +93,4 @@ export function BurgerIngredients() {
       <div className={styles.ingredientsByCategories}>{ingrediendsCards}</div>
     </>
   );
-}
+};

@@ -2,7 +2,7 @@ import styles from './reset-password.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React from 'react';
+import React, { FC } from 'react';
 import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
 import { apiBaseUrl } from '../utils/app.constants';
@@ -10,7 +10,7 @@ import { useForm } from '../utils/use-form';
 
 const resetPasswordApiUrl = `${apiBaseUrl}/password-reset/reset`;
 
-export function ResetPasswordPage() {
+export const ResetPasswordPage: FC = () => {
   const navigate = useNavigate();
   const { values, handleChange, setValues } = useForm({
     password: '',
@@ -70,4 +70,4 @@ export function ResetPasswordPage() {
       </p>
     </div>
   );
-}
+};

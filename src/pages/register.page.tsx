@@ -2,13 +2,13 @@ import styles from './register.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React from 'react';
+import React, { FC } from 'react';
 import { useAppDispatch } from '../utils/hooks';
 import { signUp } from '../services/actions/auth.actions';
 import { NewUserInterface } from '../interfaces/models/new-user.interface';
 import { useForm } from '../utils/use-form';
 
-export function RegisterPage() {
+export const RegisterPage: FC = () => {
   const dispatch = useAppDispatch();
   const { values, handleChange, setValues } = useForm<NewUserInterface>({
     email: '',
@@ -73,4 +73,4 @@ export function RegisterPage() {
       </p>
     </div>
   );
-}
+};

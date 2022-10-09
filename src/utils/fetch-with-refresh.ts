@@ -5,7 +5,7 @@ import { getTokenFromLS, REFRESH_TOKEN, saveTokens } from './browser-storage';
 import { RefreshTokenResponseInterface } from '../interfaces/responses/refresh-token-response.interface';
 import { TokensInterface } from '../interfaces/models/tokens.interface';
 
-export const refreshTokenRequest = (): Promise<any> => {
+export const refreshTokenRequest = (): Promise<unknown> => {
   return fetch(updateTokenUrl, {
     method: 'POST',
     headers: {

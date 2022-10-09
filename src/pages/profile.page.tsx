@@ -1,6 +1,6 @@
 import styles from './profile.page.module.css';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { UserInterface } from '../interfaces/models/user.interface';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ const disabledInitialState = {
   email: true
 };
 
-export function ProfilePage() {
+export const ProfilePage: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useSelector((store: StoreInterface) => store.auth.user);
@@ -159,4 +159,4 @@ export function ProfilePage() {
       </div>
     </div>
   );
-}
+};

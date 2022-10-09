@@ -1,7 +1,7 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './forgot-password.page.module.css';
 import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
@@ -10,7 +10,7 @@ import { useForm } from '../utils/use-form';
 
 const forgotPasswordApiUrl = `${apiBaseUrl}/password-reset`;
 
-export function ForgotPasswordPage() {
+export const ForgotPasswordPage: FC = () => {
   const navigate = useNavigate();
 
   const { values, handleChange } = useForm({
@@ -70,4 +70,4 @@ export function ForgotPasswordPage() {
       </p>
     </div>
   );
-}
+};

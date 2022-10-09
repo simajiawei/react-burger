@@ -1,9 +1,9 @@
 import styles from './home.page.module.css';
 import { BurgerIngredients } from '../components/burger-ingredients/burger-ingredients';
 import { BurgerConstructor } from '../components/burger-constructor/burger-constructor';
-import React from 'react';
+import React, { FC } from 'react';
 
-export function HomePage() {
+export const HomePage: FC = () => {
   const constructorWrapperClassName = `${styles.constructorWrapper} pl-4 pr-4 pt-25`;
 
   return (
@@ -16,4 +16,4 @@ export function HomePage() {
       </div>
     </div>
   );
-}
+};
