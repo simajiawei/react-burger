@@ -32,7 +32,7 @@ const App: FC = () => {
 
     const background = location.state && location.state.background;
 
-    const onCloseDetails = (e: SyntheticEvent) => {
+    const onCloseDetails = () => {
       navigate(-1);
     };
 

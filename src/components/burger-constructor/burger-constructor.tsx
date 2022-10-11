@@ -99,7 +99,7 @@ export const BurgerConstructor: FC = () => {
     setIsOrderDisplayed(true);
   };
 
-  const onCloseOrderDetails = (e: SyntheticEvent) => {
+  const onCloseOrderDetails = () => {
     setIsOrderDisplayed(false);
   };
 

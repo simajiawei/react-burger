@@ -5,7 +5,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 interface HeaderModalProps {
   children?: React.ReactNode;
-  onClose: MouseEventHandler<HTMLElement>;
+  onClose: () => void;
 }
 export const HeaderModal: FC<HeaderModalProps> = ({ children, onClose }) => {
   const headerClassName = `${styles.header} mt-10 ml-10 mr-10`;
@@ -15,7 +15,7 @@ export const HeaderModal: FC<HeaderModalProps> = ({ children, onClose }) => {
       <h1 className={titleClassName}>{children}</h1>
       <CloseIcon
         type="primary"
-        onClick={onClose as () => void}
+        onClick={onClose}
       />
     </div>
   );

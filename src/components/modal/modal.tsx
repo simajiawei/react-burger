@@ -10,7 +10,7 @@ const modalRoot = document.getElementById('modals')!;
 interface ModalProps {
   title?: string;
   children?: React.ReactNode;
-  onClose: MouseEventHandler<HTMLElement>;
+  onClose: () => void;
 }
 export const Modal: FC<ModalProps> = ({ title, children, onClose }) => {
   const modalClassName = `${styles.modal}`;
@@ -18,8 +18,7 @@ export const Modal: FC<ModalProps> = ({ title, children, onClose }) => {
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
-        // @ts-ignore
-        onClose(e);
+        onClose();
       }
     };
 

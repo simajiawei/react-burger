@@ -1,7 +1,7 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React, { FC } from 'react';
+import React, { FC, FormEvent } from 'react';
 import styles from './forgot-password.page.module.css';
 import { PasswordResetResponseInterface } from '../interfaces/responses/password-reset-response.interface';
 import { checkResponse } from '../utils/check-response';
@@ -17,7 +17,8 @@ export const ForgotPasswordPage: FC = () => {
     email: ''
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     fetch(forgotPasswordApiUrl, {
       method: 'POST',
       body: JSON.stringify(values),
@@ -36,11 +37,7 @@ export const ForgotPasswordPage: FC = () => {
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Восстановление пароля</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-6 mt-6">
           <Input
             value={values.email}
