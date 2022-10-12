@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { FC } from 'react';
 
-export function NotFoundPage() {
+export const NotFoundPage: FC = () => {
   return (
     <div>
       <h1 className="text text_type_main-large">Извините, данной страницы не существует</h1>
@@ -11,4 +11,4 @@ export function NotFoundPage() {
       </p>
     </div>
   );
-}
+};

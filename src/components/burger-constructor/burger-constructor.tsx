@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { FC, SyntheticEvent, useEffect, useMemo, useReducer, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { ConstructorIngredientInterface } from '../../interfaces/models/ingredient.interface';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -29,7 +29,7 @@ function totalReducer(state: TotalStateInterface, prices: number[]) {
   };
 }
 
-export const BurgerConstructor = () => {
+export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { constructorIngredients, order, orderIsProcessing, ingredients } = useSelector(
@@ -38,7 +38,7 @@ export const BurgerConstructor = () => {
   const { isLoggedIn } = useSelector((store: StoreInterface) => store.auth);
 
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
-  const [isOrderDisplayed, setIsOrderDisplayed] = useState(false);
+  const [isOrderDisplayed, setIsOrderDisplayed] = useState<boolean>(false);
 
   const wrapperClassName = `${styles.constructor}`;
   const totalClassName = `${styles.total} mt-10`;
@@ -99,7 +99,7 @@ export const BurgerConstructor = () => {
     setIsOrderDisplayed(true);
   };
 
-  const onCloseOrderDetails = (e: SyntheticEvent) => {
+  const onCloseOrderDetails = () => {
     setIsOrderDisplayed(false);
   };
 

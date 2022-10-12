@@ -1,5 +1,5 @@
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, {SyntheticEvent, useRef} from 'react';
+import React, { FC, SyntheticEvent, useRef } from 'react';
 import { ConstructorIngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import { useDrag, useDrop } from 'react-dnd';
 import { DndIngredientType } from '../../../utils/app.types';
@@ -16,7 +16,7 @@ interface DraggableItemInterface {
   index: number;
 }
 
-export function BurgerConstructorItem({
+export const BurgerConstructorItem: FC<BurgerConstructorItemInterface> = ({
   constructorId,
   name,
   price,
@@ -24,8 +24,8 @@ export function BurgerConstructorItem({
   image,
   handleRemove,
   moveCard
-}: BurgerConstructorItemInterface) {
-  const ref = useRef(null);
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const [{ handlerId }, drop] = useDrop({
     // Указываем тип получаемых элементов, чтобы dnd понимал,
@@ -118,4 +118,4 @@ export function BurgerConstructorItem({
       />
     </div>
   );
-}
+};

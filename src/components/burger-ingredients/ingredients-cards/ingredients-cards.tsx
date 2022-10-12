@@ -1,5 +1,5 @@
 import { Ingredient } from '../ingredient/ingredient';
-import React, { ReactElement } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { IngredientInterface } from '../../../interfaces/models/ingredient.interface';
 import styles from './ingredients-cards.module.css';
 import { CategoryInterface } from '../burger-ingredients';
@@ -8,7 +8,7 @@ interface IngredientCardInterface {
   categories: CategoryInterface;
   ingredients: IngredientInterface[];
 }
-export function IngredientsCards({ categories, ingredients }: IngredientCardInterface): ReactElement {
+export const IngredientsCards: FC<IngredientCardInterface> = ({ categories, ingredients }) => {
   const gridClassName = `${styles.cardsGrid} pl-2 pr-2 pt-6`;
   return (
     <>
@@ -37,4 +37,4 @@ export function IngredientsCards({ categories, ingredients }: IngredientCardInte
       })}
     </>
   );
-}
+};

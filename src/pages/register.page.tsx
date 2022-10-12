@@ -2,13 +2,13 @@ import styles from './register.page.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
-import React from 'react';
+import React, { FC, FormEvent } from 'react';
 import { useAppDispatch } from '../utils/hooks';
 import { signUp } from '../services/actions/auth.actions';
 import { NewUserInterface } from '../interfaces/models/new-user.interface';
 import { useForm } from '../utils/use-form';
 
-export function RegisterPage() {
+export const RegisterPage: FC = () => {
   const dispatch = useAppDispatch();
   const { values, handleChange, setValues } = useForm<NewUserInterface>({
     email: '',
@@ -16,17 +16,14 @@ export function RegisterPage() {
     password: ''
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch(signUp(values));
   };
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Регистрация</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-6 mt-6">
           <Input
             name="name"
@@ -56,8 +53,7 @@ export function RegisterPage() {
           <Button
             htmlType="submit"
             type="primary"
-            size="medium"
-            onClick={handleSubmit}>
+            size="medium">
             Зарегистрироваться
           </Button>
         </div>
@@ -73,4 +69,4 @@ export function RegisterPage() {
       </p>
     </div>
   );
-}
+};

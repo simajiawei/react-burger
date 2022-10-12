@@ -3,12 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { Pages } from '../enums/pages.enum';
 import styles from './login.page.module.css';
 import { useAppDispatch } from '../utils/hooks';
-import React from 'react';
+import React, { FC, FormEvent } from 'react';
 import { signIn } from '../services/actions/auth.actions';
 import { CredentialsInterface } from '../interfaces/models/credentials.interface';
 import { useForm } from '../utils/use-form';
 
-export function LoginPage() {
+export const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
 
   const { values, handleChange } = useForm<CredentialsInterface>({
@@ -16,18 +16,15 @@ export function LoginPage() {
     password: ''
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch(signIn(values));
   };
 
   return (
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-medium">Вход</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-6 mt-6">
           <Input
             value={values.email}
@@ -71,4 +68,4 @@ export function LoginPage() {
       </p>
     </div>
   );
-}
+};

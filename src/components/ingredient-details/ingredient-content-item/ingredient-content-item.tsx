@@ -1,15 +1,15 @@
 import styles from './ingredient-content-item.module.css';
-import React from 'react';
+import React, { FC } from 'react';
 
 export interface IngredientContentItemProps {
   title: string;
   amount: number;
 }
-export function IngredientContentItem(props: IngredientContentItemProps) {
+export const IngredientContentItem: FC<IngredientContentItemProps> = ({ title, amount }) => {
   return (
     <div className={styles.wrapper}>
-      <p className="text text_type_main-default text_color_inactive">{props.title}</p>
-      <p className="text text_type_digits-default text_color_inactive">{props.amount}</p>
+      <p className="text text_type_main-default text_color_inactive">{title}</p>
+      <p className="text text_type_digits-default text_color_inactive">{amount}</p>
     </div>
   );
-}
+};
