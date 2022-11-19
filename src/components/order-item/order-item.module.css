@@ -1,6 +1,7 @@
 .wrapper{
   background-color: var(--background);
   border-radius: 40px;
+  margin-right: 8px;
 }
 .header{
   display: flex;

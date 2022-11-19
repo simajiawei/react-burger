@@ -30,8 +30,10 @@ export const OrderItem: FC<OrderInterface> = ({ ingredients, status, number, cre
       <p className="text text_type_main-medium mt-6 mb-6">{name}</p>
       <div className={styles.ingredientsWrapper}>
         <div className={styles.ingredientsPreviews}>
-          {ingredientsImages.map((image) => (
-            <div className={styles.ingredientPreview}>
+          {ingredientsImages.map((image, index) => (
+            <div
+              className={styles.ingredientPreview}
+              key={index}>
               <img
                 src={image}
                 alt="Ингредиент"
