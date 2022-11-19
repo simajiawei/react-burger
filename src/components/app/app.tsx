@@ -20,6 +20,7 @@ import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../utils/browser-storage';
 import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
+import { OrdersPage } from '../../pages/orders.page';
 
 const App: FC = () => {
   const ModalSwitch = () => {
@@ -93,6 +94,10 @@ const App: FC = () => {
                 <Route
                   path={Pages.PROFILE}
                   element={<ProfilePage />}
+                />
+                <Route
+                  path={Pages.ORDERS}
+                  element={<OrdersPage />}
                 />
               </Route>
               <Route

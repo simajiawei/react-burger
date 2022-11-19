@@ -152,6 +152,7 @@ export const BurgerConstructor: FC = () => {
           type="primary"
           onClick={handleOrderClick}
           disabled={!bun}
+          htmlType="button"
           size="large">
           Оформить заказ
         </Button>

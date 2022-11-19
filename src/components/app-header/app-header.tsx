@@ -23,7 +23,7 @@ export const AppHeader: FC = () => {
             </NavLink>
 
             <NavLink
-              to="/current-orders"
+              to={Pages.ORDERS}
               className={navLinkClassName}>
               <AppHeaderTab icon={<ListIcon type="primary" />}>Лента заказов</AppHeaderTab>
             </NavLink>

@@ -141,6 +141,7 @@ export const ProfilePage: FC = () => {
               <Button
                 type="secondary"
                 size="medium"
+                htmlType="button"
                 onClick={handleCancel}>
                 Отмена
               </Button>
