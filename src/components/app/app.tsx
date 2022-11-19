@@ -4,7 +4,7 @@ import { AppHeader } from '../app-header/app-header';
 import { getIngredients } from '../../services/actions/burger.actions';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { useAppDispatch } from '../../utils/hooks';
+import { useAppDispatch, useSelector } from '../../utils/hooks';
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { HomePage } from '../../pages/home.page';
 import { NotFoundPage } from '../../pages/not-found.page';
@@ -18,8 +18,6 @@ import { PrivateRoutes } from '../private-routes';
 import { PublicRoutes } from '../public-routes';
 import { Modal } from '../modal/modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/store.interface';
 import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../utils/browser-storage';
 import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
 
@@ -28,7 +26,7 @@ const App: FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { ingredients } = useSelector((store: StoreInterface) => store.burger);
+    const { ingredients } = useSelector((store) => store.burger);
 
     const background = location.state && location.state.background;
 
