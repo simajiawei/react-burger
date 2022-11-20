@@ -24,6 +24,8 @@ import { OrdersPage } from '../../pages/orders.page';
 import { OrderFullInfo } from '../order-full-info/order-full-info';
 import { wsConnectionStart } from '../../services/actions/ws.actions';
 import { ordersUrl } from '../../utils/app.constants';
+import { OrdersHistoryPage } from '../../pages/orders-history.page';
+import { ProfileUserPage } from '../../pages/profile-user.page';
 
 const App: FC = () => {
   const ModalSwitch = () => {
@@ -44,11 +46,9 @@ const App: FC = () => {
 
     useEffect(() => {
       if (location.pathname.startsWith(Pages.ORDERS)) {
-        if (!wsConnected) {
-          dispatch(wsConnectionStart(ordersUrl));
-        }
+        dispatch(wsConnectionStart(ordersUrl));
       }
-    }, [dispatch, location.pathname]);
+    }, [wsConnected, dispatch, location.pathname]);
 
     useEffect(() => {
       if (getCookie(ACCESS_TOKEN)) {
@@ -113,13 +113,21 @@ const App: FC = () => {
               <Route element={<PrivateRoutes />}>
                 <Route
                   path={Pages.PROFILE}
-                  element={<ProfilePage />}
-                />
+                  element={<ProfilePage />}>
+                  <Route
+                    path={Pages.PROFILE}
+                    element={<ProfileUserPage />}
+                  />
+                  <Route
+                    path={`${Pages.PROFILE}${Pages.ORDERS}`}
+                    element={<OrdersHistoryPage />}
+                  />
+                </Route>
               </Route>
-              <Route
-                path="*"
-                element={<NotFoundPage />}
-              />
+              {/*<Route*/}
+              {/*  path="*"*/}
+              {/*  element={<NotFoundPage />}*/}
+              {/*/>*/}
             </Routes>
             <Routes>
               {background && ingredients.length > 0 && (
