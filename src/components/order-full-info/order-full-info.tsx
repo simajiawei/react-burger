@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useMemo, useReducer, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { OrdersInterface, OrdersResponseInterface } from '../../interfaces/responses/orders-response.interface';
-import { checkResponse } from '../../utils/check-response';
 import { OrderInterface, OrderStatus } from '../../interfaces/models/order.interface';
 import styles from './order-full-info.module.css';
 import { IngredientImage } from '../ingredient-image/ingredient-image';
@@ -14,14 +12,17 @@ const initialTotalState: TotalStateInterface = {
   total: 0
 };
 
-export const OrderFullInfo: FC = () => {
+interface OrderFullInfoProps {
+  pageCentered?: boolean;
+}
+
+export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
   const { feedId } = useParams();
   const [totalState, dispatchTotal] = useReducer(totalReducer, initialTotalState);
   const [fullIngredients, setFullIngredients] = useState<IngredientInterface[]>([]);
   const [order, setOrder] = useState<OrderInterface>();
 
-  // todo: remove when WS will be implemented
-  const [orders, setOrders] = useState<OrdersInterface>();
+  const { orders } = useSelector((state) => state.ws);
 
   const allIngredients = useSelector((state) => state.burger.ingredients);
 
@@ -50,34 +51,22 @@ export const OrderFullInfo: FC = () => {
     dispatchTotal(prices);
   }, [prices]);
 
-  // todo: remove when WS will be implemented
-  useEffect(() => {
-    const getOrders = () => {
-      fetch('../data/orders.json')
-        .then<OrdersResponseInterface>(checkResponse)
-        .then((responseData) => setOrders(responseData))
-        .catch((error) => {
-          console.error('Error fetching ingredients', error);
-        });
-    };
-    getOrders();
-  }, []);
-
   useEffect(() => {
     const order = orders?.orders.find((o) => o._id === feedId);
     setOrder(order);
   }, [feedId, orders]);
 
-  const orderNumberClassName = `${styles.orderNumber} text text_type_digits-default mb-10`;
+  const wrapperClassName = `${pageCentered ? styles.pageWrapper : styles.modalWrapper}`;
+  const orderNumberClassName = `${styles.orderNumber} text text_type_digits-default`;
   const orderStatus = `${styles.orderStatus} text text_type_main-default mb-15`;
   const totalPriceClassName = `${styles.ingredientsPrice} text text_type_digits-default`;
   const footerClassName = `${styles.footer} mt-10`;
   return (
     <>
       {order && (
-        <div className={styles.wrapper}>
-          <p className={orderNumberClassName}>#{order.number}</p>
-          <p className="text text_type_main-medium mb-3">{order.name}</p>
+        <div className={wrapperClassName}>
+          {pageCentered && <p className={orderNumberClassName}>#{order.number}</p>}
+          <p className="text text_type_main-medium mb-3 mt-10">{order.name}</p>
           <p className={orderStatus}>{order.status === OrderStatus.DONE ? 'Выполнен' : 'В работе'}</p>
           <p className="text text_type_main-medium mb-2">Состав:</p>
           <div className={styles.ingredients}>

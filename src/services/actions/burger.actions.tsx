@@ -1,5 +1,5 @@
 import { checkResponse } from '../../utils/check-response';
-import { apiBaseUrl, ingredientsApiUrl, ordersApiUrl } from '../../utils/app.constants';
+import { ingredientsApiUrl, ordersApiUrl } from '../../utils/app.constants';
 import { IngrediendsResponseInterface } from '../../interfaces/responses/ingredients-response.interface';
 import { Dispatch } from 'redux';
 import { NewOrderResponseInterface } from '../../interfaces/responses/new-order-response.interface';
@@ -10,7 +10,6 @@ import {
 } from './burger.actions.interface';
 import { AppThunk } from '../store';
 import { uniqueId } from '../../utils/generate-id';
-import exp from 'constants';
 
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';

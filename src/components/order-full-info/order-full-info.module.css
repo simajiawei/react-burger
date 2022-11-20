@@ -1,14 +1,17 @@
-.wrapper{
+.pageWrapper, .modalWrapper{
   max-width: 640px;
   max-height: 620px;
+
+  display: flex;
+  flex-direction: column;
+}
+.pageWrapper{
   position: absolute;
   top: 50px;
   bottom: 0;
   left: 0;
   right: 0;
   margin: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .orderNumber{

@@ -1,4 +1,4 @@
-import React, { FC, SyntheticEvent, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import styles from './app.module.css';
 import { AppHeader } from '../app-header/app-header';
 import { getIngredients } from '../../services/actions/burger.actions';
@@ -22,6 +22,8 @@ import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../ut
 import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
 import { OrdersPage } from '../../pages/orders.page';
 import { OrderFullInfo } from '../order-full-info/order-full-info';
+import { wsConnectionStart } from '../../services/actions/ws.actions';
+import { ordersUrl } from '../../utils/app.constants';
 
 const App: FC = () => {
   const ModalSwitch = () => {
@@ -29,7 +31,7 @@ const App: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { ingredients } = useSelector((store) => store.burger);
-
+    const { orders, wsConnected } = useSelector((store) => store.ws);
     const background = location.state && location.state.background;
 
     const onCloseDetails = () => {
@@ -39,6 +41,14 @@ const App: FC = () => {
     useEffect(() => {
       dispatch(getIngredients());
     }, [dispatch]);
+
+    useEffect(() => {
+      if (location.pathname.startsWith(Pages.ORDERS)) {
+        if (!wsConnected) {
+          dispatch(wsConnectionStart(ordersUrl));
+        }
+      }
+    }, [dispatch, location.pathname]);
 
     useEffect(() => {
       if (getCookie(ACCESS_TOKEN)) {
@@ -69,6 +79,15 @@ const App: FC = () => {
                 element={ingredients.length > 0 && <IngredientDetails />}
               />
 
+              <Route
+                path={Pages.ORDERS}
+                element={<OrdersPage />}
+              />
+              <Route
+                path={`${Pages.ORDERS}/:feedId`}
+                element={<OrderFullInfo pageCentered={true} />}
+              />
+
               {/* ONLY NOT AUTHENTICATED USERS */}
               <Route element={<PublicRoutes />}>
                 <Route
@@ -96,14 +115,6 @@ const App: FC = () => {
                   path={Pages.PROFILE}
                   element={<ProfilePage />}
                 />
-                <Route
-                  path={Pages.ORDERS}
-                  element={<OrdersPage />}
-                />
-                <Route
-                  path={`${Pages.ORDERS}/:feedId`}
-                  element={<OrderFullInfo />}
-                />
               </Route>
               <Route
                 path="*"
@@ -112,15 +123,35 @@ const App: FC = () => {
             </Routes>
             <Routes>
               {background && ingredients.length > 0 && (
-                <Route
-                  path={`${Pages.INGREDIENTS}/:ingredientId`}
-                  element={
-                    <Modal
-                      onClose={onCloseDetails}
-                      title="Детали ингредиента">
-                      <IngredientDetails />
-                    </Modal>
-                  }></Route>
+                <>
+                  <Route
+                    path={`${Pages.INGREDIENTS}/:ingredientId`}
+                    element={
+                      <Modal
+                        onClose={onCloseDetails}
+                        title="Детали ингредиента">
+                        <IngredientDetails />
+                      </Modal>
+                    }></Route>
+                  {orders && (
+                    <Route
+                      path={`${Pages.ORDERS}/:feedId`}
+                      element={
+                        <Modal
+                          onClose={onCloseDetails}
+                          title={
+                            <p className="text text_type_digits-default">
+                              #
+                              {orders.orders
+                                .find((order) => order._id === location.pathname.split('/').slice(-1)[0])
+                                ?.number?.toString()}
+                            </p>
+                          }>
+                          <OrderFullInfo pageCentered={false} />
+                        </Modal>
+                      }></Route>
+                  )}
+                </>
               )}
             </Routes>
           </DndProvider>

@@ -43,6 +43,7 @@ export const OrderItem: FC<OrderInterface> = ({ ingredients, status, number, cre
   return (
     <Link
       to={orderFullInfoPath}
+      state={{ background: location }}
       className={wrapper}>
       <div className={styles.header}>
         <p className="text text_type_digits-default">#{number}</p>

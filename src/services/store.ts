@@ -2,8 +2,9 @@ import thunk, { ThunkAction } from 'redux-thunk';
 import { AnyAction, configureStore } from '@reduxjs/toolkit';
 import { applyMiddleware } from 'redux';
 import { rootReducer } from './reducers';
+import { socketMiddleware } from '../middleware/socket-middleware';
 
-const enhancer = applyMiddleware(thunk);
+const enhancer = applyMiddleware(thunk, socketMiddleware());
 
 export const store = configureStore({
   reducer: rootReducer,

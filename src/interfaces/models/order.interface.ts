@@ -1,6 +1,7 @@
 export enum OrderStatus {
   DONE = 'done',
-  IN_PROGRESS = 'in_progress'
+  IN_PROGRESS = 'pending',
+  CREATED = 'created'
 }
 
 export interface OrderInterface {
