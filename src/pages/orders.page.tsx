@@ -20,6 +20,7 @@ export const OrdersPage: FC = () => {
     };
     getOrders();
   }, []);
+
   const ordersStatsClassName = `${styles.ordersStats} pt-25`;
   return (
     <div className={styles.ordersPageWrapper}>

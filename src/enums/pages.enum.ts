@@ -6,5 +6,5 @@ export enum Pages {
   RESET_PASSWORD = '/reset-password',
   PROFILE = '/profile',
   INGREDIENTS = '/ingredients',
-  ORDERS = '/orders'
+  ORDERS = '/feed'
 }

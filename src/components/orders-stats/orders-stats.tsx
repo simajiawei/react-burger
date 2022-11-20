@@ -19,7 +19,11 @@ export const OrdersStats: FC<OrdersInterface> = ({ orders, total, totalToday }) 
           <p className="text text_type_main-medium mb-6">Готовы:</p>
           <div className={styles.statusItems}>
             {ordersDone.map((order) => (
-              <p className={orderDoneClassName}>{order}</p>
+              <p
+                className={orderDoneClassName}
+                key={order}>
+                {order}
+              </p>
             ))}
           </div>
         </div>
@@ -27,7 +31,11 @@ export const OrdersStats: FC<OrdersInterface> = ({ orders, total, totalToday }) 
           <p className="text text_type_main-medium mb-6">В работе:</p>
           <div className={styles.statusItems}>
             {ordersInProgress.map((order) => (
-              <p className={orderInProgressClassName}>{order}</p>
+              <p
+                className={orderInProgressClassName}
+                key={order}>
+                {order}
+              </p>
             ))}
           </div>
         </div>

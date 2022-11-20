@@ -14,20 +14,11 @@ import { useAppDispatch } from '../../utils/hooks';
 import { StoreInterface } from '../../services/store.interface';
 import { useNavigate } from 'react-router-dom';
 import { Pages } from '../../enums/pages.enum';
-
-interface TotalStateInterface {
-  total: number;
-}
+import { totalReducer, TotalStateInterface } from '../../services/reducers/total.reducer';
 
 const totalInitialState: TotalStateInterface = {
   total: 0
 };
-
-function totalReducer(state: TotalStateInterface, prices: number[]) {
-  return {
-    total: prices.reduce((prev, cur) => prev + cur, totalInitialState.total)
-  };
-}
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();

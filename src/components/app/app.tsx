@@ -21,6 +21,7 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../utils/browser-storage';
 import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
 import { OrdersPage } from '../../pages/orders.page';
+import { OrderFullInfo } from '../order-full-info/order-full-info';
 
 const App: FC = () => {
   const ModalSwitch = () => {
@@ -98,6 +99,10 @@ const App: FC = () => {
                 <Route
                   path={Pages.ORDERS}
                   element={<OrdersPage />}
+                />
+                <Route
+                  path={`${Pages.ORDERS}/:feedId`}
+                  element={<OrderFullInfo />}
                 />
               </Route>
               <Route
