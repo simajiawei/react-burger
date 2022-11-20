@@ -3,6 +3,7 @@ import {
   WS_CONNECTION_ERROR,
   WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
+  WS_DISCONNECT,
   WS_GET_MESSAGE
 } from './ws.actions';
 import { Action } from 'redux';
@@ -17,10 +18,11 @@ export interface WsConnectionErrorInterface extends Action<typeof WS_CONNECTION_
 export interface WsConnectionStartInterface extends Action<typeof WS_CONNECTION_START> {
   url: string;
 }
-
+export interface WsConnectionDisconnectInterface extends Action<typeof WS_DISCONNECT> {}
 export type WsActions =
   | WsConnectionSuccessInterface
   | WsConnectionClosedInterface
   | WsConnectionErrorInterface
   | WsConnectionStartInterface
-  | WsGetMessageInterface;
+  | WsGetMessageInterface
+  | WsConnectionDisconnectInterface;

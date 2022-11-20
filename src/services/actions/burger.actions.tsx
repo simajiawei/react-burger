@@ -10,6 +10,9 @@ import {
 } from './burger.actions.interface';
 import { AppThunk } from '../store';
 import { uniqueId } from '../../utils/generate-id';
+import { ACCESS_TOKEN, getCookie } from '../../utils/browser-storage';
+import { getAuthHeader } from '../../utils/http-headers';
+import { fetchWithRefresh } from '../../utils/fetch-with-refresh';
 
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';
@@ -40,17 +43,16 @@ export function getIngredients(): AppThunk {
 export function submitNewOrder(orderIds: string[], cb: Function): AppThunk {
   return function (dispatch: Dispatch) {
     dispatch(setNewOrder(true));
-
-    fetch(ordersApiUrl, {
+    fetchWithRefresh<NewOrderResponseInterface>(ordersApiUrl, {
       method: 'POST',
       body: JSON.stringify({
         ingredients: orderIds
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
       }
     })
-      .then<NewOrderResponseInterface>(checkResponse)
       .then((responseData: NewOrderResponseInterface) => {
         dispatch<SetNewOrderSuccessActionInterface>({
           type: SET_NEW_ORDER_SUCCESS,

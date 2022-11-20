@@ -18,7 +18,7 @@ export const OrderItem: FC<OrderInterface> = ({ ingredients, status, number, cre
   const allIngredients = useSelector((state) => state.burger.ingredients);
   const location = useLocation();
   const [totalState, dispatchTotal] = useReducer(totalReducer, totalInitialState);
-  const orderFullInfoPath = `${Pages.ORDERS}/${_id}`;
+  const orderFullInfoPath = `${location.pathname}/${_id}`;
 
   const fullIngredients: IngredientInterface[] = useMemo(
     () =>

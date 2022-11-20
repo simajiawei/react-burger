@@ -3,6 +3,7 @@ import { AppDispatch, RootState } from '../services/store';
 import { WsActions } from '../services/actions/ws.actions.interface';
 import {
   WS_CONNECTION_START,
+  WS_DISCONNECT,
   wsConnectionClosed,
   wsConnectionError,
   wsConnectionSuccess,
@@ -19,6 +20,8 @@ export const socketMiddleware = (): Middleware => {
       if (action.type === WS_CONNECTION_START) {
         // объект класса WebSocket
         socket = new WebSocket(action.url);
+      } else if (action.type === WS_DISCONNECT) {
+        socket?.close();
       }
       if (socket) {
         // функция, которая вызывается при открытии сокета
@@ -39,6 +42,7 @@ export const socketMiddleware = (): Middleware => {
         };
         // функция, которая вызывается при закрытии соединения
         socket.onclose = (event) => {
+          console.log('onclose', event);
           dispatch(wsConnectionClosed());
         };
       }

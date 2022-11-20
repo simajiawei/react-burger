@@ -45,6 +45,9 @@ const App: FC = () => {
     }, [dispatch]);
 
     useEffect(() => {
+      if (wsConnected) {
+        return;
+      }
       if (location.pathname.startsWith(Pages.ORDERS)) {
         dispatch(wsConnectionStart(ordersUrl));
       }
@@ -141,24 +144,26 @@ const App: FC = () => {
                         <IngredientDetails />
                       </Modal>
                     }></Route>
-                  {orders && (
-                    <Route
-                      path={`${Pages.ORDERS}/:feedId`}
-                      element={
-                        <Modal
-                          onClose={onCloseDetails}
-                          title={
-                            <p className="text text_type_digits-default">
-                              #
-                              {orders.orders
-                                .find((order) => order._id === location.pathname.split('/').slice(-1)[0])
-                                ?.number?.toString()}
-                            </p>
-                          }>
-                          <OrderFullInfo pageCentered={false} />
-                        </Modal>
-                      }></Route>
-                  )}
+                  {orders &&
+                    [`${Pages.ORDERS}/:feedId`, `${Pages.PROFILE}/${Pages.ORDERS}/:feedId`].map((path, index) => (
+                      <Route
+                        key={index}
+                        path={path}
+                        element={
+                          <Modal
+                            onClose={onCloseDetails}
+                            title={
+                              <p className="text text_type_digits-default">
+                                #
+                                {orders.orders
+                                  .find((order) => order._id === location.pathname.split('/').slice(-1)[0])
+                                  ?.number?.toString()}
+                              </p>
+                            }>
+                            <OrderFullInfo pageCentered={false} />
+                          </Modal>
+                        }></Route>
+                    ))}
                 </>
               )}
             </Routes>
