@@ -3,10 +3,8 @@ import styles from './profile.page.module.css';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { getUser, updateUser } from '../services/actions/auth.actions';
 import { UserInterface } from '../interfaces/models/user.interface';
-import { useSelector } from 'react-redux';
-import { StoreInterface } from '../services/store.interface';
 import { useForm } from '../utils/use-form';
-import { useAppDispatch } from '../utils/hooks';
+import { useAppDispatch, useSelector } from '../utils/hooks';
 
 const disabledInitialState = {
   name: true,
@@ -16,7 +14,7 @@ const disabledInitialState = {
 export const ProfileUserPage = () => {
   const dispatch = useAppDispatch();
 
-  const user = useSelector((store: StoreInterface) => store.auth.user);
+  const user = useSelector((store) => store.auth.user);
 
   const { values, handleChange, setValues } = useForm<UserInterface>({
     email: '',

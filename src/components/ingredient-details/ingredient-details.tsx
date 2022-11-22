@@ -2,14 +2,13 @@ import React, { FC } from 'react';
 import { IngredientInterface } from '../../interfaces/models/ingredient.interface';
 import styles from './ingredient-details.module.css';
 import { IngredientContentItem } from './ingredient-content-item/ingredient-content-item';
-import { useSelector } from 'react-redux';
-import { StoreInterface } from '../../services/store.interface';
 import { useParams } from 'react-router-dom';
+import { useSelector } from '../../utils/hooks';
 
 export const IngredientDetails: FC = () => {
   const { ingredientId } = useParams();
 
-  const { ingredients } = useSelector((store: StoreInterface) => store.burger);
+  const { ingredients } = useSelector((store) => store.burger);
 
   const { calories, proteins, fat, carbohydrates, image_large, name } = ingredients.find(
     (ingredient) => ingredient._id === ingredientId
