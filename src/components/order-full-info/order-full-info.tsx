@@ -37,7 +37,7 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
       const ingredientIds = order?.ingredients.filter((ingredientId) => ingredient._id === ingredientId);
       if (ingredientIds) {
         if (ingredientIds.length > 0) {
-          _fullIngredients.push(..._fullIngredients, {
+          _fullIngredients.push({
             ...ingredient,
             count: ingredientIds.length
           });
