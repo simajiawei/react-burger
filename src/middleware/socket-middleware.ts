@@ -1,49 +1,44 @@
 import { Middleware, MiddlewareAPI } from 'redux';
 import { AppDispatch, RootState } from '../services/store';
 import { WsActions } from '../services/actions/ws.actions.interface';
-import {
-  WS_CONNECTION_START,
-  WS_DISCONNECT,
-  wsConnectionClosed,
-  wsConnectionError,
-  wsConnectionSuccess,
-  wsGetMessage
-} from '../services/actions/ws.actions';
+import { WsBaseActionsInterface } from '../services/reducers/ws.base-actions.interface';
 
-export const socketMiddleware = (): Middleware => {
+export const socketMiddleware = (wsActions: WsBaseActionsInterface): Middleware => {
   return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
     return (next) => (action: WsActions) => {
       const { dispatch } = store;
+      const { connectionStart, connectionClosed, connectionError, connectionSuccess, disconnect, getMessage } =
+        wsActions;
 
-      if (action.type === WS_CONNECTION_START) {
+      if (action.type === connectionStart) {
         // объект класса WebSocket
         socket = new WebSocket(action.url);
-      } else if (action.type === WS_DISCONNECT) {
+      } else if (action.type === disconnect) {
         socket?.close();
       }
       if (socket) {
         // функция, которая вызывается при открытии сокета
         socket.onopen = (event) => {
-          dispatch(wsConnectionSuccess());
+          dispatch(connectionSuccess());
         };
 
         // функция, которая вызывается при ошибке соединения
         socket.onerror = (event) => {
           console.log('ws onerror:', event);
-          dispatch(wsConnectionError());
+          dispatch(connectionError());
         };
 
         // функция, которая вызывается при получения события от сервера
         socket.onmessage = (event) => {
           const { data } = event;
-          dispatch(wsGetMessage(data));
+          dispatch(getMessage(data));
         };
         // функция, которая вызывается при закрытии соединения
         socket.onclose = (event) => {
           console.log('onclose', event);
-          dispatch(wsConnectionClosed());
+          dispatch(connectionClosed());
         };
       }
 
