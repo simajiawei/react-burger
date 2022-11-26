@@ -23,12 +23,13 @@ export const OrdersHistoryPage: FC = () => {
 
   return (
     <div className={styles.ordersList}>
-      {orders?.orders.map((order) => (
-        <OrderItem
-          key={order._id}
-          {...order}
-        />
-      ))}
+      {orders?.orders &&
+        orders.orders.map((order) => (
+          <OrderItem
+            key={order._id}
+            {...order}
+          />
+        ))}
     </div>
   );
 };

@@ -75,7 +75,8 @@ const App: FC = () => {
             <Routes location={background || location}>
               <Route
                 path={Pages.HOME}
-                element={<HomePage />}></Route>
+                element={<HomePage />}
+              />
 
               <Route
                 path={`${Pages.INGREDIENTS}/:ingredientId`}
@@ -126,14 +127,19 @@ const App: FC = () => {
                     element={<OrdersHistoryPage />}
                   />
                 </Route>
+                <Route
+                  path={`${Pages.PROFILE}${Pages.ORDERS}/:feedId`}
+                  element={<OrderFullInfo pageCentered={true} />}
+                />
               </Route>
-              {/*<Route*/}
-              {/*  path="*"*/}
-              {/*  element={<NotFoundPage />}*/}
-              {/*/>*/}
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              />
             </Routes>
-            <Routes>
-              {background && ingredients.length > 0 && (
+
+            {background && ingredients.length > 0 && (
+              <Routes>
                 <>
                   <Route
                     path={`${Pages.INGREDIENTS}/:ingredientId`}
@@ -145,7 +151,7 @@ const App: FC = () => {
                       </Modal>
                     }></Route>
                   {orders &&
-                    [`${Pages.ORDERS}/:feedId`, `${Pages.PROFILE}/${Pages.ORDERS}/:feedId`].map((path, index) => (
+                    [`${Pages.ORDERS}/:feedId`, `${Pages.PROFILE}${Pages.ORDERS}/:feedId`].map((path, index) => (
                       <Route
                         key={index}
                         path={path}
@@ -165,8 +171,8 @@ const App: FC = () => {
                         }></Route>
                     ))}
                 </>
-              )}
-            </Routes>
+              </Routes>
+            )}
           </DndProvider>
         </main>
       </>
