@@ -29,7 +29,9 @@ export const AppHeader: FC = () => {
             </NavLink>
           </div>
           <div className={logoClassName}>
-            <Logo />
+            <NavLink to="/">
+              <Logo />
+            </NavLink>
           </div>
           <div className={styles.navRight}>
             <NavLink
