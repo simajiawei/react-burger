@@ -3,8 +3,7 @@ import { OrderItem } from '../components/order-item/order-item';
 import { useAppDispatch, useSelector } from '../utils/hooks';
 import styles from './orders-history.page.module.css';
 import { wsConnectionDisconnect, wsConnectionStart } from '../services/actions/ws.actions';
-import { ordersHistoryUrl } from '../utils/app.constants';
-import { ACCESS_TOKEN, getCookie } from '../utils/browser-storage';
+import { getHistoryWsUrl } from '../utils/get-history-ws-url';
 
 export const OrdersHistoryPage: FC = () => {
   const { orders, wsConnected } = useSelector((state) => state.ws);
@@ -14,8 +13,7 @@ export const OrdersHistoryPage: FC = () => {
     if (wsConnected) {
       dispatch(wsConnectionDisconnect());
     }
-    const token = getCookie(ACCESS_TOKEN)?.replace('Bearer ', '');
-    dispatch(wsConnectionStart(`${ordersHistoryUrl}?token=${token}`));
+    dispatch(wsConnectionStart(getHistoryWsUrl()));
     return () => {
       dispatch(wsConnectionDisconnect());
     };

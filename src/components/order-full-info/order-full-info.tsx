@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import { OrderInterface, OrderStatus } from '../../interfaces/models/order.interface';
 import styles from './order-full-info.module.css';
 import { IngredientImage } from '../ingredient-image/ingredient-image';
-import { useSelector } from '../../utils/hooks';
+import { useAppDispatch, useSelector } from '../../utils/hooks';
 import { IngredientInterface } from '../../interfaces/models/ingredient.interface';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { totalReducer, TotalStateInterface } from '../../services/reducers/total.reducer';
+import { wsConnectionDisconnect, wsConnectionStart } from '../../services/actions/ws.actions';
+import { getHistoryWsUrl } from '../../utils/get-history-ws-url';
 
 const initialTotalState: TotalStateInterface = {
   total: 0
@@ -18,11 +20,13 @@ interface OrderFullInfoProps {
 
 export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
   const { feedId } = useParams();
+  const dispatch = useAppDispatch();
+
   const [totalState, dispatchTotal] = useReducer(totalReducer, initialTotalState);
   const [fullIngredients, setFullIngredients] = useState<IngredientInterface[]>([]);
   const [order, setOrder] = useState<OrderInterface>();
 
-  const { orders } = useSelector((state) => state.ws);
+  const { orders, wsConnected } = useSelector((state) => state.ws);
 
   const allIngredients = useSelector((state) => state.burger.ingredients);
 
@@ -30,6 +34,16 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
     () => fullIngredients.map((ingredient) => ingredient.price * ingredient.count),
     [fullIngredients]
   );
+
+  useEffect(() => {
+    if (wsConnected) {
+      dispatch(wsConnectionDisconnect());
+    }
+    dispatch(wsConnectionStart(getHistoryWsUrl()));
+    return () => {
+      dispatch(wsConnectionDisconnect());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const _fullIngredients: IngredientInterface[] = [];
