@@ -2,20 +2,17 @@ import React, { FC, useEffect } from 'react';
 import { OrderItem } from '../components/order-item/order-item';
 import { useAppDispatch, useSelector } from '../utils/hooks';
 import styles from './orders-history.page.module.css';
-import { wsConnectionDisconnect, wsConnectionStart } from '../services/actions/ws.actions';
 import { getHistoryWsUrl } from '../utils/get-history-ws-url';
+import { historyWsConnectionDisconnect, historyWsConnectionStart } from '../services/actions/history-ws.actions';
 
 export const OrdersHistoryPage: FC = () => {
-  const { orders, wsConnected } = useSelector((state) => state.ws);
+  const { orders } = useSelector((state) => state.wsHistory);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (wsConnected) {
-      dispatch(wsConnectionDisconnect());
-    }
-    dispatch(wsConnectionStart(getHistoryWsUrl()));
+    dispatch(historyWsConnectionStart(getHistoryWsUrl()));
     return () => {
-      dispatch(wsConnectionDisconnect());
+      dispatch(historyWsConnectionDisconnect());
     };
   }, [dispatch]);
 

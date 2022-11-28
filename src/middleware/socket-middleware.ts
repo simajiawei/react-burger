@@ -1,13 +1,12 @@
 import { Middleware, MiddlewareAPI } from 'redux';
 import { AppDispatch, RootState } from '../services/store';
-import { WsActions } from '../services/actions/ws.actions.interface';
 import { WsBaseActionsInterface } from '../services/reducers/ws.base-actions.interface';
 
 export const socketMiddleware = (wsActions: WsBaseActionsInterface): Middleware => {
   return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
-    return (next) => (action: WsActions) => {
+    return (next) => (action) => {
       const { dispatch } = store;
       const { connectionStart, connectionClosed, connectionError, connectionSuccess, disconnect, getMessage } =
         wsActions;

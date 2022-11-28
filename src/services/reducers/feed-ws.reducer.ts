@@ -1,10 +1,10 @@
 import {
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_SUCCESS,
-  WS_GET_MESSAGE
-} from '../actions/ws.actions';
-import { WsActions } from '../actions/ws.actions.interface';
+  FEED_WS_CONNECTION_CLOSED,
+  FEED_WS_CONNECTION_ERROR,
+  FEED_WS_CONNECTION_SUCCESS,
+  FEED_WS_GET_MESSAGE
+} from '../actions/feed-ws.actions';
+import { FeedWsActions } from '../actions/feed-ws.actions.interface';
 import { WsStateInterface } from './ws.state.interface';
 
 const initialState: WsStateInterface = {
@@ -12,27 +12,27 @@ const initialState: WsStateInterface = {
   orders: null
 };
 
-export const wsReducer = (state = initialState, action: WsActions) => {
+export const feedWsReducer = (state = initialState, action: FeedWsActions) => {
   switch (action.type) {
-    case WS_CONNECTION_SUCCESS:
+    case FEED_WS_CONNECTION_SUCCESS:
       return {
         ...state,
         wsConnected: true
       };
 
-    case WS_CONNECTION_ERROR:
+    case FEED_WS_CONNECTION_ERROR:
       return {
         ...state,
         wsConnected: false
       };
 
-    case WS_CONNECTION_CLOSED:
+    case FEED_WS_CONNECTION_CLOSED:
       return {
         ...state,
         wsConnected: false
       };
 
-    case WS_GET_MESSAGE:
+    case FEED_WS_GET_MESSAGE:
       return {
         ...state,
         orders: action.payload

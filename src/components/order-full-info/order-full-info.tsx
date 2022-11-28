@@ -1,32 +1,30 @@
 import React, { FC, useEffect, useMemo, useReducer, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { OrderInterface, OrderStatus } from '../../interfaces/models/order.interface';
 import styles from './order-full-info.module.css';
 import { IngredientImage } from '../ingredient-image/ingredient-image';
-import { useAppDispatch, useSelector } from '../../utils/hooks';
+import { useSelector } from '../../utils/hooks';
 import { IngredientInterface } from '../../interfaces/models/ingredient.interface';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { totalReducer, TotalStateInterface } from '../../services/reducers/total.reducer';
-import { wsConnectionDisconnect, wsConnectionStart } from '../../services/actions/ws.actions';
-import { getHistoryWsUrl } from '../../utils/get-history-ws-url';
+import { OrderInterface, OrderStatus } from '../../interfaces/models/order.interface';
 
 const initialTotalState: TotalStateInterface = {
   total: 0
 };
 
-interface OrderFullInfoProps {
+interface OrderFullInfoProps extends OrderInterface {
   pageCentered?: boolean;
 }
 
-export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
-  const { feedId } = useParams();
-  const dispatch = useAppDispatch();
-
+export const OrderFullInfo: FC<OrderFullInfoProps> = ({
+  pageCentered,
+  ingredients,
+  status,
+  number,
+  name,
+  createdAt
+}) => {
   const [totalState, dispatchTotal] = useReducer(totalReducer, initialTotalState);
   const [fullIngredients, setFullIngredients] = useState<IngredientInterface[]>([]);
-  const [order, setOrder] = useState<OrderInterface>();
-
-  const { orders, wsConnected } = useSelector((state) => state.ws);
 
   const allIngredients = useSelector((state) => state.burger.ingredients);
 
@@ -36,19 +34,9 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
   );
 
   useEffect(() => {
-    if (wsConnected) {
-      dispatch(wsConnectionDisconnect());
-    }
-    dispatch(wsConnectionStart(getHistoryWsUrl()));
-    return () => {
-      dispatch(wsConnectionDisconnect());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
     const _fullIngredients: IngredientInterface[] = [];
     allIngredients.forEach((ingredient) => {
-      const ingredientIds = order?.ingredients.filter((ingredientId) => ingredient._id === ingredientId);
+      const ingredientIds = ingredients.filter((ingredientId) => ingredient._id === ingredientId);
       if (ingredientIds) {
         if (ingredientIds.length > 0) {
           _fullIngredients.push({
@@ -59,16 +47,11 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
       }
     });
     setFullIngredients(_fullIngredients);
-  }, [allIngredients, order?.ingredients]);
+  }, [allIngredients, ingredients]);
 
   useEffect(() => {
     dispatchTotal(prices);
   }, [prices]);
-
-  useEffect(() => {
-    const order = orders?.orders.find((o) => o._id === feedId);
-    setOrder(order);
-  }, [feedId, orders]);
 
   const wrapperClassName = `${pageCentered ? styles.pageWrapper : styles.modalWrapper}`;
   const orderNumberClassName = `${styles.orderNumber} text text_type_digits-default`;
@@ -77,11 +60,11 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
   const footerClassName = `${styles.footer} mt-10`;
   return (
     <>
-      {order && (
+      {
         <div className={wrapperClassName}>
-          {pageCentered && <p className={orderNumberClassName}>#{order.number}</p>}
-          <p className="text text_type_main-medium mb-3 mt-10">{order.name}</p>
-          <p className={orderStatus}>{order.status === OrderStatus.DONE ? 'Выполнен' : 'В работе'}</p>
+          {pageCentered && <p className={orderNumberClassName}>#{number}</p>}
+          <p className="text text_type_main-medium mb-3 mt-10">{name}</p>
+          <p className={orderStatus}>{status === OrderStatus.DONE ? 'Выполнен' : 'В работе'}</p>
           <p className="text text_type_main-medium mb-2">Состав:</p>
           <div className={styles.ingredients}>
             {fullIngredients?.map((ingredient, index) => (
@@ -104,7 +87,7 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
           </div>
           <div className={footerClassName}>
             <p className="text text_type_main-default text_color_inactive">
-              <FormattedDate date={new Date(order.createdAt)} />
+              <FormattedDate date={new Date(createdAt)} />
             </p>
             <div className={styles.ingredientsPrice}>
               <p className={totalPriceClassName}>
@@ -114,7 +97,7 @@ export const OrderFullInfo: FC<OrderFullInfoProps> = ({ pageCentered }) => {
             </div>
           </div>
         </div>
-      )}
+      }
     </>
   );
 };

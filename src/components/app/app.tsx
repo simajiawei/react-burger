@@ -21,11 +21,10 @@ import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { ACCESS_TOKEN, getCookie, getTokenFromLS, REFRESH_TOKEN } from '../../utils/browser-storage';
 import { setIsLoggedIn, updateToken } from '../../services/actions/auth.actions';
 import { OrdersPage } from '../../pages/orders.page';
-import { OrderFullInfo } from '../order-full-info/order-full-info';
-import { wsConnectionStart } from '../../services/actions/ws.actions';
-import { ordersUrl } from '../../utils/app.constants';
 import { OrdersHistoryPage } from '../../pages/orders-history.page';
 import { ProfileUserPage } from '../../pages/profile-user.page';
+import { FeedOrderFullInfo } from '../feed-order-full-info/feed-order-full-info';
+import { HistoryOrderFullInfo } from '../history-order-full-info/history-order-full-info';
 
 const App: FC = () => {
   const ModalSwitch = () => {
@@ -33,7 +32,6 @@ const App: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { ingredients } = useSelector((store) => store.burger);
-    const { orders, wsConnected } = useSelector((store) => store.ws);
     const background = location.state && location.state.background;
 
     const onCloseDetails = () => {
@@ -43,15 +41,6 @@ const App: FC = () => {
     useEffect(() => {
       dispatch(getIngredients());
     }, [dispatch]);
-
-    useEffect(() => {
-      if (wsConnected) {
-        return;
-      }
-      if (location.pathname.startsWith(Pages.ORDERS)) {
-        dispatch(wsConnectionStart(ordersUrl));
-      }
-    }, [wsConnected, dispatch, location.pathname]);
 
     useEffect(() => {
       if (getCookie(ACCESS_TOKEN)) {
@@ -89,7 +78,7 @@ const App: FC = () => {
               />
               <Route
                 path={`${Pages.ORDERS}/:feedId`}
-                element={<OrderFullInfo pageCentered={true} />}
+                element={<FeedOrderFullInfo isModal={false} />}
               />
 
               {/* ONLY NOT AUTHENTICATED USERS */}
@@ -129,7 +118,7 @@ const App: FC = () => {
                 </Route>
                 <Route
                   path={`${Pages.PROFILE}${Pages.ORDERS}/:feedId`}
-                  element={<OrderFullInfo pageCentered={true} />}
+                  element={<HistoryOrderFullInfo isModal={false} />}
                 />
               </Route>
               <Route
@@ -150,26 +139,24 @@ const App: FC = () => {
                         <IngredientDetails />
                       </Modal>
                     }></Route>
-                  {orders &&
-                    [`${Pages.ORDERS}/:feedId`, `${Pages.PROFILE}${Pages.ORDERS}/:feedId`].map((path, index) => (
-                      <Route
-                        key={index}
-                        path={path}
-                        element={
-                          <Modal
-                            onClose={onCloseDetails}
-                            title={
-                              <p className="text text_type_digits-default">
-                                #
-                                {orders.orders
-                                  .find((order) => order._id === location.pathname.split('/').slice(-1)[0])
-                                  ?.number?.toString()}
-                              </p>
-                            }>
-                            <OrderFullInfo pageCentered={false} />
-                          </Modal>
-                        }></Route>
-                    ))}
+                  <Route
+                    path={`${Pages.ORDERS}/:feedId`}
+                    element={
+                      <FeedOrderFullInfo
+                        isModal={true}
+                        onCloseDetails={onCloseDetails}
+                      />
+                    }
+                  />
+                  <Route
+                    path={`${Pages.PROFILE}${Pages.ORDERS}/:feedId`}
+                    element={
+                      <HistoryOrderFullInfo
+                        isModal={true}
+                        onCloseDetails={onCloseDetails}
+                      />
+                    }
+                  />
                 </>
               </Routes>
             )}

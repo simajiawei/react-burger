@@ -5,5 +5,6 @@ import { WsStateInterface } from './reducers/ws.state.interface';
 export interface StoreInterface {
   burger: BurgerStateInterface;
   auth: AuthStateInterface;
-  ws: WsStateInterface;
+  wsFeed: WsStateInterface;
+  wsHistory: WsStateInterface;
 }
