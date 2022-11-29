@@ -1,0 +1,26 @@
+.ordersPageWrapper{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  max-width: var(--maxIfaceWidth);
+}
+.ordersWrapper{
+  height: calc(100vh - 88px);
+  display: flex;
+  flex-flow: column;
+}
+.ordersStats{
+  height: calc(100vh - 188px);
+  display: flex;
+  flex-flow: column;
+}
+
+.ordersList{
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+  overflow-y: scroll;
+  margin-bottom: var(--pageBottomMargin);
+}
+.ordersStats{
+  margin-left: 60px;
+}

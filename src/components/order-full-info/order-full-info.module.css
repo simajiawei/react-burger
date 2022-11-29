@@ -1,0 +1,48 @@
+.pageWrapper, .modalWrapper{
+  max-width: 640px;
+  max-height: 620px;
+
+  display: flex;
+  flex-direction: column;
+}
+.pageWrapper{
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.orderNumber{
+  text-align: center;
+}
+.orderStatus{
+  color: var(--colors-interface-success);
+}
+
+.ingredients{
+  overflow: auto;
+}
+
+.ingredient{
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ingredientTitleImage{
+  display: flex;
+  align-items: center;
+}
+.ingredientsPrice{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.footer{
+  display: flex;
+  justify-content: space-between;
+}

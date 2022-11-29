@@ -3,10 +3,8 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CategoryKey } from '../../enums/category-key.enum';
 import styles from './burger-ingredients.module.css';
 import { IngredientsCards } from './ingredients-cards/ingredients-cards';
-import { useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
-import { useAppDispatch } from '../../utils/hooks';
-import { StoreInterface } from '../../services/store.interface';
+import { useSelector } from '../../utils/hooks';
 
 export interface CategoryInterface {
   [key: string]: {
@@ -17,7 +15,7 @@ export interface CategoryInterface {
 }
 
 export const BurgerIngredients: FC = () => {
-  const { ingredients, selectedIngredient } = useSelector((store: StoreInterface) => store.burger);
+  const { ingredients, selectedIngredient } = useSelector((store) => store.burger);
   const [selectedCategory, setSelectedCategory] = useState<CategoryKey>(CategoryKey.BUN);
 
   const [bunsRef, inViewBuns] = useInView({

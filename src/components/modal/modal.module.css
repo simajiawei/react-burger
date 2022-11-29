@@ -13,5 +13,5 @@
 }
 .modalBody{
   max-width: 520px;
-  margin: auto;
+  margin: auto auto 30px;
 }

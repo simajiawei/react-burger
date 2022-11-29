@@ -1,0 +1,25 @@
+.wrapper{
+  display: flex;
+  flex-flow: column;
+  overflow: auto;
+  margin-bottom: var(--pageBottomMargin);
+}
+.statuses{
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+.statusDone{
+  padding-right: 36px;
+}
+.orderDone{
+  color: var(--colors-interface-success);
+}
+.statusItems{
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  max-height: 330px;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

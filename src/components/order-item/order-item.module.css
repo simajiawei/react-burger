@@ -1,0 +1,30 @@
+.wrapper{
+  background-color: var(--background);
+  border-radius: 40px;
+  margin-right: 8px;
+  color: unset;
+}
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+.ingredientsWrapper{
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+.ingredientsPreviews{
+  display: flex;
+  overflow: hidden;
+}
+.ingredientsPreviews > div{
+  margin-right: -30px;
+}
+
+
+
+.ingredientsPrice{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

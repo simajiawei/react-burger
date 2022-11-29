@@ -23,13 +23,15 @@ export const AppHeader: FC = () => {
             </NavLink>
 
             <NavLink
-              to="/current-orders"
+              to={Pages.ORDERS}
               className={navLinkClassName}>
               <AppHeaderTab icon={<ListIcon type="primary" />}>Лента заказов</AppHeaderTab>
             </NavLink>
           </div>
           <div className={logoClassName}>
-            <Logo />
+            <NavLink to="/">
+              <Logo />
+            </NavLink>
           </div>
           <div className={styles.navRight}>
             <NavLink

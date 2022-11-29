@@ -8,7 +8,7 @@ import React from 'react';
 const modalRoot = document.getElementById('modals')!;
 
 interface ModalProps {
-  title?: string;
+  title?: string | React.ReactNode;
   children?: React.ReactNode;
   onClose: () => void;
 }

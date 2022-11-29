@@ -1,0 +1,8 @@
+.ordersList{
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+  overflow-y: scroll;
+  margin-bottom: var(--pageBottomMargin);
+  height: calc(100vh - 170px);
+}

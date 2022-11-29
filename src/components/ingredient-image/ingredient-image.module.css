@@ -1,0 +1,15 @@
+.ingredientPreviewImage, .ingredientPreview{
+  width: 64px;
+  height: 64px;
+}
+
+.ingredientPreview{
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--background-alt), var(--background-alt)), linear-gradient(#801AB3 0%, #4C4CFF);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+.ingredientPreview:last-child{
+  margin-right: 0;
+}
