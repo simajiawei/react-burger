@@ -10,7 +10,6 @@ import {
 } from './burger.actions.interface';
 import { AppThunk } from '../store';
 import { uniqueId } from '../../utils/generate-id';
-import { ACCESS_TOKEN, getCookie } from '../../utils/browser-storage';
 import { getAuthHeader } from '../../utils/http-headers';
 import { fetchWithRefresh } from '../../utils/fetch-with-refresh';
 
