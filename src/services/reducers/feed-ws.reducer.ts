@@ -7,7 +7,7 @@ import {
 import { FeedWsActions } from '../actions/feed-ws.actions.interface';
 import { WsStateInterface } from './ws.state.interface';
 
-const initialState: WsStateInterface = {
+export const initialState: WsStateInterface = {
   wsConnected: false,
   orders: null
 };

@@ -1,12 +1,14 @@
 import { authReducer } from './auth.reducer';
 import { SET_IS_LOGGED_IN, SET_USER } from '../actions/auth.actions';
+import { initialState } from './auth.reducer';
 
 describe('auth reducer', () => {
+  const user = {
+    name: 'Test user',
+    email: 'testemail@mail.ru'
+  };
   it('should return initial state', () => {
-    expect(authReducer(undefined, {})).toEqual({
-      user: null,
-      isLoggedIn: null
-    });
+    expect(authReducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle SET_USER', () => {
@@ -15,18 +17,12 @@ describe('auth reducer', () => {
         {},
         {
           type: SET_USER,
-          user: {
-            name: 'Test user',
-            email: 'testemail@mail.ru'
-          }
+          user
         }
       )
     ).toEqual({
       isLoggedIn: true,
-      user: {
-        name: 'Test user',
-        email: 'testemail@mail.ru'
-      }
+      user
     });
   });
 
@@ -35,10 +31,7 @@ describe('auth reducer', () => {
       authReducer(
         {
           isLoggedIn: false,
-          user: {
-            name: 'Test user',
-            email: 'testemail@mail.ru'
-          }
+          user
         },
         {
           type: SET_IS_LOGGED_IN,
@@ -47,10 +40,7 @@ describe('auth reducer', () => {
       )
     ).toEqual({
       isLoggedIn: true,
-      user: {
-        name: 'Test user',
-        email: 'testemail@mail.ru'
-      }
+      user
     });
   });
 });

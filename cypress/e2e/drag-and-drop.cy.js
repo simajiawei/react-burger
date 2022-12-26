@@ -1,7 +1,6 @@
 describe('drag and drop ingredient to constructor', function () {
-  const homePage = 'http://localhost:3000/';
   before('should be available on localhost:3000', function () {
-    cy.visit(homePage);
+    cy.visit('/');
   });
 
   it('should drag ingredient to constructor and create order', function () {
@@ -35,8 +34,6 @@ describe('drag and drop ingredient to constructor', function () {
     cy.get('button').contains('Войти').as('loginButton');
 
     cy.get('@loginButton').click();
-
-    cy.url().should('equal', homePage);
 
     cy.get('@orderButton').click();
     cy.wait(15000);

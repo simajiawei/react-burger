@@ -1,4 +1,4 @@
-import { burgerReducer } from './burger.reducer';
+import { burgerReducer, initialState } from './burger.reducer';
 import {
   ADD_INGREDIENT_TO_CONSTRUCTOR,
   CLEAR_CONSTRUCTOR_ELEMENTS,
@@ -10,14 +10,77 @@ import {
 } from '../actions/burger.actions';
 
 describe('burger reducer', () => {
+  const newOrder = {
+    ingredients: [],
+    constructorIngredients: [],
+    selectedIngredient: null,
+    order: 5,
+    orderIsProcessing: false
+  };
+  const sause = {
+    _id: '1',
+    name: 'Флюоресцентная булка R2-D3',
+    type: 'sauce',
+    proteins: 44,
+    fat: 26,
+    carbohydrates: 85,
+    calories: 643,
+    price: 988,
+    image: 'https://code.s3.yandex.net/react/code/bun-01.png',
+    image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
+    image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
+    __v: 0,
+    count: 0
+  };
+
+  const sause2 = {
+    ...sause,
+    _id: '2'
+  };
+
+  const bun = {
+    ...sause,
+    _id: '3',
+    type: 'bun'
+  };
+
+  const sauseOnlyBurger = {
+    ...newOrder,
+    ingredients: [
+      {
+        ...sause,
+        count: 1
+      }
+    ],
+    constructorIngredients: [
+      {
+        ...sause,
+        constructorId: '1'
+      }
+    ]
+  };
+
+  const bunBurger = {
+    ...newOrder,
+    ingredients: [
+      {
+        ...sause,
+        count: 8
+      },
+      {
+        ...sause2,
+        count: 4
+      },
+      {
+        ...bun,
+        count: 4
+      }
+    ],
+    constructorIngredients: [bun, sause, sause2]
+  };
+
   it('should return initial state', () => {
-    expect(burgerReducer(undefined, {})).toEqual({
-      ingredients: [],
-      constructorIngredients: [],
-      selectedIngredient: null,
-      order: null,
-      orderIsProcessing: false
-    });
+    expect(burgerReducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle SET_NEW_ORDER', () => {
@@ -27,11 +90,9 @@ describe('burger reducer', () => {
         isProcessing: true
       })
     ).toEqual({
-      ingredients: [],
-      constructorIngredients: [],
-      selectedIngredient: null,
-      order: null,
-      orderIsProcessing: true
+      ...newOrder,
+      orderIsProcessing: true,
+      order: null
     });
   });
 
@@ -41,40 +102,15 @@ describe('burger reducer', () => {
         type: SET_NEW_ORDER_SUCCESS,
         orderNumber: 5
       })
-    ).toEqual({
-      ingredients: [],
-      constructorIngredients: [],
-      selectedIngredient: null,
-      order: 5,
-      orderIsProcessing: false
-    });
+    ).toEqual(newOrder);
   });
 
   it('should handle ADD_INGREDIENT_TO_CONSTRUCTOR', () => {
     expect(
       burgerReducer(
         {
-          ingredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 0
-            }
-          ],
-          constructorIngredients: [],
-          selectedIngredient: null,
-          order: 5,
-          orderIsProcessing: false
+          ...newOrder,
+          ingredients: [sause]
         },
         {
           type: ADD_INGREDIENT_TO_CONSTRUCTOR,
@@ -82,544 +118,77 @@ describe('burger reducer', () => {
           id: '1'
         }
       )
-    ).toEqual({
-      ingredients: [
-        {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 1
-        }
-      ],
-      constructorIngredients: [
-        {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          constructorId: '1',
-          count: 0
-        }
-      ],
-      selectedIngredient: null,
-      order: 5,
-      orderIsProcessing: false
-    });
+    ).toEqual(sauseOnlyBurger);
   });
 
   it('should handle REMOVE_INGREDIENT_FROM_CONSTRUCTOR', () => {
     expect(
-      burgerReducer(
-        {
-          ingredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 1
-            }
-          ],
-          constructorIngredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              constructorId: '1',
-              count: 0
-            }
-          ],
-          selectedIngredient: null,
-          order: 5,
-          orderIsProcessing: false
-        },
-        {
-          type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-          constructorId: '1',
-          id: '1'
-        }
-      )
+      burgerReducer(sauseOnlyBurger, {
+        type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+        constructorId: '1',
+        id: '1'
+      })
     ).toEqual({
-      ingredients: [
-        {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 0
-        }
-      ],
-      constructorIngredients: [],
-      selectedIngredient: null,
-      order: 5,
-      orderIsProcessing: false
+      ...newOrder,
+      ingredients: [sause]
     });
   });
   it('should handle UPDATE_INGREDIENTS', () => {
     expect(
       burgerReducer(
         {
+          ...newOrder,
           ingredients: [
             {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
+              ...sause,
               count: 8
             },
             {
-              _id: '2',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
+              ...sause2,
               count: 4
             }
-          ],
-          constructorIngredients: [],
-          selectedIngredient: null,
-          order: null,
-          orderIsProcessing: false
+          ]
         },
         {
           type: UPDATE_INGREDIENTS,
-          items: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0
-            },
-            {
-              _id: '2',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0
-            }
-          ]
+          items: [sause, sause2]
         }
       )
     ).toEqual({
+      ...newOrder,
       ingredients: [
         {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
+          ...sause,
           count: 0
         },
         {
-          _id: '2',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
+          ...sause2,
           count: 0
         }
-      ],
-      constructorIngredients: [],
-      selectedIngredient: null,
-      order: null,
-      orderIsProcessing: false
+      ]
     });
   });
 
   it('should handle UPDATE_CONSTRUCTOR_ELEMENTS', () => {
     expect(
-      burgerReducer(
-        {
-          ingredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'bun',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 8
-            },
-            {
-              _id: '2',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 4
-            },
-            {
-              _id: '3',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 4
-            }
-          ],
-          constructorIngredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'bun',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 8
-            },
-            {
-              _id: '2',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 4
-            },
-            {
-              _id: '3',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 4
-            }
-          ],
-          selectedIngredient: null,
-          order: null,
-          orderIsProcessing: false
-        },
-        {
-          type: UPDATE_CONSTRUCTOR_ELEMENTS,
-          items: [
-            {
-              _id: '3',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 8
-            },
-            {
-              _id: '2',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 4
-            }
-          ]
-        }
-      )
+      burgerReducer(bunBurger, {
+        type: UPDATE_CONSTRUCTOR_ELEMENTS,
+        items: [sause2, sause]
+      })
     ).toEqual({
-      ingredients: [
-        {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'bun',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 8
-        },
-        {
-          _id: '2',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 4
-        },
-        {
-          _id: '3',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 4
-        }
-      ],
-      constructorIngredients: [
-        {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'bun',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 8
-        },
-        {
-          _id: '3',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 8
-        },
-        {
-          _id: '2',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 4
-        }
-      ],
-      selectedIngredient: null,
-      order: null,
-      orderIsProcessing: false
+      ...bunBurger,
+      constructorIngredients: [bun, sause2, sause]
     });
   });
 
   it('should handle CLEAR_CONSTRUCTOR_ELEMENTS', () => {
     expect(
-      burgerReducer(
-        {
-          ingredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              count: 1
-            }
-          ],
-          constructorIngredients: [
-            {
-              _id: '1',
-              name: 'Флюоресцентная булка R2-D3',
-              type: 'sauce',
-              proteins: 44,
-              fat: 26,
-              carbohydrates: 85,
-              calories: 643,
-              price: 988,
-              image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-              image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-              image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-              __v: 0,
-              constructorId: '1',
-              count: 0
-            }
-          ],
-          selectedIngredient: null,
-          order: 5,
-          orderIsProcessing: false
-        },
-        {
-          type: CLEAR_CONSTRUCTOR_ELEMENTS
-        }
-      )
+      burgerReducer(sauseOnlyBurger, {
+        type: CLEAR_CONSTRUCTOR_ELEMENTS
+      })
     ).toEqual({
-      ingredients: [
-        {
-          _id: '1',
-          name: 'Флюоресцентная булка R2-D3',
-          type: 'sauce',
-          proteins: 44,
-          fat: 26,
-          carbohydrates: 85,
-          calories: 643,
-          price: 988,
-          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
-          image_mobile: 'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
-          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
-          __v: 0,
-          count: 1
-        }
-      ],
-      constructorIngredients: [],
-      selectedIngredient: null,
-      order: 5,
-      orderIsProcessing: false
+      ...sauseOnlyBurger,
+      constructorIngredients: []
     });
   });
 });

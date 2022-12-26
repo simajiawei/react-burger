@@ -1,18 +1,20 @@
-import { feedWsReducer } from './feed-ws.reducer';
+import { feedWsReducer, initialState } from './feed-ws.reducer';
 import {
-  FEED_WS_CONNECTION_SUCCESS,
+  FEED_WS_CONNECTION_CLOSED,
   FEED_WS_CONNECTION_ERROR,
-  FEED_WS_GET_MESSAGE,
-  FEED_WS_CONNECTION_CLOSED
+  FEED_WS_CONNECTION_SUCCESS,
+  FEED_WS_GET_MESSAGE
 } from '../actions/feed-ws.actions';
-import { OrderInterface } from '../../interfaces/models/order.interface';
 
 describe('feed ws reducer', function () {
+  const orders = {
+    orders: [],
+    total: 0,
+    totalToday: 0
+  };
+
   it('should return initial state', () => {
-    expect(feedWsReducer(undefined, {})).toEqual({
-      wsConnected: false,
-      orders: null
-    });
+    expect(feedWsReducer(undefined, {})).toEqual(initialState);
   });
   it('should handle FEED_WS_CONNECTION_SUCCESS', () => {
     expect(
@@ -65,20 +67,12 @@ describe('feed ws reducer', function () {
         },
         {
           type: FEED_WS_GET_MESSAGE,
-          payload: {
-            orders: [],
-            total: 0,
-            totalToday: 0
-          }
+          payload: orders
         }
       )
     ).toEqual({
       wsConnected: true,
-      orders: {
-        orders: [],
-        total: 0,
-        totalToday: 0
-      }
+      orders
     });
   });
 });

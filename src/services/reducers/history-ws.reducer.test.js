@@ -1,4 +1,4 @@
-import { historyWsReducer } from './history-ws.reducer';
+import { historyWsReducer, initialState } from './history-ws.reducer';
 import {
   HISTORY_WS_CONNECTION_CLOSED,
   HISTORY_WS_CONNECTION_ERROR,
@@ -7,11 +7,13 @@ import {
 } from '../actions/history-ws.actions';
 
 describe('history ws reducer', function () {
+  const orders = {
+    orders: [],
+    total: 0,
+    totalToday: 0
+  };
   it('should return initial state', () => {
-    expect(historyWsReducer(undefined, {})).toEqual({
-      wsConnected: false,
-      orders: null
-    });
+    expect(historyWsReducer(undefined, {})).toEqual(initialState);
   });
   it('should handle HISTORY_WS_CONNECTION_SUCCESS', () => {
     expect(
@@ -64,20 +66,12 @@ describe('history ws reducer', function () {
         },
         {
           type: HISTORY_WS_GET_MESSAGE,
-          payload: {
-            orders: [],
-            total: 0,
-            totalToday: 0
-          }
+          payload: orders
         }
       )
     ).toEqual({
       wsConnected: true,
-      orders: {
-        orders: [],
-        total: 0,
-        totalToday: 0
-      }
+      orders
     });
   });
 });
