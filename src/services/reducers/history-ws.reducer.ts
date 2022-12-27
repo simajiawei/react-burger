@@ -7,7 +7,7 @@ import {
 import { WsStateInterface } from './ws.state.interface';
 import { HistoryWsActions } from '../actions/history-ws.actions.interface';
 
-const initialState: WsStateInterface = {
+export const initialState: WsStateInterface = {
   wsConnected: false,
   orders: null
 };

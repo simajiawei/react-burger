@@ -2,8 +2,10 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/react-burger/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
+    "@testing-library/react": "^13.4.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.47",
     "@types/react": "^16.14.29",
@@ -27,7 +29,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -48,8 +53,12 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
     "@types/react-router-dom": "^5.3.3",
+    "cypress": "^12.2.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^4.0.0",
     "prettier": "2.7.1"
   }
 }
